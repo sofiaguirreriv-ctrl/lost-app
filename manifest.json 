@@ -1,0 +1,29 @@
+{
+  "id": "./index.html",
+  "name": "LOST",
+  "short_name": "LOST",
+  "description": "Horario, calendario académico, alarmas, cumpleaños y comunidad.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f3e8ff",
+  "theme_color": "#7e22ce",
+  "lang": "es",
+  "dir": "ltr",
+  "categories": ["education", "productivity"],
+  "icons": [
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
