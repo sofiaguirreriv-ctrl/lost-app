@@ -1,0 +1,103 @@
+{
+  "id": "./index.html",
+  "name": "LOST",
+  "short_name": "LOST",
+  "description": "Horario, calendario académico, alarmas, cumpleaños y comunidad.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": [
+    "window-controls-overlay",
+    "standalone",
+    "minimal-ui"
+  ],
+  "orientation": "portrait",
+  "background_color": "#f3e8ff",
+  "theme_color": "#7e22ce",
+  "lang": "es",
+  "dir": "ltr",
+  "categories": [
+    "education",
+    "productivity"
+  ],
+  "launch_handler": {
+    "client_mode": "focus-existing"
+  },
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Horario",
+      "short_name": "Horario",
+      "description": "Ver el horario de clases",
+      "url": "./index.html?view=horario",
+      "icons": [
+        {
+          "src": "./icon-512.png",
+          "sizes": "512x512",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Calendario",
+      "short_name": "Calendario",
+      "description": "Abrir el calendario académico",
+      "url": "./index.html?view=calendario",
+      "icons": [
+        {
+          "src": "./icon-512.png",
+          "sizes": "512x512",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Alarmas",
+      "short_name": "Alarmas",
+      "description": "Gestionar alarmas y recordatorios",
+      "url": "./index.html?view=alarmas",
+      "icons": [
+        {
+          "src": "./icon-512.png",
+          "sizes": "512x512",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+  "share_target": {
+    "action": "./index.html",
+    "method": "GET",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  },
+  "protocol_handlers": [
+    {
+      "protocol": "web+lost",
+      "url": "./index.html?protocol=%s"
+    }
+  ],
+  "file_handlers": [
+    {
+      "action": "./index.html",
+      "accept": {
+        "text/plain": [".txt"],
+        "text/calendar": [".ics"]
+      }
+    }
+  ]
+}

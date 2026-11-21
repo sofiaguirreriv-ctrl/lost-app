@@ -1,0 +1,22 @@
+self.addEventListener("sync", (event) => {
+  if (event.tag === "lost-sync") {
+    event.waitUntil(Promise.resolve());
+  }
+});
+
+self.addEventListener("periodicsync", (event) => {
+  if (event.tag === "lost-periodic-sync") {
+    event.waitUntil(Promise.resolve());
+  }
+});
+
+self.addEventListener("push", (event) => {
+  const data = event.data ? event.data.text() : "Tienes una novedad en LOST.";
+  event.waitUntil(
+    self.registration.showNotification("LOST", {
+      body: data,
+      icon: "./icon-512.png",
+      badge: "./icon-512.png"
+    })
+  );
+});
