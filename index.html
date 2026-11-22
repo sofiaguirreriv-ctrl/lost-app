@@ -1,0 +1,580 @@
+<!-- NAVEGACIÓN DE LAS TRES PESTAÑAS -->
+<nav id="lost-main-tabs" class="lost-tabs">
+  <button type="button" class="tab-btn active" data-tab="tab-lunes-viernes" onclick="abrirPestanaLOST('tab-lunes-viernes')">
+    Lunes–Viernes
+  </button>
+  <button type="button" class="tab-btn" data-tab="tab-ciclo" onclick="abrirPestanaLOST('tab-ciclo')">
+    Ciclo
+  </button>
+  <button type="button" class="tab-btn" data-tab="tab-mater-salvatoris" onclick="abrirPestanaLOST('tab-mater-salvatoris')">
+    Mater Salvatoris
+  </button>
+</nav>
+
+<!-- 1. PESTAÑA LUNES–VIERNES -->
+<section id="tab-lunes-viernes" class="lost-tab-panel">
+  <h2>Horario y Días (Lunes–Viernes)</h2>
+  <p id="lv-hoy-especial"></p>
+  <div class="lv-row">
+    <label for="lv-fecha-input">Revisar fecha:</label>
+    <input type="date" id="lv-fecha-input" onchange="renderLunesViernes()" />
+  </div>
+  <div id="lv-resultado" class="lost-box"></div>
+  <div id="lv-semana-grid" class="lv-semana-grid"></div>
+</section>
+
+<!-- 2. PESTAÑA CICLO (PERSONALIZABLE + FERIADOS / ADJUNTOS) -->
+<section id="tab-ciclo" class="lost-tab-panel" style="display:none;">
+  <h2>Ciclo Personalizado</h2>
+  <p id="ciclo-hoy-resumen"></p>
+
+  <div class="lost-box">
+    <label for="ciclo-desc-input">Descripción de tu ciclo:</label>
+    <textarea id="ciclo-desc-input" rows="2" placeholder="Describe cómo funciona tu ciclo..."></textarea>
+
+    <label for="ciclo-letras-input">Letras o códigos del ciclo (separados por coma):</label>
+    <input type="text" id="ciclo-letras-input" value="A, B, C, D" />
+
+    <div class="lv-row">
+      <div>
+        <label for="ciclo-ancla-fecha">Fecha de referencia:</label>
+        <input type="date" id="ciclo-ancla-fecha" />
+      </div>
+      <div>
+        <label for="ciclo-ancla-letra">Letra en esa fecha:</label>
+        <select id="ciclo-ancla-letra"></select>
+      </div>
+    </div>
+
+    <button type="button" onclick="guardarCicloUsuario()">Guardar ciclo</button>
+  </div>
+
+  <div class="lost-box">
+    <h3>Días feriados (Sombrilla)</h3>
+    <div class="lv-row">
+      <input type="date" id="ciclo-feriado-fecha" />
+      <input type="text" id="ciclo-feriado-nombre" placeholder="Nombre del feriado" />
+      <button type="button" onclick="agregarFeriadoUsuario()">Agregar feriado</button>
+    </div>
+    <div style="margin-top:8px;">
+      <label for="ciclo-feriado-file">Adjuntar archivo (.csv, .txt o .json):</label>
+      <input type="file" id="ciclo-feriado-file" accept=".csv,.txt,.json" onchange="cargarArchivoFeriadosUsuario(event)" />
+    </div>
+    <ul id="ciclo-lista-feriados"></ul>
+  </div>
+
+  <div class="lost-box">
+    <h3>Consultar fecha en tu ciclo</h3>
+    <div class="lv-row">
+      <input type="date" id="ciclo-consulta-fecha" onchange="renderConsultaCicloUsuario()" />
+    </div>
+    <div id="ciclo-consulta-salida"></div>
+  </div>
+</section>
+
+<!-- 3. PESTAÑA MATER SALVATORIS (2026-2027, A-F, ANCLA 20 NOV 2026 = D) -->
+<section id="tab-mater-salvatoris" class="lost-tab-panel" style="display:none;">
+  <h2>Mater Salvatoris (2026–2027)</h2>
+  <p id="mater-hoy-resumen"></p>
+  <small>Ancla: 20 de noviembre de 2026 = Ciclo D · Secuencia: A, B, C, D, E, F</small>
+
+  <div class="lv-row" style="margin:10px 0;">
+    <button type="button" onclick="moverMesMater(-1)">◀ Anterior</button>
+    <strong id="mater-mes-label">Noviembre 2026</strong>
+    <button type="button" onclick="moverMesMater(1)">Siguiente ▶</button>
+    <button type="button" onclick="irHoyMater()">Hoy</button>
+  </div>
+
+  <div class="mater-dias-semana">
+    <div>Lun</div><div>Mar</div><div>Mié</div><div>Jue</div><div>Vie</div><div>Sáb</div><div>Dom</div>
+  </div>
+  <div id="mater-calendario-grid" class="mater-calendario-grid"></div>
+  <div id="mater-dia-info" class="lost-box" style="margin-top:12px;"></div>
+</section>
+
+<style>
+  .lost-tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+  .tab-btn { padding:8px 14px; border-radius:10px; border:1px solid #7e22ce; background:#f3e8ff; color:#581c87; font-weight:600; cursor:pointer; }
+  .tab-btn.active { background:#7e22ce; color:#fff; }
+  .lost-box { background:#fff; border:1px solid #e9d5ff; border-radius:12px; padding:12px; margin-bottom:12px; }
+  .lv-row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:6px; }
+  .lv-semana-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:8px; margin-top:10px; }
+  .lv-dia-card { background:#faf5ff; border:1px solid #e9d5ff; border-radius:10px; padding:8px; }
+  .mater-dias-semana, .mater-calendario-grid { display:grid; grid-template-columns:repeat(7, 1fr); gap:6px; }
+  .mater-dias-semana div { text-align:center; font-weight:700; color:#581c87; font-size:0.85em; }
+  .mater-celda { min-height:72px; border:1px solid #e9d5ff; border-radius:10px; padding:6px; background:#fff; cursor:pointer; font-size:0.84em; }
+  .mater-celda.vacia { background:transparent; border-color:transparent; cursor:default; }
+  .mater-celda.sombrilla { background:#f3e8ff; border-style:dashed; opacity:0.8; }
+  .mater-celda.activa { outline:2px solid #7e22ce; }
+  .mater-badge { display:inline-block; background:#7e22ce; color:#fff; border-radius:6px; padding:1px 6px; font-size:0.75em; font-weight:700; }
+  .mater-mini-tag { font-size:0.72em; color:#581c87; background:#faf5ff; border-radius:5px; padding:2px 4px; margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+</style>
+
+<script>
+  // FECHAS ESPECIALES GLOBALES (disponibles en Lunes-Viernes, Ciclo y Mater Salvatoris)
+  const FECHAS_ESPECIALES_GLOBALES = {
+    "01-01": [{ emoji: "🎉", nombre: "Año Nuevo" }],
+    "01-04": [{ emoji: "⠃", nombre: "Día Mundial del Braille" }],
+    "01-06": [{ emoji: "👑", nombre: "Día de Reyes" }],
+    "01-24": [{ emoji: "📚", nombre: "Día Internacional de la Educación" }],
+    "01-27": [{ emoji: "🕯️", nombre: "Día Internacional de Conmemoración en Memoria de las Víctimas del Holocausto" }],
+    "02-02": [{ emoji: "🌿", nombre: "Día Mundial de los Humedales" }],
+    "02-04": [{ emoji: "🎗️", nombre: "Día Mundial contra el Cáncer" }],
+    "02-11": [{ emoji: "🔬", nombre: "Día Internacional de la Mujer y la Niña en la Ciencia" }],
+    "02-13": [{ emoji: "📻", nombre: "Día Mundial de la Radio" }],
+    "02-14": [{ emoji: "💘", nombre: "Día de San Valentín" }],
+    "02-21": [{ emoji: "🗣️", nombre: "Día Internacional de la Lengua Materna" }],
+    "03-03": [{ emoji: "🐾", nombre: "Día Mundial de la Vida Silvestre" }],
+    "03-08": [{ emoji: "💜", nombre: "Día Internacional de la Mujer" }],
+    "03-14": [{ emoji: "📐", nombre: "Día Internacional de las Matemáticas" }],
+    "03-20": [{ emoji: "😊", nombre: "Día Internacional de la Felicidad" }],
+    "03-21": [{ emoji: "✍️", nombre: "Día Mundial de la Poesía y Día Internacional de la Eliminación de la Discriminación Racial" }],
+    "03-22": [{ emoji: "💧", nombre: "Día Mundial del Agua" }],
+    "04-07": [{ emoji: "🩺", nombre: "Día Mundial de la Salud" }],
+    "04-15": [{ emoji: "🎨", nombre: "Día Mundial del Arte" }],
+    "04-22": [{ emoji: "🌍", nombre: "Día Internacional de la Madre Tierra" }],
+    "04-23": [{ emoji: "📖", nombre: "Día Mundial del Libro" }],
+    "04-30": [{ emoji: "🎷", nombre: "Día Internacional del Jazz" }],
+    "05-03": [{ emoji: "📰", nombre: "Día Mundial de la Libertad de Prensa" }],
+    "05-20": [{ emoji: "🐝", nombre: "Día Mundial de las Abejas" }],
+    "05-21": [{ emoji: "🌐", nombre: "Día Mundial de la Diversidad Cultural" }],
+    "05-22": [{ emoji: "🦋", nombre: "Día Internacional de la Diversidad Biológica" }],
+    "06-05": [{ emoji: "🌱", nombre: "Día Mundial del Medio Ambiente" }],
+    "06-08": [{ emoji: "🌊", nombre: "Día Mundial de los Océanos" }],
+    "07-11": [{ emoji: "👥", nombre: "Día Mundial de la Población" }],
+    "07-18": [{ emoji: "🕊️", nombre: "Día Internacional de Nelson Mandela" }],
+    "07-30": [{ emoji: "🤝", nombre: "Día Internacional de la Amistad" }],
+    "08-09": [{ emoji: "🪶", nombre: "Día Internacional de los Pueblos Indígenas" }],
+    "08-12": [{ emoji: "🌟", nombre: "Día Internacional de la Juventud" }],
+    "09-08": [{ emoji: "✏️", nombre: "Día Internacional de la Alfabetización" }],
+    "09-15": [{ emoji: "🗳️", nombre: "Día Internacional de la Democracia" }],
+    "09-21": [{ emoji: "☮️", nombre: "Día Internacional de la Paz y Día Mundial del Alzheimer" }],
+    "09-27": [{ emoji: "✈️", nombre: "Día Mundial del Turismo" }],
+    "10-01": [{ emoji: "☕", nombre: "Día Internacional de las Personas de Edad y del Café" }],
+    "10-05": [{ emoji: "🍎", nombre: "Día Mundial de los Docentes" }],
+    "10-11": [{ emoji: "🌸", nombre: "Día Internacional de la Niña" }],
+    "10-24": [{ emoji: "🇺🇳", nombre: "Día de las Naciones Unidas" }],
+    "10-31": [{ emoji: "🎃", nombre: "Halloween" }],
+    "11-01": [{ emoji: "🕯️", nombre: "Día de Todos los Santos" }],
+    "11-02": [{ emoji: "🌼", nombre: "Día de los Muertos" }],
+    "11-10": [{ emoji: "🧪", nombre: "Día Mundial de la Ciencia" }],
+    "11-14": [{ emoji: "💙", nombre: "Día Mundial de la Diabetes" }],
+    "11-20": [{ emoji: "🎈", nombre: "Día Universal del Niño y de la Filosofía" }],
+    "11-25": [{ emoji: "💜", nombre: "Día contra la Violencia hacia la Mujer" }],
+    "12-01": [{ emoji: "❤️", nombre: "Día Mundial del SIDA" }],
+    "12-03": [{ emoji: "♿", nombre: "Día de las Personas con Discapacidad" }],
+    "12-10": [{ emoji: "📜", nombre: "Día de los Derechos Humanos" }],
+    "12-18": [{ emoji: "🌍", nombre: "Día del Migrante" }],
+    "12-25": [{ emoji: "🎄", nombre: "Navidad" }],
+    "12-31": [{ emoji: "🎆", nombre: "Fin de Año" }]
+  };
+
+  function obtenerEspecialesGlobal(iso) {
+    if (!iso || iso.length < 10) return [];
+    return FECHAS_ESPECIALES_GLOBALES[iso.slice(5)] || [];
+  }
+
+  function parseFecha(iso) {
+    const [y, m, d] = iso.split("-").map(Number);
+    return new Date(y, m - 1, d);
+  }
+
+  function toISO(date) {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, "0");
+    const d = String(date.getDate()).padStart(2, "0");
+    return `${y}-${m}-${d}`;
+  }
+
+  function abrirPestanaLOST(id) {
+    document.querySelectorAll(".lost-tab-panel").forEach(p => (p.style.display = "none"));
+    document.querySelectorAll("#lost-main-tabs .tab-btn").forEach(b => {
+      b.classList.toggle("active", b.dataset.tab === id);
+    });
+    const panel = document.getElementById(id);
+    if (panel) panel.style.display = "block";
+    if (id === "tab-lunes-viernes") renderLunesViernes();
+    if (id === "tab-ciclo") renderConsultaCicloUsuario();
+    if (id === "tab-mater-salvatoris") renderCalendarioMater();
+  }
+
+  // --- LUNES-VIERNES ---
+  function renderLunesViernes() {
+    const input = document.getElementById("lv-fecha-input");
+    const res = document.getElementById("lv-resultado");
+    const grid = document.getElementById("lv-semana-grid");
+    const hoyBanner = document.getElementById("lv-hoy-especial");
+    if (!input || !res || !grid) return;
+
+    const hoyISO = toISO(new Date());
+    const espHoy = obtenerEspecialesGlobal(hoyISO);
+    if (hoyBanner) {
+      hoyBanner.textContent = espHoy.length
+        ? `Hoy (${hoyISO}): ${espHoy.map(e => `${e.emoji} ${e.nombre}`).join(" · ")}`
+        : `Hoy (${hoyISO})`;
+    }
+
+    const base = parseFecha(input.value || hoyISO);
+    const espDia = obtenerEspecialesGlobal(toISO(base));
+    res.innerHTML = `<strong>${toISO(base)}:</strong> ${
+      espDia.length ? espDia.map(e => `${e.emoji} ${e.nombre}`).join(", ") : "Día sin fecha especial global registrada."
+    }`;
+
+    // Lunes a viernes de la semana seleccionada
+    const dow = base.getDay();
+    const diffLunes = dow === 0 ? -6 : 1 - dow;
+    const lunes = new Date(base.getFullYear(), base.getMonth(), base.getDate() + diffLunes);
+
+    let cards = "";
+    for (let i = 0; i < 5; i++) {
+      const d = new Date(lunes.getFullYear(), lunes.getMonth(), lunes.getDate() + i);
+      const iso = toISO(d);
+      const esp = obtenerEspecialesGlobal(iso);
+      const nombreDia = d.toLocaleDateString("es-PR", { weekday: "long", day: "numeric", month: "short" });
+      cards += `
+        <div class="lv-dia-card">
+          <strong>${nombreDia}</strong>
+          <div style="margin-top:4px;font-size:0.85em;">
+            ${esp.length ? esp.map(e => `<div>${e.emoji} ${e.nombre}</div>`).join("") : "<span>—</span>"}
+          </div>
+        </div>
+      `;
+    }
+    grid.innerHTML = cards;
+  }
+
+  // --- CICLO PERSONALIZADO ---
+  const KEY_CICLO_LOST = "lost_tab_ciclo_v1";
+  let estadoCicloLOST = {
+    descripcion: "",
+    letras: ["A", "B", "C", "D"],
+    anclaFecha: toISO(new Date()),
+    anclaLetra: "A",
+    feriados: []
+  };
+
+  function initCicloLOST() {
+    const raw = localStorage.getItem(KEY_CICLO_LOST);
+    if (raw) {
+      try { estadoCicloLOST = { ...estadoCicloLOST, ...JSON.parse(raw) }; } catch (e) {}
+    }
+    document.getElementById("ciclo-desc-input").value = estadoCicloLOST.descripcion || "";
+    document.getElementById("ciclo-letras-input").value = estadoCicloLOST.letras.join(", ");
+    document.getElementById("ciclo-ancla-fecha").value = estadoCicloLOST.anclaFecha;
+    refrescarSelectAnclaUsuario();
+    document.getElementById("ciclo-ancla-letra").value = estadoCicloLOST.anclaLetra;
+    document.getElementById("ciclo-consulta-fecha").value = toISO(new Date());
+    renderFeriadosUsuario();
+    renderConsultaCicloUsuario();
+  }
+
+  function refrescarSelectAnclaUsuario() {
+    const letras = document.getElementById("ciclo-letras-input").value.split(",").map(s => s.trim()).filter(Boolean);
+    const lista = letras.length ? letras : ["A"];
+    const sel = document.getElementById("ciclo-ancla-letra");
+    const actual = sel.value || estadoCicloLOST.anclaLetra;
+    sel.innerHTML = lista.map(l => `<option value="${l}">${l}</option>`).join("");
+    if (lista.includes(actual)) sel.value = actual;
+  }
+
+  document.getElementById("ciclo-letras-input")?.addEventListener("input", refrescarSelectAnclaUsuario);
+
+  function guardarCicloUsuario() {
+    const letras = document.getElementById("ciclo-letras-input").value.split(",").map(s => s.trim()).filter(Boolean);
+    if (!letras.length) return;
+    estadoCicloLOST.descripcion = document.getElementById("ciclo-desc-input").value.trim();
+    estadoCicloLOST.letras = letras;
+    estadoCicloLOST.anclaFecha = document.getElementById("ciclo-ancla-fecha").value || toISO(new Date());
+    estadoCicloLOST.anclaLetra = document.getElementById("ciclo-ancla-letra").value || letras[0];
+    localStorage.setItem(KEY_CICLO_LOST, JSON.stringify(estadoCicloLOST));
+    if (typeof guardarEnNubeLOST === "function") guardarEnNubeLOST();
+    renderConsultaCicloUsuario();
+  }
+
+  function agregarFeriadoUsuario() {
+    const fecha = document.getElementById("ciclo-feriado-fecha").value;
+    const nombre = document.getElementById("ciclo-feriado-nombre").value.trim() || "Feriado";
+    if (!fecha) return;
+    if (!estadoCicloLOST.feriados.some(f => f.fecha === fecha)) {
+      estadoCicloLOST.feriados.push({ fecha, nombre });
+      estadoCicloLOST.feriados.sort((a, b) => a.fecha.localeCompare(b.fecha));
+      guardarCicloUsuario();
+      renderFeriadosUsuario();
+    }
+    document.getElementById("ciclo-feriado-nombre").value = "";
+  }
+
+  function quitarFeriadoUsuario(fecha) {
+    estadoCicloLOST.feriados = estadoCicloLOST.feriados.filter(f => f.fecha !== fecha);
+    guardarCicloUsuario();
+    renderFeriadosUsuario();
+  }
+
+  function cargarArchivoFeriadosUsuario(ev) {
+    const file = ev.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const txt = String(reader.result || "").trim();
+      let items = [];
+      if (file.name.endsWith(".json")) {
+        try {
+          const arr = JSON.parse(txt);
+          if (Array.isArray(arr)) {
+            items = arr.filter(x => x && x.fecha).map(x => ({ fecha: String(x.fecha).trim(), nombre: String(x.nombre || "Feriado").trim() }));
+          }
+        } catch (e) { return; }
+      } else {
+        items = txt.split(/\r?\n/).map(l => l.trim()).filter(Boolean).map(l => {
+          const [f, ...r] = l.split(",");
+          return { fecha: f.trim(), nombre: r.join(",").trim() || "Feriado" };
+        }).filter(x => /^\d{4}-\d{2}-\d{2}$/.test(x.fecha));
+      }
+      items.forEach(it => {
+        if (!estadoCicloLOST.feriados.some(f => f.fecha === it.fecha)) {
+          estadoCicloLOST.feriados.push(it);
+        }
+      });
+      estadoCicloLOST.feriados.sort((a, b) => a.fecha.localeCompare(b.fecha));
+      guardarCicloUsuario();
+      renderFeriadosUsuario();
+      ev.target.value = "";
+    };
+    reader.readAsText(file);
+  }
+
+  function renderFeriadosUsuario() {
+    const ul = document.getElementById("ciclo-lista-feriados");
+    if (!ul) return;
+    ul.innerHTML = estadoCicloLOST.feriados.length
+      ? estadoCicloLOST.feriados.map(f => `<li><strong>${f.fecha}</strong> — ${f.nombre} <button type="button" onclick="quitarFeriadoUsuario('${f.fecha}')">Quitar</button></li>`).join("")
+      : "<li>Sin feriados agregados.</li>";
+  }
+
+  function calcularCicloUsuarioEnFecha(iso) {
+    const feriado = estadoCicloLOST.feriados.find(f => f.fecha === iso);
+    if (feriado) return `Sombrilla (${feriado.nombre})`;
+    const fecha = parseFecha(iso);
+    if (fecha.getDay() === 0 || fecha.getDay() === 6) return "Fin de semana";
+
+    const letras = estadoCicloLOST.letras.length ? estadoCicloLOST.letras : ["A"];
+    const idx0 = Math.max(0, letras.indexOf(estadoCicloLOST.anclaLetra));
+    const ancla = parseFecha(estadoCicloLOST.anclaFecha);
+
+    const esHabiles = (dt) => {
+      const d = dt.getDay();
+      if (d === 0 || d === 6) return false;
+      return !estadoCicloLOST.feriados.some(f => f.fecha === toISO(dt));
+    };
+
+    let pasos = 0;
+    const cur = new Date(ancla.getTime());
+    if (fecha > ancla) {
+      while (toISO(cur) < iso) { cur.setDate(cur.getDate() + 1); if (esHabiles(cur)) pasos++; }
+    } else if (fecha < ancla) {
+      while (toISO(cur) > iso) { cur.setDate(cur.getDate() - 1); if (esHabiles(cur)) pasos--; }
+    }
+    const n = letras.length;
+    return `Ciclo ${letras[(((idx0 + pasos) % n) + n) % n]}`;
+  }
+
+  function renderConsultaCicloUsuario() {
+    const hoy = toISO(new Date());
+    const espHoy = obtenerEspecialesGlobal(hoy);
+    const resumen = document.getElementById("ciclo-hoy-resumen");
+    if (resumen) {
+      resumen.textContent = `Hoy (${hoy}): ${calcularCicloUsuarioEnFecha(hoy)}${espHoy.length ? " · " + espHoy.map(e => `${e.emoji} ${e.nombre}`).join(" · ") : ""}`;
+    }
+
+    const input = document.getElementById("ciclo-consulta-fecha");
+    const out = document.getElementById("ciclo-consulta-salida");
+    if (!input || !out) return;
+    const iso = input.value || hoy;
+    const esp = obtenerEspecialesGlobal(iso);
+    out.innerHTML = `<p style="margin-top:8px;"><strong>${iso}:</strong> ${calcularCicloUsuarioEnFecha(iso)}</p>${
+      esp.length ? `<div>${esp.map(e => `${e.emoji} ${e.nombre}`).join(" · ")}</div>` : ""
+    }`;
+  }
+
+  // --- MATER SALVATORIS (2026-2027, A-F, ANCLA 20 NOV 2026 = D) ---
+  const CICLOS_MATER = ["A", "B", "C", "D", "E", "F"];
+  const ANCLA_MATER = "2026-11-20";
+  const ANCLA_MATER_IDX = 3; // D
+
+  const FERIADOS_MATER = [
+    { inicio: "2026-08-06", fin: "2026-08-07", nombre: "Labores docentes", emoji: "👩‍🏫" },
+    { inicio: "2026-09-07", fin: "2026-09-07", nombre: "Labor Day (no clases)", emoji: "🏖️" },
+    { inicio: "2026-10-12", fin: "2026-10-12", nombre: "Día de la hispanidad (no clases)", emoji: "🌎" },
+    { inicio: "2026-11-23", fin: "2026-11-27", nombre: "Semana de acción de gracias", emoji: "🦃" },
+    { inicio: "2026-12-17", fin: "2026-12-21", nombre: "Labores docentes", emoji: "👩‍🏫" },
+    { inicio: "2027-01-08", fin: "2027-01-08", nombre: "Labores docentes", emoji: "👩‍🏫" },
+    { inicio: "2027-01-18", fin: "2027-01-18", nombre: "Día de Martin Luther King Jr. (no clases)", emoji: "🕊️" },
+    { inicio: "2027-02-15", fin: "2027-02-15", nombre: "Día de los Presidentes", emoji: "🇺🇸" },
+    { inicio: "2027-03-19", fin: "2027-03-19", nombre: "Retiro de Facultad (no clases)", emoji: "✝️" },
+    { inicio: "2027-05-24", fin: "2027-05-24", nombre: "Memorial day (no clases)", emoji: "🇺🇸" },
+    { inicio: "2027-05-25", fin: "2027-05-31", nombre: "Labores docentes", emoji: "👩‍🏫" }
+  ];
+
+  const EVENTOS_MATER = [
+    { inicio: "2026-08-10", fin: "2026-08-12", nombre: "Orientación de padres", emoji: "🎒" },
+    { inicio: "2026-08-13", fin: "2026-08-14", nombre: "Comienzo de clases", emoji: "✏️" },
+    { inicio: "2026-10-06", fin: "2026-10-08", nombre: "Midterms Int. HS", emoji: "📝" },
+    { inicio: "2026-10-15", fin: "2026-10-17", nombre: "Torneo de Voley", emoji: "🏐" },
+    { inicio: "2026-11-16", fin: "2026-11-20", nombre: "Semana de Puerto Rico", emoji: "🇵🇷" },
+    { inicio: "2026-12-14", fin: "2026-12-16", nombre: "Midterms Int. HS", emoji: "📝" },
+    { inicio: "2026-12-15", fin: "2026-12-15", nombre: "Festival de Navidad de 1, 2 y 3 grado", emoji: "🎅" },
+    { inicio: "2026-12-16", fin: "2026-12-16", nombre: "Festival de Navidad de 4, 5 y 6 grado", emoji: "🎄" },
+    { inicio: "2026-12-16", fin: "2026-12-16", nombre: "Último día de clases preescolar, elemental, Inte. y HS", emoji: "🔔" },
+    { inicio: "2026-12-17", fin: "2026-12-17", nombre: "Festival de Navidad de Preescolar", emoji: "⭐" },
+    { inicio: "2027-01-11", fin: "2027-01-11", nombre: "Comienzo de las clases", emoji: "📚" },
+    { inicio: "2027-02-05", fin: "2027-02-05", nombre: "Field day Intermedia y HS", emoji: "🏃" },
+    { inicio: "2027-02-10", fin: "2027-02-10", nombre: "Miércoles de Ceniza", emoji: "✝️" },
+    { inicio: "2027-02-12", fin: "2027-02-12", nombre: "Field day elemental", emoji: "🏅" },
+    { inicio: "2027-02-19", fin: "2027-02-19", nombre: "Field day Preescolar", emoji: "🎈" },
+    { inicio: "2027-02-26", fin: "2027-02-26", nombre: "Torneo de Golf", emoji: "⛳" },
+    { inicio: "2027-03-02", fin: "2027-03-04", nombre: "Midterms Int. HS", emoji: "📝" },
+    { inicio: "2027-03-12", fin: "2027-03-13", nombre: "Torneo de Baloncesto", emoji: "🏀" },
+    { inicio: "2027-03-30", fin: "2027-03-30", nombre: "Comienzo de clases", emoji: "✏️" },
+    { inicio: "2027-04-05", fin: "2027-04-05", nombre: "Solemnidad de la Anunciación. Misa Mater", emoji: "⛪" },
+    { inicio: "2027-04-16", fin: "2027-04-17", nombre: "Torneo de futsal", emoji: "⚽" },
+    { inicio: "2027-05-06", fin: "2027-05-06", nombre: "Día del estudiante", emoji: "🎉" },
+    { inicio: "2027-05-07", fin: "2027-05-07", nombre: "Día del maestro", emoji: "🍎" },
+    { inicio: "2027-05-12", fin: "2027-05-14", nombre: "Midterms Int. HS", emoji: "📝" },
+    { inicio: "2027-05-18", fin: "2027-05-18", nombre: "Misa de grado 12", emoji: "🎓" },
+    { inicio: "2027-05-19", fin: "2027-05-19", nombre: "Graduación de grado 12", emoji: "🥳" },
+    { inicio: "2027-05-20", fin: "2027-05-20", nombre: "Fin de preescolar y elemental / Grad. 8vo", emoji: "🎓" },
+    { inicio: "2027-05-21", fin: "2027-05-21", nombre: "Graduación de Kinder", emoji: "🌟" },
+    { inicio: "2027-05-25", fin: "2027-07-02", nombre: "Campamento verano", emoji: "☀️" }
+  ];
+
+  let mesMater = new Date(2026, 10, 1);
+  let diaMaterSel = "2026-11-20";
+
+  function rangoMatch(arr, iso) {
+    return arr.filter(x => iso >= x.inicio && iso <= x.fin);
+  }
+
+  function esDiaConCicloMater(dt) {
+    const dow = dt.getDay();
+    if (dow === 0 || dow === 6) return false;
+    return rangoMatch(FERIADOS_MATER, toISO(dt)).length === 0;
+  }
+
+  function infoMater(iso) {
+    const dt = parseFecha(iso);
+    const feriados = rangoMatch(FERIADOS_MATER, iso);
+    const eventos = rangoMatch(EVENTOS_MATER, iso);
+    const especiales = obtenerEspecialesGlobal(iso);
+    const esSombrilla = feriados.length > 0;
+
+    let ciclo = null;
+    if (!esSombrilla && dt.getDay() !== 0 && dt.getDay() !== 6) {
+      if (iso === ANCLA_MATER) {
+        ciclo = CICLOS_MATER[ANCLA_MATER_IDX];
+      } else {
+        const ancla = parseFecha(ANCLA_MATER);
+        let pasos = 0;
+        const cur = new Date(ancla.getTime());
+        if (dt > ancla) {
+          while (toISO(cur) < iso) { cur.setDate(cur.getDate() + 1); if (esDiaConCicloMater(cur)) pasos++; }
+        } else {
+          while (toISO(cur) > iso) { cur.setDate(cur.getDate() - 1); if (esDiaConCicloMater(cur)) pasos--; }
+        }
+        const n = CICLOS_MATER.length;
+        ciclo = CICLOS_MATER[(((ANCLA_MATER_IDX + pasos) % n) + n) % n];
+      }
+    }
+    return { iso, dt, ciclo, esSombrilla, feriados, eventos, especiales };
+  }
+
+  function renderCalendarioMater() {
+    const grid = document.getElementById("mater-calendario-grid");
+    const label = document.getElementById("mater-mes-label");
+    if (!grid || !label) return;
+
+    const y = mesMater.getFullYear();
+    const m = mesMater.getMonth();
+    const txt = mesMater.toLocaleDateString("es-PR", { month: "long", year: "numeric" });
+    label.textContent = txt.charAt(0).toUpperCase() + txt.slice(1);
+
+    const primero = new Date(y, m, 1);
+    const offset = (primero.getDay() + 6) % 7;
+    const total = new Date(y, m + 1, 0).getDate();
+
+    let html = "";
+    for (let i = 0; i < offset; i++) html += `<div class="mater-celda vacia"></div>`;
+
+    for (let d = 1; d <= total; d++) {
+      const iso = toISO(new Date(y, m, d));
+      const info = infoMater(iso);
+      const cls = ["mater-celda"];
+      if (info.esSombrilla) cls.push("sombrilla");
+      if (iso === diaMaterSel) cls.push("activa");
+
+      const emojis = [
+        ...info.especiales.map(e => e.emoji),
+        ...info.eventos.map(e => e.emoji || ""),
+        ...info.feriados.map(f => f.emoji || "")
+      ].filter(Boolean).join(" ");
+
+      const tags = [
+        ...info.especiales.map(e => `${e.emoji} ${e.nombre}`),
+        ...info.eventos.map(e => `${e.emoji || "📌"} ${e.nombre}`),
+        ...info.feriados.map(f => `${f.emoji || "⛱️"} ${f.nombre}`)
+      ];
+
+      html += `
+        <div class="${cls.join(" ")}" onclick="seleccionarDiaMater('${iso}')">
+          <div style="display:flex;justify-content:space-between;align-items:center;font-weight:700;">
+            <span>${d} ${emojis}</span>
+            ${info.ciclo ? `<span class="mater-badge">${info.ciclo}</span>` : ""}
+          </div>
+          <div>${tags.slice(0, 2).map(t => `<div class="mater-mini-tag">${t}</div>`).join("")}</div>
+        </div>
+      `;
+    }
+    grid.innerHTML = html;
+    renderInfoDiaMater(diaMaterSel);
+  }
+
+  function renderInfoDiaMater(iso) {
+    const box = document.getElementById("mater-dia-info");
+    if (!box) return;
+    const info = infoMater(iso);
+    const estado = info.ciclo ? `Ciclo ${info.ciclo}` : info.esSombrilla ? "Sombrilla (feriado / sin ciclo)" : "Fin de semana";
+    const lines = [
+      ...info.feriados.map(f => `<li>${f.emoji || "⛱️"} <strong>${f.nombre}</strong> <em>(Sombrilla)</em></li>`),
+      ...info.eventos.map(e => `<li>${e.emoji || "📌"} <strong>${e.nombre}</strong></li>`),
+      ...info.especiales.map(s => `<li>${s.emoji} <strong>${s.nombre}</strong> <em>(Fecha especial)</em></li>`)
+    ];
+    box.innerHTML = `<div><strong>${info.iso}</strong> · <strong>${estado}</strong></div>${
+      lines.length ? `<ul style="margin:6px 0 0 18px;">${lines.join("")}</ul>` : "<p style='margin:4px 0 0;'>Sin eventos ni feriados en esta fecha.</p>"
+    }`;
+  }
+
+  function seleccionarDiaMater(iso) { diaMaterSel = iso; renderCalendarioMater(); }
+  function moverMesMater(delta) { mesMater = new Date(mesMater.getFullYear(), mesMater.getMonth() + delta, 1); renderCalendarioMater(); }
+  function irHoyMater() {
+    const h = new Date();
+    diaMaterSel = toISO(h);
+    mesMater = new Date(h.getFullYear(), h.getMonth(), 1);
+    renderCalendarioMater();
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const hoyISO = toISO(new Date());
+    const lvInput = document.getElementById("lv-fecha-input");
+    if (lvInput) lvInput.value = hoyISO;
+    renderLunesViernes();
+    initCicloLOST();
+
+    const hInfo = infoMater(hoyISO);
+    const mRes = document.getElementById("mater-hoy-resumen");
+    if (mRes) {
+      mRes.textContent = `Hoy (${hoyISO}): ${hInfo.ciclo ? `Ciclo ${hInfo.ciclo}` : hInfo.esSombrilla ? "Sombrilla" : "Fin de semana"}${
+        hInfo.especiales.length ? " · " + hInfo.especiales.map(e => `${e.emoji} ${e.nombre}`).join(" · ") : ""
+      }`;
+    }
+    renderCalendarioMater();
+  });
+</script>
