@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#7e22ce" />
+<title>LOST</title>
+<link rel="manifest" href="./manifest.json" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&display=swap"
+rel="stylesheet"
+/>
+<link rel="stylesheet" href="styles.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js" defer></script>
+<style>
+  .lost-subtabs-bar {
+    display: flex;
+    gap: 0.45rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.9rem;
+  }
+  .lost-subtab-btn {
+    border: 1.5px solid #c084fc;
+    background: #f3e8ff;
+    color: #581c87;
+    font-weight: 800;
+    padding: 0.45rem 0.85rem;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 0.9rem;
+  }
+  .lost-subtab-btn.activa {
+    background: #7e22ce;
+    color: #ffffff;
+    border-color: #7e22ce;
+  }
+  .lost-subpanel {
+    margin-top: 0.5rem;
+  }
+  .lost-especial-banner {
+    margin-top: 0.45rem;
+    padding: 0.4rem 0.7rem;
+    border-radius: 12px;
+    background: #faf5ff;
+    border: 1px dashed #c084fc;
+    color: #581c87;
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+  .mater-cal-controls {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0.65rem 0;
+  }
+  .mater-cal-grid-hdr,
+  .mater-cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.35rem;
+  }
+  .mater-cal-grid-hdr div {
+    text-align: center;
+    font-weight: 800;
+    color: #581c87;
+    font-size: 0.82rem;
+    padding: 0.25rem 0;
+  }
+  .mater-celda {
+    min-height: 70px;
+    border: 1.5px solid #e9d5ff;
+    border-radius: 12px;
+    padding: 0.35rem;
+    background: #ffffff;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-size: 0.8rem;
+  }
+  .mater-celda.vacia {
+    background: transparent;
+    border-color: transparent;
+    cursor: default;
+  }
+  .mater-celda.sombrilla {
+    background: #fef3c7;
+    border-style: dashed;
+    border-color: #f59e0b;
+    opacity: 0.9;
+  }
+  .mater-celda.sel {
+    outline: 2px solid #7e22ce;
+  }
+  .mater-celda-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 800;
+    gap: 2px;
+  }
+  .mater-letra-pill {
+    background: #7e22ce;
+    color: #ffffff;
+    border-radius: 7px;
+    padding: 1px 6px;
+    font-size: 0.75rem;
+  }
+  .mater-evento-pill {
+    font-size: 0.7rem;
+    background: #f3e8ff;
+    color: #581c87;
+    border-radius: 6px;
+    padding: 2px 4px;
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 700;
+  }
+  .mater-detalle-box {
+    margin-top: 0.75rem;
+    padding: 0.75rem;
+    border-radius: 14px;
+    background: #faf5ff;
+    border: 1.5px solid #d8b4fe;
+  }
+</style>
+</head>
+<body>
+<div id="lost-welcome" class="lost-welcome-overlay" role="dialog" aria-modal="true" aria-labelledby="lost-welcome-titulo">
+<div class="card lost-welcome-card">
+<div class="lost-welcome-top">
+<span class="portada-tag" id="lost-welcome-badge">LOST</span>
+<span class="badge-fecha" id="lost-step-counter">Portada</span>
+</div>
+
+<div id="lost-landing-view" class="lost-welcome-body">
+<div class="muneco-wrap muneco-anim-flotar lost-welcome-muneco" id="welcome-muneco-box" aria-hidden="true">🗓️</div>
+<h1 class="portada-titulo lost-welcome-h1" id="lost-welcome-titulo">LOST</h1>
+<p class="portada-sub lost-welcome-tagline" id="lost-welcome-tagline">“Por si estás perdido y no sabes ni que día es después de unas buenas vacaciones.”</p>
+<p class="lost-creator-credit" id="lost-creator-credit">Creado por Sofía Aguirre Rivera</p>
+<p class="subtitulo-dia lost-welcome-desc" id="lost-welcome-desc">
+Organiza tu rutina académica o docente, consulta qué bloque está en curso y administra alarmas, fechas clave y comunidad desde un solo lugar.
+</p>
+
+<div class="lost-welcome-pills">
+<span class="materia-badge" id="pill-rol">🎓 Estudiante / Maestro</span>
+<span class="materia-badge" id="pill-ciclo">🔄 Ciclo A–F o Lun–Vie</span>
+<span class="materia-badge" id="pill-alarmas">⏰ Alarmas y feriados</span>
+<span class="materia-badge" id="pill-comunidad">🤝 Comunidad y QR</span>
+</div>
+
+<div class="lost-welcome-actions">
+<button type="button" class="btn-agregar" id="btn-iniciar-tutorial">Empezar tutorial (4 pasos)</button>
+<button type="button" class="btn-hoy" id="btn-saltar-todo">Ir directo a LOST</button>
+</div>
+</div>
+
+<div id="lost-tutorial-view" class="lost-welcome-body" style="display:none;">
+<div class="lost-progress-track">
+<div class="lost-progress-fill" id="lost-progress-fill" style="width:25%;"></div>
+</div>
+
+<div class="muneco-wrap muneco-anim-flotar lost-welcome-muneco" id="lost-step-icon" aria-hidden="true">🎓</div>
+<span class="lost-tutorial-tip" id="lost-step-tag">✦ Paso 1 · Rol y ciclo</span>
+<h2 id="lost-step-title">1. Tu rol y ciclo</h2>
+<p class="subtitulo-dia lost-welcome-desc" id="lost-step-body">
+Elige si usas LOST como Estudiante o Maestro y cambia entre Ciclo A–F o semana Lun–Vie desde la portada.
+</p>
+
+<div class="lost-welcome-actions">
+<button type="button" class="btn-hoy" id="btn-paso-anterior">◀ Atrás</button>
+<button type="button" class="btn-agregar" id="btn-paso-siguiente">Siguiente ▶</button>
+</div>
+<button type="button" class="btn-sec lost-welcome-omitir" id="btn-omitir-tutorial">Omitir y entrar a LOST</button>
+</div>
+</div>
+</div>
+
+<main class="app" id="lost-app" style="display:none;">
+<div class="alarma-alerta-banner" id="alarma-banner" role="alert">
+<div>
+<h3 class="alarma-alerta-titulo" id="alarma-banner-titulo">⏰ Alarma activa</h3>
+<p class="alarma-alerta-sub" id="alarma-banner-sub"></p>
+</div>
+<div style="display:flex;gap:0.45rem;flex-wrap:wrap;">
+<button type="button" class="btn-alarma-accion btn-posponer-alarma" id="btn-posponer-alarma">+5 min</button>
+<button type="button" class="btn-alarma-accion btn-detener-alarma" id="btn-detener-alarma">Detener</button>
+</div>
+</div>
+
+<header class="portada-lost" id="sec-inicio">
+<div class="portada-contenido">
+<div>
+<span class="portada-tag" id="portada-sub-tag">Estudiante · Ciclo Escolar A–F</span>
+<h1 class="portada-titulo">LOST</h1>
+<p class="portada-sub" id="portada-desc">Horario, calendario académico, alarmas, cumpleaños y comunidad</p>
+<div class="perfil-chip-portada" id="chip-perfil-activo">
+<span id="chip-perfil-emoji">🦊</span>
+<span id="chip-perfil-nombre">Mi Perfil</span>
+<span id="chip-perfil-cake"></span>
+</div>
+<div class="lost-auth-bar" id="zona-cuenta-lost">
+<button type="button" id="btn-login-lost" class="lost-btn-login" onclick="iniciarSesionGoogle()">
+Iniciar sesión con Google
+</button>
+<div id="info-usuario-lost" class="lost-user-pill" style="display:none;">
+<span id="nombre-usuario-lost"></span>
+<button type="button" id="btn-logout-lost" class="lost-btn-logout" onclick="cerrarSesionLOST()">Salir</button>
+</div>
+</div>
+<p class="msg-respaldo" id="estado-nube-lost"></p>
+</div>
+
+<div class="controles-portada">
+<div class="modo-switch" title="Idioma / Language / Langue">
+<button type="button" class="modo-btn activo" id="btn-idioma-es">ESP</button>
+<button type="button" class="modo-btn" id="btn-idioma-en">ING</button>
+<button type="button" class="modo-btn" id="btn-idioma-fr">FRANCÉS</button>
+</div>
+<div class="modo-switch" title="Selecciona tu rol en LOST">
+<button type="button" class="modo-btn activo" id="btn-rol-estudiante">Estudiante</button>
+<button type="button" class="modo-btn" id="btn-rol-maestro">Maestro</button>
+</div>
+<div class="modo-switch" title="Cambia entre ciclo A-F o semana normal">
+<button type="button" class="modo-btn activo" id="btn-modo-ciclo">Ciclo A–F</button>
+<button type="button" class="modo-btn" id="btn-modo-semanal">Lun–Vie</button>
+</div>
+<button type="button" class="btn-hoy" id="btn-ver-tutorial-app" title="Ver entrada y tutorial de 4 pasos">✨ Tutorial</button>
+</div>
+</div>
+</header>
+
+<section class="materia-card vista-seccion" data-vista="inicio" id="tarjeta-materia-muneco" aria-live="polite">
+<div>
+<span class="materia-badge" id="badge-categoria-materia">Materia activa / del día</span>
+<h2 class="materia-titulo" id="titulo-materia-muneco">Cargando calendario...</h2>
+<p class="materia-desc" id="desc-materia-muneco"></p>
+<div class="lost-especial-banner" id="inicio-fecha-especial" style="display:none;"></div>
+</div>
+<div class="muneco-wrap muneco-anim-flotar" id="muneco-materia-box" aria-hidden="true">🦊</div>
+</section>
+
+<section class="card hero vista-seccion" data-vista="inicio">
+<div>
+<p class="badge-fecha" id="texto-fecha-seleccionada"></p>
+<div class="letra-gigante" id="letra-seleccionada">A</div>
+<p class="subtitulo-dia" id="subtitulo-dia"></p>
+<div class="cumple-aviso-dia" id="cumple-aviso-dia" style="display:none;"></div>
+</div>
+<div class="hero-acciones">
+<button type="button" class="btn-hoy" id="btn-toggle-gym">🏋️ Gym este día</button>
+<button type="button" class="btn-hoy" id="btn-ir-hoy">Ir a hoy</button>
+</div>
+</section>
+
+<section class="card vista-seccion" data-vista="inicio" aria-live="polite">
+<div class="live-header">
+<h2 id="titulo-en-vivo">En vivo hoy</h2>
+<span class="live-reloj" id="reloj-en-vivo">--:--:--</span>
+</div>
+<div class="live-grid">
+<div class="live-box actual">
+<div class="live-etiqueta" id="etiqueta-bloque-actual">Bloque actual</div>
+<div class="live-titulo" id="live-bloque-actual">Cargando...</div>
+<div class="live-detalle" id="live-detalle-actual"></div>
+</div>
+<div class="live-box siguiente">
+<div class="live-etiqueta" id="etiqueta-siguiente-bloque">Siguiente bloque</div>
+<div class="live-titulo" id="live-siguiente-bloque">Cargando...</div>
+<div class="live-detalle" id="live-detalle-siguiente"></div>
+</div>
+</div>
+</section>
+
+<section class="card cal-card vista-seccion" data-vista="calendario">
+<div class="lost-subtabs-bar" role="tablist" aria-label="Modos de calendario">
+<button type="button" class="lost-subtab-btn activa" id="subtab-btn-lv" onclick="cambiarSubpestanaCalendario('lv')">Lunes–Viernes</button>
+<button type="button" class="lost-subtab-btn" id="subtab-btn-ciclo" onclick="cambiarSubpestanaCalendario('ciclo')">Ciclo</button>
+<button type="button" class="lost-subtab-btn" id="subtab-btn-mater" onclick="cambiarSubpestanaCalendario('mater')">Mater Salvatoris</button>
+</div>
+<div class="lost-especial-banner" id="cal-fecha-especial" style="display:none;"></div>
+
+<!-- SUBPESTAÑA 1: LUNES-VIERNES (Calendario base de LOST) -->
+<div id="subpanel-lv" class="lost-subpanel">
+<div class="cal-header">
+<button type="button" id="mes-anterior" aria-label="Mes anterior">◀</button>
+<div class="cal-titulo" id="titulo-mes"></div>
+<button type="button" id="mes-siguiente" aria-label="Mes siguiente">▶</button>
+</div>
+
+<div class="herramientas-feriados-lost">
+<button type="button" id="btn-modo-feriados-rapido" class="btn-sec">🗓️ Marcar feriados: OFF</button>
+<label class="btn-agregar lost-label-foto" for="input-foto-calendario">
+📸 Subir foto del calendario escolar
+<input type="file" id="input-foto-calendario" accept="image/*" style="display:none;" />
+</label>
+</div>
+<p class="msg-respaldo" id="estado-feriados-foto"></p>
+
+<div class="leyenda">
+<span><i style="background:#ede9fe;border-color:#7c3aed;"></i> Día de ciclo / clase</span>
+<span><i style="background:#fef3c7;border-color:#f59e0b;"></i> Feriado / Sin clases</span>
+<span><i style="background:#fce7f3;border-color:#ec4899;"></i> Cumpleaños</span>
+<span><i style="background:#dcfce7;border-color:#22c55e;"></i> Gym</span>
+</div>
+
+<div class="cal-grid-semana">
+<div>Dom</div><div>Lun</div><div>Mar</div><div>Mié</div><div>Jue</div><div>Vie</div><div>Sáb</div>
+</div>
+<div class="cal-grid-dias" id="cuadricula-calendario"></div>
+</div>
+
+<!-- SUBPESTAÑA 2: CICLO PERSONALIZABLE -->
+<div id="subpanel-ciclo" class="lost-subpanel" style="display:none;">
+<h3>Ciclo Personalizado</h3>
+<p class="subtitulo-dia" id="ciclo-custom-hoy"></p>
+
+<div class="form-grid" style="margin-top:0.5rem;">
+<div class="full">
+<label class="campo-lbl" for="custom-ciclo-desc">Descripción de tu ciclo</label>
+<textarea id="custom-ciclo-desc" rows="2" placeholder="Ej. Rotación de días de clase; no corre en feriados marcados."></textarea>
+</div>
+<div>
+<label class="campo-lbl" for="custom-ciclo-letras">Letras o códigos del ciclo (separados por coma)</label>
+<input type="text" id="custom-ciclo-letras" value="A, B, C, D" />
+</div>
+<div>
+<label class="campo-lbl" for="custom-ciclo-ancla-fecha">Fecha de referencia</label>
+<input type="date" id="custom-ciclo-ancla-fecha" />
+</div>
+<div>
+<label class="campo-lbl" for="custom-ciclo-ancla-letra">Letra en la fecha de referencia</label>
+<select id="custom-ciclo-ancla-letra"></select>
+</div>
+<div class="full">
+<button type="button" class="btn-agregar" onclick="guardarCicloPersonalLOST()">Guardar configuración de Ciclo</button>
+</div>
+</div>
+
+<div style="margin-top:0.85rem;">
+<label class="campo-lbl" for="custom-feriado-fecha">Marcar feriado / sin clases (Sombrilla)</label>
+<div style="display:flex;gap:0.45rem;flex-wrap:wrap;">
+<input type="date" id="custom-feriado-fecha" style="max-width:190px;" />
+<input type="text" id="custom-feriado-nombre" placeholder="Motivo o nombre del feriado" style="flex:1;min-width:160px;" />
+<button type="button" class="btn-sec" onclick="agregarFeriadoPersonalLOST()">+ Marcar</button>
+</div>
+<div style="margin-top:0.55rem;">
+<label class="campo-lbl" for="custom-feriado-archivo">O adjuntar archivo de feriados (.csv, .txt o .json)</label>
+<input type="file" id="custom-feriado-archivo" accept=".csv,.txt,.json" onchange="importarFeriadosArchivoLOST(event)" />
+</div>
+<ul class="lista-clases" id="custom-lista-feriados"></ul>
+</div>
+
+<div class="mater-detalle-box">
+<label class="campo-lbl" for="custom-consulta-fecha">Consultar fecha en tu ciclo</label>
+<div style="display:flex;gap:0.45rem;flex-wrap:wrap;align-items:center;">
+<input type="date" id="custom-consulta-fecha" onchange="renderConsultaCicloPersonalLOST()" />
+<span id="custom-consulta-resultado" style="font-weight:800;color:#581c87;"></span>
+</div>
+</div>
+</div>
+
+<!-- SUBPESTAÑA 3: MATER SALVATORIS (2026-2027, A-F, ANCLA 20 NOV 2026 = D) -->
+<div id="subpanel-mater" class="lost-subpanel" style="display:none;">
+<h3>Mater Salvatoris (2026–2027)</h3>
+<p class="subtitulo-dia" id="mater-resumen-hoy"></p>
+<small style="display:block;color:#6b21a8;font-weight:700;">Referencia: 20 de noviembre de 2026 = Ciclo D · Secuencia: A, B, C, D, E, F · Feriados en sombrilla</small>
+
+<div class="mater-cal-controls">
+<button type="button" class="btn-sec" onclick="cambiarMesMaterLOST(-1)">◀ Mes anterior</button>
+<strong id="mater-mes-titulo" style="color:#581c87;">Noviembre 2026</strong>
+<button type="button" class="btn-sec" onclick="cambiarMesMaterLOST(1)">Mes siguiente ▶</button>
+<button type="button" class="btn-hoy" onclick="irHoyMaterLOST()">Hoy</button>
+</div>
+
+<div class="mater-cal-grid-hdr">
+<div>Lun</div><div>Mar</div><div>Mié</div><div>Jue</div><div>Vie</div><div>Sáb</div><div>Dom</div>
+</div>
+<div id="mater-cal-grid" class="mater-cal-grid"></div>
+<div id="mater-dia-detalle" class="mater-detalle-box"></div>
+</div>
+</section>
+
+<section class="card vista-seccion" data-vista="crear">
+<h2 id="titulo-bloques-dia">📚 Bloques del día A</h2>
+<div class="tabs" id="tabs-dias"></div>
+
+<form id="form-clase" class="form-grid">
+<div>
+<label class="campo-lbl" for="input-materia">Materia o bloque</label>
+<input type="text" id="input-materia" placeholder="Ej. Matemáticas o Periodo 1" required />
+</div>
+<div>
+<label class="campo-lbl" for="input-salon">Salón / enlace / grupo</label>
+<input type="text" id="input-salon" placeholder="Ej. Salón 204 o Grupo 10-A" />
+</div>
+<div>
+<label class="campo-lbl" for="input-hora-inicio">Hora inicio</label>
+<input type="time" id="input-hora-inicio" required />
+</div>
+<div>
+<label class="campo-lbl" for="input-hora-fin">Hora fin</label>
+<input type="time" id="input-hora-fin" required />
+</div>
+<div class="full">
+<button type="submit" class="btn-agregar" id="btn-guardar-bloque">+ Guardar bloque</button>
+</div>
+</form>
+
+<ul class="lista-clases" id="lista-clases"></ul>
+</section>
+
+<section class="card vista-seccion" data-vista="calendario">
+<h2 id="titulo-notas-dia">📝 Notas y tareas</h2>
+<form id="form-nota" class="nota-form">
+<div class="nota-fila-top">
+<input type="date" id="input-fecha-nota" required />
+<select id="select-tipo-nota">
+<option value="Tarea">📌 Tarea</option>
+<option value="Examen">📝 Examen</option>
+<option value="Recordatorio">🔔 Recordatorio</option>
+</select>
+</div>
+<textarea id="input-texto-nota" rows="2" placeholder="Escribe tarea, examen o recordatorio..." required></textarea>
+<button type="submit" class="btn-agregar" id="btn-guardar-nota">+ Guardar nota</button>
+</form>
+<ul class="lista-clases" id="lista-notas"></ul>
+</section>
+
+<section class="card vista-seccion" data-vista="alarmas">
+<h2 id="titulo-alarmas">Alarmas (despertar, pendientes y recordatorios)</h2>
+<form id="form-alarma" class="form-grid">
+<div>
+<label class="campo-lbl" for="input-hora-alarma">Hora</label>
+<input type="time" id="input-hora-alarma" required />
+</div>
+<div>
+<label class="campo-lbl" for="select-tipo-alarma">Tipo de alarma</label>
+<select id="select-tipo-alarma">
+<option value="despertar">⏰ Despertar</option>
+<option value="pendiente">📌 Pendiente</option>
+<option value="recordatorio">🔔 Recordatorio</option>
+</select>
+</div>
+<div>
+<label class="campo-lbl" for="select-repeticion-alarma">Repetición</label>
+<select id="select-repeticion-alarma">
+<option value="una_vez">Una vez</option>
+<option value="diaria">Todos los días</option>
+<option value="lv">Lun–Vie</option>
+</select>
+</div>
+<div>
+<label class="campo-lbl" for="select-tono-alarma">Tono</label>
+<select id="select-tono-alarma">
+<option value="campanita">Campanita suave</option>
+<option value="arpegio">Arpegio alegre</option>
+<option value="pulso">Pulso firme</option>
+</select>
+</div>
+<div class="full">
+<label class="campo-lbl" for="input-etiqueta-alarma">Etiqueta</label>
+<input type="text" id="input-etiqueta-alarma" placeholder="Ej. Levantarme / Entregar proyecto / Clase" required />
+</div>
+<div class="full" style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+<button type="submit" class="btn-agregar" id="btn-guardar-alarma">+ Guardar alarma</button>
+<button type="button" class="btn-sec" id="btn-probar-alarma">🔊 Probar sonido</button>
+<button type="button" class="btn-sec" id="btn-permiso-notif">🔔 Activar notificaciones</button>
+</div>
+</form>
+<ul class="lista-clases" id="lista-alarmas"></ul>
+</section>
+
+<section class="card vista-seccion" data-vista="perfil">
+<h2 id="titulo-perfil">Mi perfil, avatar/Bitmoji, foto y cumpleaños</h2>
+<form id="form-perfil" class="form-grid">
+<div>
+<label class="campo-lbl" for="input-nombre-perfil">Tu nombre</label>
+<input type="text" id="input-nombre-perfil" placeholder="Ej. Sofía" required />
+</div>
+<div>
+<label class="campo-lbl" for="select-tipo-avatar">Tipo de avatar</label>
+<select id="select-tipo-avatar">
+<option value="emoji">Emoji / Mascota</option>
+<option value="bitmoji">Bitmoji / Sticker</option>
+<option value="foto">Foto propia</option>
+</select>
+</div>
+<div>
+<label class="campo-lbl" for="input-emoji-perfil">Emoji / Mascota / Bitmoji</label>
+<input type="text" id="input-emoji-perfil" maxlength="8" placeholder="🦊" />
+</div>
+<div>
+<label class="campo-lbl" for="input-cumple-perfil">Tu cumpleaños</label>
+<input type="date" id="input-cumple-perfil" />
+</div>
+<div class="full">
+<label class="campo-lbl" for="input-foto-perfil">Subir foto de perfil (opcional)</label>
+<input type="file" id="input-foto-perfil" accept="image/*" />
+</div>
+<div class="full">
+<span class="campo-lbl">Emojis rápidos</span>
+<div class="emoji-picker-rapido" id="selector-emojis-rapidos"></div>
+</div>
+<div class="full">
+<span class="campo-lbl">Bitmoji / Stickers</span>
+<div class="emoji-picker-rapido" id="selector-bitmoji-fotos"></div>
+</div>
+<div class="full" style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+<button type="submit" class="btn-agregar" id="btn-guardar-perfil">Guardar mi perfil</button>
+<button type="button" class="btn-sec" id="btn-link-mi-perfil">🔗 Copiar mi enlace</button>
+<button type="button" class="btn-sec" id="btn-qr-mi-perfil">📱 QR de mi perfil</button>
+</div>
+</form>
+<p class="msg-respaldo" id="msg-perfil"></p>
+</section>
+
+<section class="card vista-seccion" data-vista="perfil">
+<h2 id="titulo-comunidad">Comunidad compartida (QR, Enlace o en la App)</h2>
+<form id="form-comunidad" class="form-grid">
+<div>
+<label class="campo-lbl" for="input-nombre-amigo">Nombre del compañero/a</label>
+<input type="text" id="input-nombre-amigo" placeholder="Ej. Valentina" required />
+</div>
+<div>
+<label class="campo-lbl" for="input-emoji-amigo">Emoji</label>
+<input type="text" id="input-emoji-amigo" maxlength="8" value="💜" />
+</div>
+<div class="full">
+<label class="campo-lbl" for="input-cumple-amigo">Cumpleaños</label>
+<input type="date" id="input-cumple-amigo" />
+</div>
+<div class="full">
+<button type="submit" class="btn-agregar" id="btn-agregar-amigo">+ Agregar a la comunidad</button>
+</div>
+</form>
+
+<div style="margin-top:0.85rem;">
+<label class="campo-lbl" for="input-enlace-comunidad">Pegar enlace, código o JSON de perfil/comunidad</label>
+<input type="text" id="input-enlace-comunidad" placeholder="Pega aquí un enlace #perfil=..., código o JSON" />
+<div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.55rem;">
+<button type="button" class="btn-sec" id="btn-fusionar-comunidad">🤝 Fusionar enlace/código</button>
+<button type="button" class="btn-sec" id="btn-link-comunidad">🔗 Copiar enlace comunidad</button>
+<button type="button" class="btn-sec" id="btn-qr-comunidad">📱 QR de comunidad</button>
+</div>
+</div>
+
+<div class="qr-panel" id="panel-qr-compartir">
+<h3 id="titulo-qr-panel" style="margin:0 0 0.25rem;">Código QR</h3>
+<p class="subtitulo-dia" id="subtitulo-qr-panel" style="margin:0;"></p>
+<div class="qr-canvas-box" id="contenedor-qr"></div>
+<button type="button" class="btn-sec" id="btn-cerrar-qr">Cerrar QR</button>
+</div>
+
+<ul class="lista-clases" id="lista-comunidad"></ul>
+</section>
+
+<section class="card vista-seccion" data-vista="perfil">
+<h2 id="titulo-config">⚙️ Configuración del ciclo, feriados, Apps Script y respaldo</h2>
+
+<div class="ciclo-resumen-bar">
+<div class="ciclo-stat">
+<span class="ciclo-stat-lbl">Inicio del ciclo</span>
+<span class="ciclo-stat-val" id="stat-inicio-ciclo">--</span>
+</div>
+<div class="ciclo-stat">
+<span class="ciclo-stat-lbl">Letras del ciclo</span>
+<span class="ciclo-stat-val" id="stat-letras-ciclo">A–F</span>
+</div>
+<div class="ciclo-stat">
+<span class="ciclo-stat-lbl">Feriados registrados</span>
+<span class="ciclo-stat-val" id="stat-total-feriados">0</span>
+</div>
+</div>
+
+<form id="form-config-ciclo" class="form-grid">
+<div>
+<label class="campo-lbl" for="input-fecha-inicio-ciclo">Fecha de inicio del ciclo</label>
+<input type="date" id="input-fecha-inicio-ciclo" required />
+</div>
+<div>
+<label class="campo-lbl" for="input-letras-ciclo">Letras del ciclo (separadas por coma)</label>
+<input type="text" id="input-letras-ciclo" value="A, B, C, D, E, F" required />
+</div>
+<div>
+<label class="campo-lbl" for="input-correo-destino">Correo destino</label>
+<input type="email" id="input-correo-destino" placeholder="tu@correo.com" />
+</div>
+<div>
+<label class="campo-lbl" for="input-minutos-antelacion">Minutos de antelación</label>
+<input type="number" id="input-minutos-antelacion" min="0" max="120" value="15" />
+</div>
+<div class="full">
+<label class="campo-lbl" for="input-apps-script-url">URL de Google Apps Script (opcional)</label>
+<input type="url" id="input-apps-script-url" placeholder="https://script.google.com/macros/s/.../exec" />
+</div>
+<div class="full">
+<button type="submit" class="btn-agregar" id="btn-guardar-config">Guardar configuración</button>
+</div>
+</form>
+
+<div class="feriado-controles">
+<label class="campo-lbl" for="input-fecha-feriado">Marcar o quitar día feriado / sin clases</label>
+<div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+<input type="date" id="input-fecha-feriado" style="max-width:220px;" />
+<button type="button" class="btn-sec" id="btn-toggle-feriado">🏖️ Alternar feriado</button>
+</div>
+<ul class="lista-clases" id="lista-feriados"></ul>
+</div>
+
+<div class="json-avanzado-box">
+<div class="respaldo-botones">
+<button type="button" class="btn-sec" id="btn-sync-calendar">📅 Sincronizar Calendar</button>
+<button type="button" class="btn-sec" id="btn-sync-correo">✉️ Enviar resumen por correo</button>
+<button type="button" class="btn-sec" id="btn-copiar-json">📋 Copiar respaldo JSON</button>
+<button type="button" class="btn-sec" id="btn-importar-json">📥 Importar JSON</button>
+</div>
+<textarea id="area-json-respaldo" rows="4" placeholder="Aquí aparece o se pega tu respaldo en formato JSON..."></textarea>
+<p class="msg-respaldo" id="msg-respaldo"></p>
+</div>
+</section>
+</main>
+
+<nav class="kawaii-bottom-bar" aria-label="Navegación principal de LOST" id="lost-bottom-nav">
+<button type="button" class="kawaii-tab-item activa" data-target-vista="inicio" id="nav-btn-inicio">
+<span class="kawaii-tab-ico">🏠</span>
+<span class="kawaii-tab-lbl" id="nav-lbl-inicio">Inicio</span>
+</button>
+<button type="button" class="kawaii-tab-item" data-target-vista="calendario" id="nav-btn-calendario">
+<span class="kawaii-tab-ico">📅</span>
+<span class="kawaii-tab-lbl" id="nav-lbl-calendario">Calendario</span>
+</button>
+<button type="button" class="kawaii-tab-item kawaii-tab-center" data-target-vista="crear" id="nav-btn-crear">
+<span class="kawaii-tab-ico">+</span>
+<span class="kawaii-tab-lbl" id="nav-lbl-crear">Crear</span>
+</button>
+<button type="button" class="kawaii-tab-item" data-target-vista="alarmas" id="nav-btn-alarmas">
+<span class="kawaii-tab-ico">⏰</span>
+<span class="kawaii-tab-lbl" id="nav-lbl-alarmas">Alarmas</span>
+</button>
+<button type="button" class="kawaii-tab-item" data-target-vista="perfil" id="nav-btn-perfil">
+<span class="kawaii-tab-ico">🌸</span>
+<span class="kawaii-tab-lbl" id="nav-lbl-perfil">Perfil</span>
+</button>
+</nav>
+
+<script src="app.js"></script>
+<script>
+(() => {
+  const FECHAS_ESPECIALES_LOST = {
+    "01-01": [{ emoji: "🎉", nombre: "Año Nuevo" }],
+    "01-04": [{ emoji: "⠃", nombre: "Día Mundial del Braille" }],
+    "01-06": [{ emoji: "👑", nombre: "Día de Reyes" }],
+    "01-24": [{ emoji: "📚", nombre: "Día Internacional de la Educación" }],
+    "01-27": [{ emoji: "🕯️", nombre: "Día Internacional de Conmemoración en Memoria de las Víctimas del Holocausto" }],
+    "02-02": [{ emoji: "🌿", nombre: "Día Mundial de los Humedales" }],
+    "02-04": [{ emoji: "🎗️", nombre: "Día Mundial contra el Cáncer" }],
+    "02-11": [{ emoji: "🔬", nombre: "Día Internacional de la Mujer y la Niña en la Ciencia" }],
+    "02-13": [{ emoji: "📻", nombre: "Día Mundial de la Radio" }],
+    "02-14": [{ emoji: "💘", nombre: "Día de San Valentín" }],
+    "02-21": [{ emoji: "🗣️", nombre: "Día Internacional de la Lengua Materna" }],
+    "03-03": [{ emoji: "🐾", nombre: "Día Mundial de la Vida Silvestre" }],
+    "03-08": [{ emoji: "💜", nombre: "Día Internacional de la Mujer" }],
+    "03-14": [{ emoji: "📐", nombre: "Día Internacional de las Matemáticas" }],
+    "03-20": [{ emoji: "😊", nombre: "Día Internacional de la Felicidad" }],
+    "03-21": [{ emoji: "✍️", nombre: "Día Mundial de la Poesía y Día Internacional de la Eliminación de la Discriminación Racial" }],
+    "03-22": [{ emoji: "💧", nombre: "Día Mundial del Agua" }],
+    "04-07": [{ emoji: "🩺", nombre: "Día Mundial de la Salud" }],
+    "04-15": [{ emoji: "🎨", nombre: "Día Mundial del Arte" }],
+    "04-22": [{ emoji: "🌍", nombre: "Día Internacional de la Madre Tierra" }],
+    "04-23": [{ emoji: "📖", nombre: "Día Mundial del Libro" }],
+    "04-30": [{ emoji: "🎷", nombre: "Día Internacional del Jazz" }],
+    "05-03": [{ emoji: "📰", nombre: "Día Mundial de la Libertad de Prensa" }],
+    "05-20": [{ emoji: "🐝", nombre: "Día Mundial de las Abejas" }],
+    "05-21": [{ emoji: "🌐", nombre: "Día Mundial de la Diversidad Cultural" }],
+    "05-22": [{ emoji: "🦋", nombre: "Día Internacional de la Diversidad Biológica" }],
+    "06-05": [{ emoji: "🌱", nombre: "Día Mundial del Medio Ambiente" }],
+    "06-08": [{ emoji: "🌊", nombre: "Día Mundial de los Océanos" }],
+    "07-11": [{ emoji: "👥", nombre: "Día Mundial de la Población" }],
+    "07-18": [{ emoji: "🕊️", nombre: "Día Internacional de Nelson Mandela" }],
+    "07-30": [{ emoji: "🤝", nombre: "Día Internacional de la Amistad" }],
+    "08-09": [{ emoji: "🪶", nombre: "Día Internacional de los Pueblos Indígenas" }],
+    "08-12": [{ emoji: "🌟", nombre: "Día Internacional de la Juventud" }],
+    "09-08": [{ emoji: "✏️", nombre: "Día Internacional de la Alfabetización" }],
+    "09-15": [{ emoji: "🗳️", nombre: "Día Internacional de la Democracia" }],
+    "09-21": [{ emoji: "☮️", nombre: "Día Internacional de la Paz y Día Mundial del Alzheimer" }],
+    "09-27": [{ emoji: "✈️", nombre: "Día Mundial del Turismo" }],
+    "10-01": [{ emoji: "☕", nombre: "Día Internacional de las Personas de Edad y del Café" }],
+    "10-05": [{ emoji: "🍎", nombre: "Día Mundial de los Docentes" }],
+    "10-11": [{ emoji: "🌸", nombre: "Día Internacional de la Niña" }],
+    "10-24": [{ emoji: "🇺🇳", nombre: "Día de las Naciones Unidas" }],
+    "10-31": [{ emoji: "🎃", nombre: "Halloween" }],
+    "11-01": [{ emoji: "🕯️", nombre: "Día de Todos los Santos" }],
+    "11-02": [{ emoji: "🌼", nombre: "Día de los Muertos" }],
+    "11-10": [{ emoji: "🧪", nombre: "Día Mundial de la Ciencia" }],
+    "11-14": [{ emoji: "💙", nombre: "Día Mundial de la Diabetes" }],
+    "11-20": [{ emoji: "🎈", nombre: "Día Universal del Niño y de la Filosofía" }],
+    "11-25": [{ emoji: "💜", nombre: "Día contra la Violencia hacia la Mujer" }],
+    "12-01": [{ emoji: "❤️", nombre: "Día Mundial del SIDA" }],
+    "12-03": [{ emoji: "♿", nombre: "Día de las Personas con Discapacidad" }],
+    "12-10": [{ emoji: "📜", nombre: "Día de los Derechos Humanos" }],
+    "12-18": [{ emoji: "🌍", nombre: "Día del Migrante" }],
+    "12-25": [{ emoji: "🎄", nombre: "Navidad" }],
+    "12-31": [{ emoji: "🎆", nombre: "Fin de Año" }]
+  };
+
+  function obtenerEspeciales(iso) {
+    if (!iso || iso.length < 10) return [];
+    return FECHAS_ESPECIALES_LOST[iso.slice(5)] || [];
+  }
+
+  function parseISO(iso) {
+    const [y, m, d] = iso.split("-").map(Number);
+    return new Date(y, m - 1, d);
+  }
+
+  function toISO(dt) {
+    return `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, "0")}-${String(dt.getDate()).padStart(2, "0")}`;
+  }
+
+  function refrescarEspecialesEnPantalla() {
+    const hoyISO = toISO(new Date());
+    const espHoy = obtenerEspeciales(hoyISO);
+    const bannerInicio = document.getElementById("inicio-fecha-especial");
+    if (bannerInicio) {
+      if (espHoy.length) {
+        bannerInicio.style.display = "block";
+        bannerInicio.textContent = espHoy.map(e => `${e.emoji} ${e.nombre}`).join(" · ");
+      } else {
+        bannerInicio.style.display = "none";
+      }
+    }
+
+    const fechaInputNota = document.getElementById("input-fecha-nota");
+    const fechaRef = (fechaInputNota && fechaInputNota.value) || hoyISO;
+    const espCal = obtenerEspeciales(fechaRef);
+    const bannerCal = document.getElementById("cal-fecha-especial");
+    if (bannerCal) {
+      if (espCal.length) {
+        bannerCal.style.display = "block";
+        bannerCal.textContent = `${fechaRef}: ${espCal.map(e => `${e.emoji} ${e.nombre}`).join(" · ")}`;
+      } else {
+        bannerCal.style.display = "none";
+      }
+    }
+  }
+
+  window.cambiarSubpestanaCalendario = (tab) => {
+    const panels = {
+      lv: document.getElementById("subpanel-lv"),
+      ciclo: document.getElementById("subpanel-ciclo"),
+      mater: document.getElementById("subpanel-mater")
+    };
+    const btns = {
+      lv: document.getElementById("subtab-btn-lv"),
+      ciclo: document.getElementById("subtab-btn-ciclo"),
+      mater: document.getElementById("subtab-btn-mater")
+    };
+    Object.keys(panels).forEach(k => {
+      if (panels[k]) panels[k].style.display = k === tab ? "block" : "none";
+      if (btns[k]) btns[k].classList.toggle("activa", k === tab);
+    });
+    if (tab === "ciclo") renderConsultaCicloPersonalLOST();
+    if (tab === "mater") renderMesMaterLOST();
+  };
+
+  // --- CICLO PERSONALIZADO ---
+  const KEY_CICLO_LOST = "lost_ciclo_custom_v1";
+  let cicloCustom = {
+    descripcion: "",
+    letras: ["A", "B", "C", "D"],
+    anclaFecha: toISO(new Date()),
+    anclaLetra: "A",
+    feriados: []
+  };
+
+  function cargarCicloCustom() {
+    try {
+      const raw = localStorage.getItem(KEY_CICLO_LOST);
+      if (raw) cicloCustom = { ...cicloCustom, ...JSON.parse(raw) };
+    } catch (e) {}
+
+    const descEl = document.getElementById("custom-ciclo-desc");
+    const letrasEl = document.getElementById("custom-ciclo-letras");
+    const anclaFEl = document.getElementById("custom-ciclo-ancla-fecha");
+    const consFEl = document.getElementById("custom-consulta-fecha");
+
+    if (descEl) descEl.value = cicloCustom.descripcion || "";
+    if (letrasEl) letrasEl.value = cicloCustom.letras.join(", ");
+    if (anclaFEl) anclaFEl.value = cicloCustom.anclaFecha;
+    if (consFEl) consFEl.value = toISO(new Date());
+
+    poblarSelectAnclaCustom();
+    renderListaFeriadosCustom();
+    renderConsultaCicloPersonalLOST();
+  }
+
+  function poblarSelectAnclaCustom() {
+    const letrasEl = document.getElementById("custom-ciclo-letras");
+    const sel = document.getElementById("custom-ciclo-ancla-letra");
+    if (!letrasEl || !sel) return;
+    const arr = letrasEl.value.split(",").map(s => s.trim()).filter(Boolean);
+    const lista = arr.length ? arr : ["A"];
+    const prev = sel.value || cicloCustom.anclaLetra;
+    sel.innerHTML = lista.map(l => `<option value="${l}">${l}</option>`).join("");
+    if (lista.includes(prev)) sel.value = prev;
+  }
+
+  document.getElementById("custom-ciclo-letras")?.addEventListener("input", poblarSelectAnclaCustom);
+
+  window.guardarCicloPersonalLOST = () => {
+    const letras = (document.getElementById("custom-ciclo-letras")?.value || "")
+      .split(",").map(s => s.trim()).filter(Boolean);
+    if (!letras.length) return;
+    cicloCustom.descripcion = (document.getElementById("custom-ciclo-desc")?.value || "").trim();
+    cicloCustom.letras = letras;
+    cicloCustom.anclaFecha = document.getElementById("custom-ciclo-ancla-fecha")?.value || toISO(new Date());
+    cicloCustom.anclaLetra = document.getElementById("custom-ciclo-ancla-letra")?.value || letras[0];
+    localStorage.setItem(KEY_CICLO_LOST, JSON.stringify(cicloCustom));
+    if (typeof window.guardarEnNubeLOST === "function" && typeof window.obtenerEstadoLOST === "function") {
+      window.guardarEnNubeLOST({ ...window.obtenerEstadoLOST(), cicloCustom });
+    }
+    renderConsultaCicloPersonalLOST();
+  };
+
+  window.agregarFeriadoPersonalLOST = () => {
+    const fecha = document.getElementById("custom-feriado-fecha")?.value;
+    const nombre = (document.getElementById("custom-feriado-nombre")?.value || "").trim() || "Feriado / Sin clases";
+    if (!fecha) return;
+    if (!cicloCustom.feriados.some(f => f.fecha === fecha)) {
+      cicloCustom.feriados.push({ fecha, nombre });
+      cicloCustom.feriados.sort((a, b) => a.fecha.localeCompare(b.fecha));
+      window.guardarCicloPersonalLOST();
+      renderListaFeriadosCustom();
+    }
+    const inpN = document.getElementById("custom-feriado-nombre");
+    if (inpN) inpN.value = "";
+  };
+
+  window.quitarFeriadoPersonalLOST = (fecha) => {
+    cicloCustom.feriados = cicloCustom.feriados.filter(f => f.fecha !== fecha);
+    window.guardarCicloPersonalLOST();
+    renderListaFeriadosCustom();
+  };
+
+  window.importarFeriadosArchivoLOST = (ev) => {
+    const file = ev.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const txt = String(reader.result || "").trim();
+      let items = [];
+      if (file.name.toLowerCase().endsWith(".json")) {
+        try {
+          const parsed = JSON.parse(txt);
+          if (Array.isArray(parsed)) {
+            items = parsed.filter(x => x && x.fecha).map(x => ({
+              fecha: String(x.fecha).trim(),
+              nombre: String(x.nombre || "Feriado").trim()
+            }));
+          }
+        } catch (e) { return; }
+      } else {
+        items = txt.split(/\r?\n/).map(l => l.trim()).filter(Boolean).map(l => {
+          const [f, ...r] = l.split(",");
+          return { fecha: f.trim(), nombre: r.join(",").trim() || "Feriado" };
+        }).filter(x => /^\d{4}-\d{2}-\d{2}$/.test(x.fecha));
+      }
+      items.forEach(it => {
+        if (!cicloCustom.feriados.some(f => f.fecha === it.fecha)) {
+          cicloCustom.feriados.push(it);
+        }
+      });
+      cicloCustom.feriados.sort((a, b) => a.fecha.localeCompare(b.fecha));
+      window.guardarCicloPersonalLOST();
+      renderListaFeriadosCustom();
+      ev.target.value = "";
+    };
+    reader.readAsText(file);
+  };
+
+  function renderListaFeriadosCustom() {
+    const ul = document.getElementById("custom-lista-feriados");
+    if (!ul) return;
+    ul.innerHTML = cicloCustom.feriados.length
+      ? cicloCustom.feriados.map(f => `<li><strong>${f.fecha}</strong> — ${f.nombre} <button type="button" class="btn-sec" onclick="quitarFeriadoPersonalLOST('${f.fecha}')">Quitar</button></li>`).join("")
+      : "<li>No hay feriados marcados en tu ciclo.</li>";
+  }
+
+  function calcularCicloCustomEnFecha(iso) {
+    const feriado = cicloCustom.feriados.find(f => f.fecha === iso);
+    if (feriado) return `Sombrilla (${feriado.nombre})`;
+    const dt = parseISO(iso);
+    if (dt.getDay() === 0 || dt.getDay() === 6) return "Fin de semana";
+    const letras = cicloCustom.letras.length ? cicloCustom.letras : ["A"];
+    const idx0 = Math.max(0, letras.indexOf(cicloCustom.anclaLetra));
+    const ancla = parseISO(cicloCustom.anclaFecha);
+    const esHabil = (d) => d.getDay() !== 0 && d.getDay() !== 6 && !cicloCustom.feriados.some(f => f.fecha === toISO(d));
+    let pasos = 0;
+    const cur = new Date(ancla.getTime());
+    if (dt > ancla) {
+      while (toISO(cur) < iso) { cur.setDate(cur.getDate() + 1); if (esHabil(cur)) pasos++; }
+    } else if (dt < ancla) {
+      while (toISO(cur) > iso) { cur.setDate(cur.getDate() - 1); if (esHabil(cur)) pasos--; }
+    }
+    const n = letras.length;
+    return `Ciclo ${letras[(((idx0 + pasos) % n) + n) % n]}`;
+  }
+
+  window.renderConsultaCicloPersonalLOST = () => {
+    const hoy = toISO(new Date());
+    const espHoy = obtenerEspeciales(hoy);
+    const hoyEl = document.getElementById("ciclo-custom-hoy");
+    if (hoyEl) {
+      hoyEl.textContent = `Hoy (${hoy}): ${calcularCicloCustomEnFecha(hoy)}${espHoy.length ? " · " + espHoy.map(e => `${e.emoji} ${e.nombre}`).join(" · ") : ""}`;
+    }
+    const input = document.getElementById("custom-consulta-fecha");
+    const out = document.getElementById("custom-consulta-resultado");
+    if (!input || !out) return;
+    const iso = input.value || hoy;
+    const esp = obtenerEspeciales(iso);
+    out.textContent = `${calcularCicloCustomEnFecha(iso)}${esp.length ? " · " + esp.map(e => `${e.emoji} ${e.nombre}`).join(" · ") : ""}`;
+  };
+
+  // --- MATER SALVATORIS (2026-2027, A-F, ANCLA 20 NOV 2026 = D) ---
+  const CICLOS_MATER = ["A", "B", "C", "D", "E", "F"];
+  const ANCLA_MATER_FECHA = "2026-11-20";
+  const ANCLA_MATER_IDX = 3;
+
+  const FERIADOS_MATER = [
+    { inicio: "2026-08-06", fin: "2026-08-07", nombre: "Labores docentes", emoji: "👩‍🏫" },
+    { inicio: "2026-09-07", fin: "2026-09-07", nombre: "Labor Day (no clases)", emoji: "🏖️" },
+    { inicio: "2026-10-12", fin: "2026-10-12", nombre: "Día de la hispanidad (no clases)", emoji: "🌎" },
+    { inicio: "2026-11-23", fin: "2026-11-27", nombre: "Semana de acción de gracias", emoji: "🦃" },
+    { inicio: "2026-12-17", fin: "2026-12-21", nombre: "Labores docentes", emoji: "👩‍🏫" },
+    { inicio: "2027-01-08", fin: "2027-01-08", nombre: "Labores docentes", emoji: "👩‍🏫" },
+    { inicio: "2027-01-18", fin: "2027-01-18", nombre: "Día de Martin Luther King Jr. (no clases)", emoji: "🕊️" },
+    { inicio: "2027-02-15", fin: "2027-02-15", nombre: "Día de los Presidentes", emoji: "🇺🇸" },
+    { inicio: "2027-03-19", fin: "2027-03-19", nombre: "Retiro de Facultad (no clases)", emoji: "✝️" },
+    { inicio: "2027-05-24", fin: "2027-05-24", nombre: "Memorial day (no clases)", emoji: "🇺🇸" },
+    { inicio: "2027-05-25", fin: "2027-05-31", nombre: "Labores docentes", emoji: "👩‍🏫" }
+  ];
+
+  const EVENTOS_MATER = [
+    { inicio: "2026-08-10", fin: "2026-08-12", nombre: "Orientación de padres", emoji: "🎒" },
+    { inicio: "2026-08-13", fin: "2026-08-14", nombre: "Comienzo de clases", emoji: "✏️" },
+    { inicio: "2026-10-06", fin: "2026-10-08", nombre: "Midterms Int. HS", emoji: "📝" },
+    { inicio: "2026-10-15", fin: "2026-10-17", nombre: "Torneo de Voley", emoji: "🏐" },
+    { inicio: "2026-11-16", fin: "2026-11-20", nombre: "Semana de Puerto Rico", emoji: "🇵🇷" },
+    { inicio: "2026-12-14", fin: "2026-12-16", nombre: "Midterms Int. HS", emoji: "📝" },
+    { inicio: "2026-12-15", fin: "2026-12-15", nombre: "Festival de Navidad de 1, 2 y 3 grado", emoji: "🎅" },
+    { inicio: "2026-12-16", fin: "2026-12-16", nombre: "Festival de Navidad de 4, 5 y 6 grado", emoji: "🎄" },
+    { inicio: "2026-12-16", fin: "2026-12-16", nombre: "Último día de clases preescolar, elemental, Inte. y HS", emoji: "🔔" },
+    { inicio: "2026-12-17", fin: "2026-12-17", nombre: "Festival de Navidad de Preescolar", emoji: "⭐" },
+    { inicio: "2027-01-11", fin: "2027-01-11", nombre: "Comienzo de las clases", emoji: "📚" },
+    { inicio: "2027-02-05", fin: "2027-02-05", nombre: "Field day Intermedia y HS", emoji: "🏃" },
+    { inicio: "2027-02-10", fin: "2027-02-10", nombre: "Miércoles de Ceniza", emoji: "✝️" },
+    { inicio: "2027-02-12", fin: "2027-02-12", nombre: "Field day elemental", emoji: "🏅" },
+    { inicio: "2027-02-19", fin: "2027-02-19", nombre: "Field day Preescolar", emoji: "🎈" },
+    { inicio: "2027-02-26", fin: "2027-02-26", nombre: "Torneo de Golf", emoji: "⛳" },
+    { inicio: "2027-03-02", fin: "2027-03-04", nombre: "Midterms Int. HS", emoji: "📝" },
+    { inicio: "2027-03-12", fin: "2027-03-13", nombre: "Torneo de Baloncesto", emoji: "🏀" },
+    { inicio: "2027-03-30", fin: "2027-03-30", nombre: "Comienzo de clases", emoji: "✏️" },
+    { inicio: "2027-04-05", fin: "2027-04-05", nombre: "Solemnidad de la Anunciación. Misa Mater", emoji: "⛪" },
+    { inicio: "2027-04-16", fin: "2027-04-17", nombre: "Torneo de futsal", emoji: "⚽" },
+    { inicio: "2027-05-06", fin: "2027-05-06", nombre: "Día del estudiante", emoji: "🎉" },
+    { inicio: "2027-05-07", fin: "2027-05-07", nombre: "Día del maestro", emoji: "🍎" },
+    { inicio: "2027-05-12", fin: "2027-05-14", nombre: "Midterms Int. HS", emoji: "📝" },
+    { inicio: "2027-05-18", fin: "2027-05-18", nombre: "Misa de grado 12", emoji: "🎓" },
+    { inicio: "2027-05-19", fin: "2027-05-19", nombre: "Graduación de grado 12", emoji: "🥳" },
+    { inicio: "2027-05-20", fin: "2027-05-20", nombre: "Fin de preescolar y elemental / Grad. 8vo", emoji: "🎓" },
+    { inicio: "2027-05-21", fin: "2027-05-21", nombre: "Graduación de Kinder", emoji: "🌟" },
+    { inicio: "2027-05-25", fin: "2027-07-02", nombre: "Campamento verano", emoji: "☀️" }
+  ];
+
+  let mesMater = new Date(2026, 10, 1);
+  let diaMaterSel = "2026-11-20";
+
+  function rangoMatch(arr, iso) {
+    return arr.filter(x => iso >= x.inicio && iso <= x.fin);
+  }
+
+  function esDiaConCicloMater(dt) {
+    const dow = dt.getDay();
+    if (dow === 0 || dow === 6) return false;
+    return rangoMatch(FERIADOS_MATER, toISO(dt)).length === 0;
+  }
+
+  function calcularInfoMater(iso) {
+    const dt = parseISO(iso);
+    const feriados = rangoMatch(FERIADOS_MATER, iso);
+    const eventos = rangoMatch(EVENTOS_MATER, iso);
+    const especiales = obtenerEspeciales(iso);
+    const esSombrilla = feriados.length > 0;
+
+    let ciclo = null;
+    if (!esSombrilla && dt.getDay() !== 0 && dt.getDay() !== 6) {
+      if (iso === ANCLA_MATER_FECHA) {
+        ciclo = CICLOS_MATER[ANCLA_MATER_IDX];
+      } else {
+        const ancla = parseISO(ANCLA_MATER_FECHA);
+        let pasos = 0;
+        const cur = new Date(ancla.getTime());
+        if (dt > ancla) {
+          while (toISO(cur) < iso) { cur.setDate(cur.getDate() + 1); if (esDiaConCicloMater(cur)) pasos++; }
+        } else {
+          while (toISO(cur) > iso) { cur.setDate(cur.getDate() - 1); if (esDiaConCicloMater(cur)) pasos--; }
+        }
+        const n = CICLOS_MATER.length;
+        ciclo = CICLOS_MATER[(((ANCLA_MATER_IDX + pasos) % n) + n) % n];
+      }
+    }
+    return { iso, dt, ciclo, esSombrilla, feriados, eventos, especiales };
+  }
+
+  window.renderMesMaterLOST = () => {
+    const grid = document.getElementById("mater-cal-grid");
+    const tit = document.getElementById("mater-mes-titulo");
+    if (!grid || !tit) return;
+
+    const y = mesMater.getFullYear();
+    const m = mesMater.getMonth();
+    const nom = mesMater.toLocaleDateString("es-PR", { month: "long", year: "numeric" });
+    tit.textContent = nom.charAt(0).toUpperCase() + nom.slice(1);
+
+    const primero = new Date(y, m, 1);
+    const offset = (primero.getDay() + 6) % 7;
+    const total = new Date(y, m + 1, 0).getDate();
+
+    let html = "";
+    for (let i = 0; i < offset; i++) html += `<div class="mater-celda vacia"></div>`;
+
+    for (let d = 1; d <= total; d++) {
+      const iso = toISO(new Date(y, m, d));
+      const info = calcularInfoMater(iso);
+      const cls = ["mater-celda"];
+      if (info.esSombrilla) cls.push("sombrilla");
+      if (iso === diaMaterSel) cls.push("sel");
+
+      const emojis = [
+        ...info.especiales.map(e => e.emoji),
+        ...info.eventos.map(e => e.emoji || ""),
+        ...info.feriados.map(f => f.emoji || "")
+      ].filter(Boolean).join(" ");
+
+      const tags = [
+        ...info.especiales.map(e => `${e.emoji} ${e.nombre}`),
+        ...info.eventos.map(e => `${e.emoji || "📌"} ${e.nombre}`),
+        ...info.feriados.map(f => `${f.emoji || "⛱️"} ${f.nombre}`)
+      ];
+
+      html += `
+        <div class="${cls.join(" ")}" onclick="seleccionarDiaMaterLOST('${iso}')">
+          <div class="mater-celda-top">
+            <span>${d} ${emojis}</span>
+            ${info.ciclo ? `<span class="mater-letra-pill">${info.ciclo}</span>` : ""}
+          </div>
+          <div>${tags.slice(0, 2).map(t => `<div class="mater-evento-pill">${t}</div>`).join("")}</div>
+        </div>
+      `;
+    }
+    grid.innerHTML = html;
+    renderDetalleDiaMaterLOST(diaMaterSel);
+  };
+
+  function renderDetalleDiaMaterLOST(iso) {
+    const box = document.getElementById("mater-dia-detalle");
+    if (!box) return;
+    const info = calcularInfoMater(iso);
+    const estado = info.ciclo ? `Ciclo ${info.ciclo}` : info.esSombrilla ? "Sombrilla (feriado / sin ciclo)" : "Fin de semana";
+    const lines = [
+      ...info.feriados.map(f => `<li>${f.emoji || "⛱️"} <strong>${f.nombre}</strong> <em>(Sombrilla)</em></li>`),
+      ...info.eventos.map(e => `<li>${e.emoji || "📌"} <strong>${e.nombre}</strong></li>`),
+      ...info.especiales.map(s => `<li>${s.emoji} <strong>${s.nombre}</strong> <em>(Fecha especial)</em></li>`)
+    ];
+    box.innerHTML = `<div><strong>${info.iso}</strong> · <strong>${estado}</strong></div>${
+      lines.length ? `<ul style="margin:0.4rem 0 0 1.1rem;">${lines.join("")}</ul>` : "<p style='margin:0.35rem 0 0;'>Sin eventos ni feriados en esta fecha.</p>"
+    }`;
+  }
+
+  window.seleccionarDiaMaterLOST = (iso) => { diaMaterSel = iso; window.renderMesMaterLOST(); };
+  window.cambiarMesMaterLOST = (delta) => { mesMater = new Date(mesMater.getFullYear(), mesMater.getMonth() + delta, 1); window.renderMesMaterLOST(); };
+  window.irHoyMaterLOST = () => {
+    const h = new Date();
+    diaMaterSel = toISO(h);
+    mesMater = new Date(h.getFullYear(), h.getMonth(), 1);
+    window.renderMesMaterLOST();
+  };
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const hoyISO = toISO(new Date());
+    const hInfo = calcularInfoMater(hoyISO);
+    const resHoy = document.getElementById("mater-resumen-hoy");
+    if (resHoy) {
+      resHoy.textContent = `Hoy (${hoyISO}): ${hInfo.ciclo ? `Ciclo ${hInfo.ciclo}` : hInfo.esSombrilla ? "Sombrilla" : "Fin de semana"}${
+        hInfo.especiales.length ? " · " + hInfo.especiales.map(e => `${e.emoji} ${e.nombre}`).join(" · ") : ""
+      }`;
+    }
+    cargarCicloCustom();
+    window.renderMesMaterLOST();
+    refrescarEspecialesEnPantalla();
+    document.getElementById("input-fecha-nota")?.addEventListener("change", refrescarEspecialesEnPantalla);
+  });
+})();
+</script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBxXS5wsrgHX0IfhgCCaZu51JVr4bawxRo",
+  authDomain: "lost-app-62727.firebaseapp.com",
+  projectId: "lost-app-62727",
+  storageBucket: "lost-app-62727.firebasestorage.app",
+  messagingSenderId: "112448744813",
+  appId: "1:112448744813:web:b8ee09a12606a48090be64",
+  measurementId: "G-Z0FL409H2H"
+};
+
+let usuarioActual = null;
+let db = null;
+
+try {
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  db = getFirestore(app);
+  const provider = new GoogleAuthProvider();
+
+  window.iniciarSesionGoogle = async () => {
+    try {
+      await signInWithPopup(auth, provider);
+    } catch (err) {
+      const el = document.getElementById("estado-nube-lost");
+      if (el) el.textContent = "No se pudo iniciar sesión: " + err.message;
+    }
+  };
+
+  window.cerrarSesionLOST = async () => {
+    await signOut(auth);
+  };
+
+  window.guardarEnNubeLOST = async (datosCompletos) => {
+    if (!usuarioActual || !db) return;
+    try {
+      await setDoc(doc(db, "usuarios", usuarioActual.uid), {
+        perfil: datosCompletos,
+        actualizadoEn: new Date().toISOString()
+      }, { merge: true });
+      const el = document.getElementById("estado-nube-lost");
+      if (el) el.textContent = "☁️ Sincronizado con tu cuenta";
+    } catch (err) {
+      console.error("Error al sincronizar:", err);
+    }
+  };
+
+  onAuthStateChanged(auth, async (user) => {
+    usuarioActual = user;
+    const btnLogin = document.getElementById("btn-login-lost");
+    const infoUsuario = document.getElementById("info-usuario-lost");
+    const nombreUsuario = document.getElementById("nombre-usuario-lost");
+    const estadoNube = document.getElementById("estado-nube-lost");
+
+    if (user) {
+      if (btnLogin) btnLogin.style.display = "none";
+      if (infoUsuario) infoUsuario.style.display = "inline-flex";
+      if (nombreUsuario) nombreUsuario.textContent = user.displayName || user.email;
+      if (estadoNube) estadoNube.textContent = "☁️ Cargando datos de tu cuenta...";
+
+      const docRef = doc(db, "usuarios", user.uid);
+      const snap = await getDoc(docRef);
+      if (snap.exists() && snap.data()?.perfil && typeof window.aplicarDatosNubeLOST === "function") {
+        window.aplicarDatosNubeLOST(snap.data().perfil);
+      } else if (typeof window.obtenerEstadoLOST === "function") {
+        await window.guardarEnNubeLOST(window.obtenerEstadoLOST());
+      }
+      if (estadoNube) estadoNube.textContent = "☁️ Sesión activa y sincronizada";
+    } else {
+      if (btnLogin) btnLogin.style.display = "inline-block";
+      if (infoUsuario) infoUsuario.style.display = "none";
+      if (estadoNube) estadoNube.textContent = "";
+    }
+  });
+} catch (err) {
+  console.warn("Firebase pendiente de configurar:", err.message);
+}
+</script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js").catch(() => {});
+  });
+}
+</script>
+</body>
+</html>
+```[cite: 4]
+
+### Qué hacer ahora mismo
+1. Guarda este `index.html` y súbelo a tu repositorio en GitHub.
+2. Espera a que termine el despliegue en **GitHub Pages** y abre tu app con recarga forzada (`Ctrl + Shift + R` o `Cmd + Shift + R`).
+3. Verás tu portada, alarma, perfil, comunidad y barra inferior intactas, y al tocar **Calendario** en la barra inferior tendrás arriba las tres pestañas (**`Lunes–Viernes`**, **`Ciclo`** y **`Mater Salvatoris`**) con los emojis en fechas especiales[cite: 4].
+
+Si al abrirlo en tu navegador notas algún detalle en `app.js` (por ejemplo, que al cambiar de pestaña en `app.js` no se muestre `#cal-fecha-especial`), avísame y lo ajustamos en un segundo.
