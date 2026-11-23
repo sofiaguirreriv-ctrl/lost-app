@@ -1,0 +1,1886 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#7e22ce" />
+  <title>LOST — Agenda Escolar y Ciclo</title>
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="icon" type="image/png" href="./icon-512.png" />
+  <link rel="apple-touch-icon" href="./icon-512.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Nunito:wght@500;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+  <style>
+    :root {
+      --lost-lila: #f3e8ff;
+      --lost-lila-borde: #d8b4fe;
+      --lost-morado: #6b21a8;
+      --lost-morado-osc: #4c1d95;
+      --lost-acento: #9333ea;
+      --lost-portada-bg: linear-gradient(135deg, #6b21a8 0%, #9333ea 52%, #c084fc 100%);
+      --lost-portada-borde: #e9d5ff;
+      --lost-card-borde: #e9d5ff;
+      --lost-card-sombra: #f3e8ff;
+      --lost-bg-tint: #faf5ff;
+    }
+
+    /* Decoración según la época */
+    body[data-epoca="navidad"] {
+      --lost-lila: #dcfce7;
+      --lost-lila-borde: #86efac;
+      --lost-morado: #166534;
+      --lost-morado-osc: #14532d;
+      --lost-acento: #b91c1c;
+      --lost-portada-bg: linear-gradient(135deg, #14532d 0%, #991b1b 60%, #b45309 100%);
+      --lost-portada-borde: #fde047;
+      --lost-card-borde: #86efac;
+      --lost-card-sombra: #bbf7d0;
+      --lost-bg-tint: #f0fdf4;
+    }
+    body[data-epoca="halloween"] {
+      --lost-lila: #ffedd5;
+      --lost-lila-borde: #fdba74;
+      --lost-morado: #7c2d12;
+      --lost-morado-osc: #2e1065;
+      --lost-acento: #ea580c;
+      --lost-portada-bg: linear-gradient(135deg, #2e1065 0%, #7c2d12 52%, #ea580c 100%);
+      --lost-portada-borde: #c084fc;
+      --lost-card-borde: #fdba74;
+      --lost-card-sombra: #fed7aa;
+      --lost-bg-tint: #fff7ed;
+    }
+    body[data-epoca="san-valentin"] {
+      --lost-lila: #fce7f3;
+      --lost-lila-borde: #f9a8d4;
+      --lost-morado: #9d174d;
+      --lost-morado-osc: #831843;
+      --lost-acento: #e11d48;
+      --lost-portada-bg: linear-gradient(135deg, #9d174d 0%, #e11d48 55%, #f472b6 100%);
+      --lost-portada-borde: #fbcfe8;
+      --lost-card-borde: #f9a8d4;
+      --lost-card-sombra: #fbcfe8;
+      --lost-bg-tint: #fdf2f8;
+    }
+    body[data-epoca="pascua"] {
+      --lost-lila: #ccfbf1;
+      --lost-lila-borde: #5eead4;
+      --lost-morado: #0f766e;
+      --lost-morado-osc: #115e59;
+      --lost-acento: #8b5cf6;
+      --lost-portada-bg: linear-gradient(135deg, #0d9488 0%, #8b5cf6 58%, #f59e0b 100%);
+      --lost-portada-borde: #fef08a;
+      --lost-card-borde: #99f6e4;
+      --lost-card-sombra: #ccfbf1;
+      --lost-bg-tint: #f0fdfa;
+    }
+    body[data-epoca="verano"] {
+      --lost-lila: #fef3c7;
+      --lost-lila-borde: #fcd34d;
+      --lost-morado: #0369a1;
+      --lost-morado-osc: #075985;
+      --lost-acento: #f59e0b;
+      --lost-portada-bg: linear-gradient(135deg, #0284c7 0%, #06b6d4 52%, #f59e0b 100%);
+      --lost-portada-borde: #fef08a;
+      --lost-card-borde: #bae6fd;
+      --lost-card-sombra: #e0f2fe;
+      --lost-bg-tint: #f0f9ff;
+    }
+    body[data-epoca="regreso-clases"] {
+      --lost-lila: #e0e7ff;
+      --lost-lila-borde: #a5b4fc;
+      --lost-morado: #3730a3;
+      --lost-morado-osc: #312e81;
+      --lost-acento: #4f46e5;
+      --lost-portada-bg: linear-gradient(135deg, #312e81 0%, #4f46e5 55%, #0ea5e9 100%);
+      --lost-portada-borde: #c7d2fe;
+      --lost-card-borde: #a5b4fc;
+      --lost-card-sombra: #e0e7ff;
+      --lost-bg-tint: #eef2ff;
+    }
+
+    body {
+      background-color: var(--lost-bg-tint);
+      transition: background-color 0.25s ease;
+    }
+    .portada-lost {
+      background: var(--lost-portada-bg) !important;
+      border-bottom: 3px solid var(--lost-portada-borde) !important;
+      transition: background 0.3s ease;
+    }
+    .card, .materia-card {
+      border-color: var(--lost-card-borde) !important;
+      box-shadow: 0 6px 0 var(--lost-card-sombra) !important;
+    }
+
+    /* Controles superiores */
+    .lost-top-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.45rem;
+      margin-bottom: 0.55rem;
+    }
+    .lost-lang-group {
+      display: inline-flex;
+      gap: 0.3rem;
+      background: rgba(255, 255, 255, 0.22);
+      padding: 0.24rem;
+      border-radius: 999px;
+    }
+    .lost-lang-btn {
+      border: none;
+      background: transparent;
+      color: #fff;
+      font-weight: 800;
+      font-size: 0.78rem;
+      padding: 0.28rem 0.65rem;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+    .lost-lang-btn.activo {
+      background: #fff;
+      color: var(--lost-morado-osc);
+    }
+    .lost-epoca-select {
+      border: 2px solid rgba(255, 255, 255, 0.55);
+      background: rgba(255, 255, 255, 0.92);
+      color: var(--lost-morado-osc);
+      font-weight: 800;
+      font-size: 0.78rem;
+      padding: 0.28rem 0.65rem;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+    .lost-epoca-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      margin-top: 0.45rem;
+      padding: 0.24rem 0.72rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+    }
+
+    /* Todas las opciones visibles sin corte ni scroll oculto */
+    #selector-emojis-rapidos {
+      display: flex !important;
+      flex-wrap: wrap !important;
+      gap: 0.45rem !important;
+      max-height: none !important;
+      height: auto !important;
+      overflow: visible !important;
+      padding: 0.75rem !important;
+      border: 2px solid var(--lost-lila-borde) !important;
+      border-radius: 20px !important;
+      background: #ffffff !important;
+    }
+    #selector-bitmoji-fotos {
+      display: flex !important;
+      flex-wrap: wrap !important;
+      gap: 0.48rem !important;
+      max-height: none !important;
+      height: auto !important;
+      overflow: visible !important;
+      padding: 0.75rem !important;
+      border: 2px solid var(--lost-lila-borde) !important;
+      border-radius: 20px !important;
+      background: #ffffff !important;
+    }
+    .lost-emoji-btn-item {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      min-width: 2.55rem !important;
+      height: 2.55rem !important;
+      padding: 0 0.55rem !important;
+      border-radius: 999px !important;
+      border: 2px solid var(--lost-lila-borde) !important;
+      background: #faf5ff !important;
+      font-size: 1.25rem !important;
+      line-height: 1 !important;
+      cursor: pointer !important;
+      transition: transform 0.12s ease, background 0.15s ease, border-color 0.15s ease !important;
+    }
+    .lost-emoji-btn-item:hover {
+      transform: translateY(-2px) !important;
+      background: var(--lost-lila) !important;
+    }
+    .lost-emoji-btn-item.seleccionado {
+      background: var(--lost-morado) !important;
+      color: #fff !important;
+      border-color: var(--lost-morado-osc) !important;
+      transform: scale(1.06) !important;
+    }
+    .lost-sticker-btn-item {
+      font-size: 0.86rem !important;
+      font-weight: 800 !important;
+      color: var(--lost-morado-osc) !important;
+      padding: 0.38rem 0.78rem !important;
+      height: auto !important;
+      gap: 0.3rem !important;
+    }
+    .lost-sticker-btn-item.seleccionado {
+      color: #fff !important;
+    }
+
+    /* Carta de cumpleaños única */
+    .lost-cumple-tarjeta {
+      position: relative;
+      background: linear-gradient(135deg, #fdf4ff, #fce7f3);
+      border: 2px solid #f0abfc;
+      border-radius: 22px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 0.85rem;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(168, 85, 247, 0.16);
+    }
+    .lost-cumple-bizcocho-top,
+    .lost-cumple-bizcocho-bottom {
+      font-size: 1.4rem;
+    }
+    .lost-cumple-titulo-cursiva {
+      font-family: "Great Vibes", cursive;
+      font-size: 2rem;
+      color: #86198f;
+      margin: 0.15rem 0;
+    }
+    .lost-cumple-nombre-burbuja {
+      display: inline-block;
+      background: #fff;
+      border: 2px solid #e879f9;
+      color: #6b21a8;
+      font-weight: 900;
+      padding: 0.28rem 0.95rem;
+      border-radius: 999px;
+      margin: 0.25rem 0 0.45rem;
+    }
+    .lost-cumple-cuerpo-cursiva {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #581c87;
+      margin: 0 0 0.65rem;
+    }
+    .lost-cumple-cerrar-btn {
+      border: none;
+      background: #9333ea;
+      color: #fff;
+      font-weight: 800;
+      padding: 0.42rem 1rem;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+
+    /* Foto de perfil y avatar chip */
+    .lost-chip-avatar-img {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #fff;
+      vertical-align: middle;
+    }
+    .lost-foto-box {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      margin: 0.65rem 0;
+      padding: 0.65rem;
+      border-radius: 16px;
+      background: #faf5ff;
+      border: 1.5px dashed var(--lost-lila-borde);
+    }
+    #lost-foto-perfil-preview {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--lost-morado);
+      background: #fff;
+    }
+
+    /* Subpestañas y calendarios */
+    .lost-subtabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin-bottom: 0.9rem;
+    }
+    .lost-subtab-btn {
+      border: 2px solid var(--lost-lila-borde);
+      background: #fff;
+      color: var(--lost-morado-osc);
+      font-weight: 800;
+      padding: 0.42rem 0.85rem;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+    .lost-subtab-btn.activa {
+      background: var(--lost-morado);
+      color: #fff;
+      border-color: var(--lost-morado-osc);
+    }
+    .lv-resumen-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+      gap: 0.55rem;
+      margin: 0.75rem 0;
+    }
+    .lv-dia-card {
+      background: #fff;
+      border: 2px solid var(--lost-lila-borde);
+      border-radius: 14px;
+      padding: 0.55rem 0.7rem;
+      cursor: pointer;
+    }
+    .lv-dia-card.activo {
+      background: var(--lost-lila);
+      border-color: var(--lost-morado);
+    }
+    .lv-dia-titulo {
+      font-weight: 900;
+      color: var(--lost-morado-osc);
+      margin-bottom: 0.25rem;
+    }
+    .lv-dia-item {
+      font-size: 0.82rem;
+      color: #3b0764;
+    }
+    .mater-grid-hdr,
+    .mater-cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 0.35rem;
+    }
+    .mater-grid-hdr div {
+      text-align: center;
+      font-weight: 800;
+      font-size: 0.8rem;
+      color: var(--lost-morado-osc);
+    }
+    .mater-celda {
+      min-height: 68px;
+      background: #fff;
+      border: 1.5px solid var(--lost-lila-borde);
+      border-radius: 12px;
+      padding: 0.35rem;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .mater-celda.vacia {
+      background: transparent;
+      border-color: transparent;
+      cursor: default;
+    }
+    .mater-celda.sombrilla {
+      background: #fef9c3;
+      border-color: #facc15;
+    }
+    .mater-celda.sel {
+      border: 2.5px solid var(--lost-morado);
+      box-shadow: 0 0 0 2px var(--lost-lila);
+    }
+    .mater-celda-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 800;
+      font-size: 0.82rem;
+    }
+    .mater-letra-pill {
+      background: var(--lost-morado);
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 900;
+      padding: 0.1rem 0.42rem;
+      border-radius: 999px;
+    }
+    .mater-evento-pill {
+      font-size: 0.68rem;
+      line-height: 1.15;
+      background: var(--lost-lila);
+      color: var(--lost-morado-osc);
+      border-radius: 6px;
+      padding: 0.12rem 0.28rem;
+      margin-top: 0.18rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .lost-fecha-especial-badge {
+      font-size: 0.68rem;
+      font-weight: 800;
+      color: var(--lost-morado-osc);
+      background: var(--lost-lila);
+      border-radius: 6px;
+      padding: 0.1rem 0.3rem;
+      margin-top: 0.2rem;
+    }
+    .lost-oculto {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Pantalla de Bienvenida / Tutorial -->
+  <section id="lost-welcome" class="welcome-overlay" aria-label="Bienvenida LOST">
+    <div id="lost-landing-view" class="welcome-card">
+      <div class="lost-top-controls" style="justify-content:center;">
+        <div class="lost-lang-group">
+          <button type="button" class="lost-lang-btn activo" data-idioma-app="es">ES</button>
+          <button type="button" class="lost-lang-btn" data-idioma-app="en">EN</button>
+          <button type="button" class="lost-lang-btn" data-idioma-app="fr">FR</button>
+        </div>
+      </div>
+      <div id="welcome-muneco-box" style="display:flex;justify-content:center;margin-bottom:.5rem;">
+        <img src="./icon-512.png" alt="LOST" style="width:74px;height:74px;border-radius:20px;" />
+      </div>
+      <h1 style="margin:0;font-size:2.1rem;font-weight:900;color:#4c1d95;">LOST</h1>
+      <p id="lost-welcome-tagline" style="font-weight:800;color:#7e22ce;margin:.2rem 0;">Tu agenda escolar con ciclo inteligente</p>
+      <p id="lost-creator-credit" style="font-size:.82rem;opacity:.8;margin:0 0 .6rem;">Hecho con 💜 para organizar tus días</p>
+      <p id="lost-welcome-desc" style="margin:0 0 .9rem;">Organiza tus clases por letras de ciclo, tus actividades de lunes a viernes, alarmas y cumpleaños de tus amigos.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:.4rem;justify-content:center;margin-bottom:1rem;">
+        <span id="pill-rol" class="badge">🎓 Estudiante / Docente</span>
+        <span id="pill-ciclo" class="badge">🔄 Ciclo A–F</span>
+        <span id="pill-alarmas" class="badge">⏰ Alarmas</span>
+        <span id="pill-comunidad" class="badge">🎂 Comunidad</span>
+      </div>
+      <div style="display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;">
+        <button type="button" id="btn-iniciar-tutorial" class="btn-prim">✨ Ver guía rápida</button>
+        <button type="button" id="btn-saltar-todo" class="btn-sec">Entrar directo →</button>
+      </div>
+    </div>
+
+    <div id="lost-tutorial-view" class="welcome-card" style="display:none;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem;">
+        <span id="lost-step-counter" style="font-weight:800;font-size:.85rem;color:#6b21a8;">Paso 1 de 4</span>
+        <button type="button" id="btn-omitir-tutorial" class="btn-sec">Saltar</button>
+      </div>
+      <div style="height:8px;background:#f3e8ff;border-radius:999px;overflow:hidden;margin-bottom:1rem;">
+        <div id="lost-progress-fill" style="height:100%;width:25%;background:#9333ea;transition:width .25s;"></div>
+      </div>
+      <div id="lost-step-icon" style="font-size:2.4rem;">📅</div>
+      <div id="lost-step-tag" style="font-size:.8rem;font-weight:800;color:#7e22ce;margin-top:.2rem;">Ciclo</div>
+      <h2 id="lost-step-title" style="margin:.25rem 0 .45rem;">Calendario y Ciclo</h2>
+      <p id="lost-step-body" style="margin:0 0 1rem;">Consulta qué letra toca cada día y qué materias tienes asignadas.</p>
+      <div style="display:flex;gap:.6rem;justify-content:center;">
+        <button type="button" id="btn-paso-anterior" class="btn-sec">← Anterior</button>
+        <button type="button" id="btn-paso-siguiente" class="btn-prim">Siguiente →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Banner de alarma activa -->
+  <div id="alarma-activa-banner" class="card" style="display:none;position:sticky;top:0;z-index:999;background:#fef08a;border:2px solid #eab308;">
+    <strong id="alarma-banner-titulo">⏰ ¡Alarma sonando!</strong>
+    <span id="alarma-banner-detalle"></span>
+    <div style="margin-top:.45rem;display:flex;gap:.45rem;">
+      <button type="button" id="btn-posponer-alarma" class="btn-sec">Posponer 5 min</button>
+      <button type="button" id="btn-detener-alarma" class="btn-prim">Detener</button>
+    </div>
+  </div>
+
+  <!-- Aplicación Principal -->
+  <main id="lost-app" class="app-contenedor">
+
+    <!-- Portada -->
+    <header class="portada-lost">
+      <div class="lost-top-controls">
+        <div class="lost-lang-group" role="group" aria-label="Idioma">
+          <button type="button" class="lost-lang-btn activo" data-idioma-app="es">ES</button>
+          <button type="button" class="lost-lang-btn" data-idioma-app="en">EN</button>
+          <button type="button" class="lost-lang-btn" data-idioma-app="fr">FR</button>
+        </div>
+        <select id="select-epoca-lost" class="lost-epoca-select" aria-label="Época / Tema"></select>
+      </div>
+
+      <div class="portada-contenido" style="display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;">
+        <div>
+          <span id="portada-sub-tag" style="font-size:.82rem;font-weight:800;opacity:.9;">AGENDA ESCOLAR · CICLO</span>
+          <h1 style="margin:.1rem 0;font-size:1.85rem;font-weight:900;">LOST</h1>
+          <p id="portada-desc" style="margin:0;opacity:.92;">Organiza tus materias, horarios, ciclo y fechas especiales.</p>
+          <div id="lost-epoca-badge" class="lost-epoca-pill">✨ Estilo LOST</div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.45rem;">
+          <div id="chip-perfil-activo" style="background:rgba(255,255,255,.2);padding:.35rem .8rem;border-radius:999px;font-weight:800;display:inline-flex;align-items:center;gap:.4rem;">
+            <span id="chip-perfil-emoji">📅</span>
+            <span id="chip-perfil-nombre">Mi Perfil</span>
+          </div>
+          <div style="display:flex;gap:.4rem;flex-wrap:wrap;justify-content:flex-end;">
+            <button type="button" id="btn-login-lost" class="btn-sec">☁️ Conectar Google</button>
+            <div id="info-usuario-lost" style="display:none;align-items:center;gap:.4rem;background:rgba(255,255,255,.2);padding:.25rem .65rem;border-radius:999px;">
+              <span id="nombre-usuario-lost" style="font-size:.8rem;font-weight:800;"></span>
+              <button type="button" id="btn-logout-lost" class="btn-sec" style="padding:.2rem .55rem;font-size:.75rem;">Salir</button>
+            </div>
+            <button type="button" id="btn-ver-tutorial-app" class="btn-sec">❓ Guía</button>
+          </div>
+          <small id="estado-nube-lost" style="font-size:.76rem;opacity:.9;"></small>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:.45rem;flex-wrap:wrap;margin-top:.75rem;">
+        <button type="button" id="btn-rol-estudiante" class="btn-sec activa">🎒 Estudiante</button>
+        <button type="button" id="btn-rol-maestro" class="btn-sec">🍎 Docente</button>
+        <button type="button" id="btn-modo-ciclo" class="btn-sec activa">🔄 Modo Ciclo</button>
+        <button type="button" id="btn-modo-semanal" class="btn-sec">📆 Modo Semanal</button>
+      </div>
+    </header>
+
+    <!-- Banner de Cumpleaños (una sola carta por persona) -->
+    <section id="lost-banner-cumple" style="display:none;margin-top:.85rem;" aria-live="polite"></section>
+
+    <!-- Banner fecha especial de hoy -->
+    <div id="inicio-fecha-especial" class="card" style="display:none;font-weight:800;text-align:center;"></div>
+
+    <!-- VISTA: INICIO -->
+    <section class="vista-seccion" data-vista="inicio">
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:.6rem;flex-wrap:wrap;">
+          <div style="display:flex;align-items:center;gap:.6rem;">
+            <div id="muneco-materia-box">
+              <img src="./icon-512.png" alt="LOST" style="width:42px;height:42px;border-radius:12px;" />
+            </div>
+            <div>
+              <span id="badge-categoria-materia" class="badge">📚 Hoy en clase</span>
+              <h2 id="titulo-dia-actual" style="margin:.15rem 0 0;">Horario de Hoy</h2>
+            </div>
+          </div>
+          <div style="display:flex;gap:.4rem;flex-wrap:wrap;">
+            <button type="button" id="btn-toggle-gym" class="btn-sec">🏃‍♀️ Gym</button>
+            <button type="button" id="btn-ir-hoy" class="btn-prim">📍 Hoy</button>
+          </div>
+        </div>
+
+        <div style="margin-top:.85rem;padding:.75rem;border-radius:14px;background:var(--lost-lila);">
+          <strong id="titulo-en-vivo">⏱️ En vivo</strong>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.5rem;margin-top:.4rem;">
+            <div><small id="etiqueta-bloque-actual">Bloque actual</small><div id="bloque-actual-texto" style="font-weight:800;">—</div></div>
+            <div><small id="etiqueta-siguiente-bloque">Siguiente bloque</small><div id="siguiente-bloque-texto" style="font-weight:800;">—</div></div>
+          </div>
+        </div>
+
+        <ul id="lista-bloques-hoy" style="margin-top:.85rem;"></ul>
+      </div>
+
+      <div class="card">
+        <h3 id="titulo-notas-dia" style="margin-top:0;">📝 Pendientes y Notas del Día</h3>
+        <form id="form-nota-dia" style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem;">
+          <input type="date" id="input-fecha-nota" />
+          <select id="select-tipo-nota">
+            <option value="Tarea">Tarea</option>
+            <option value="Examen">Examen</option>
+            <option value="Recordatorio">Recordatorio</option>
+          </select>
+          <input type="text" id="input-texto-nota" placeholder="Escribe tu pendiente..." style="flex:1;min-width:170px;" />
+          <button type="submit" id="btn-guardar-nota" class="btn-prim">Guardar</button>
+        </form>
+        <ul id="lista-notas-dia"></ul>
+      </div>
+    </section>
+
+    <!-- VISTA: CALENDARIO -->
+    <section class="vista-seccion" data-vista="calendario" style="display:none;">
+      <div class="lost-subtabs">
+        <button type="button" id="subtab-btn-lv" class="lost-subtab-btn activa" data-subtab="lv">📆 Lunes a Viernes</button>
+        <button type="button" id="subtab-btn-ciclo" class="lost-subtab-btn" data-subtab="ciclo">🔄 Mi Ciclo</button>
+        <button type="button" id="subtab-btn-mater" class="lost-subtab-btn" data-subtab="mater">🏫 Calendario Mater (A–F)</button>
+      </div>
+
+      <div id="cal-fecha-especial" class="card" style="display:none;font-weight:800;"></div>
+
+      <!-- Subpanel Lunes a Viernes -->
+      <div id="subpanel-lv" class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;">
+          <div>
+            <h2 id="lv-titulo-panel" style="margin:0;">Calendario Mensual y Lunes a Viernes</h2>
+            <p id="lv-desc-panel" style="margin:.2rem 0 0;opacity:.85;">Consulta el mes y organiza tu rutina semanal.</p>
+          </div>
+          <div style="display:flex;gap:.4rem;flex-wrap:wrap;">
+            <button type="button" id="mes-anterior" class="btn-sec">◀</button>
+            <strong id="titulo-mes" style="align-self:center;">Mes</strong>
+            <button type="button" id="mes-siguiente" class="btn-sec">▶</button>
+            <button type="button" id="btn-modo-feriados-rapido" class="btn-sec">⛱️ Feriados</button>
+            <label id="lbl-foto-calendario" class="btn-sec" style="cursor:pointer;">📷 Foto<input type="file" id="input-foto-calendario" accept="image/*" style="display:none;" /></label>
+          </div>
+        </div>
+
+        <div id="leyenda-lv" style="display:flex;gap:.75rem;flex-wrap:wrap;margin:.65rem 0;font-size:.82rem;">
+          <span><i>🟣</i> Clase / Ciclo</span>
+          <span><i>🟡</i> Feriado / Sombrilla</span>
+          <span><i>✨</i> Fecha especial</span>
+        </div>
+
+        <div id="lv-grid-semana" style="display:grid;grid-template-columns:repeat(7,1fr);text-align:center;font-weight:800;margin-bottom:.35rem;">
+          <div>Dom</div><div>Lun</div><div>Mar</div><div>Mié</div><div>Jue</div><div>Vie</div><div>Sáb</div>
+        </div>
+        <div id="cuadricula-calendario" class="cal-grid-dias"></div>
+        <div id="lv-detalle-fecha" style="margin-top:.75rem;padding:.65rem;border-radius:12px;background:var(--lost-lila);"></div>
+
+        <hr style="margin:1rem 0;border:none;border-top:1px dashed var(--lost-lila-borde);" />
+        <h3 id="lv-agenda-titulo" style="margin:0 0 .4rem;">🗓️ Rutina Lunes a Viernes</h3>
+        <div id="lv-resumen-semanal" class="lv-resumen-grid"></div>
+
+        <form id="form-lv-personal" style="display:flex;flex-wrap:wrap;gap:.5rem;margin:.65rem 0;">
+          <div>
+            <label id="lbl-lv-dia" for="select-lv-dia" style="display:block;font-size:.78rem;font-weight:800;">Día</label>
+            <select id="select-lv-dia">
+              <option value="Lunes">Lunes</option>
+              <option value="Martes">Martes</option>
+              <option value="Miércoles">Miércoles</option>
+              <option value="Jueves">Jueves</option>
+              <option value="Viernes">Viernes</option>
+            </select>
+          </div>
+          <div>
+            <label id="lbl-lv-hora" for="input-lv-hora" style="display:block;font-size:.78rem;font-weight:800;">Hora</label>
+            <input type="text" id="input-lv-hora" placeholder="3:30 PM" style="width:110px;" />
+          </div>
+          <div style="flex:1;min-width:170px;">
+            <label id="lbl-lv-actividad" for="input-lv-actividad" style="display:block;font-size:.78rem;font-weight:800;">Actividad</label>
+            <input type="text" id="input-lv-actividad" placeholder="Ej. Práctica, estudio, club..." style="width:100%;" />
+          </div>
+          <button type="submit" id="btn-agregar-lv" class="btn-prim" style="align-self:flex-end;">+ Agregar</button>
+        </form>
+        <ul id="lv-lista-dia"></ul>
+      </div>
+
+      <!-- Subpanel Mi Ciclo Personalizado -->
+      <div id="subpanel-ciclo" class="card" style="display:none;">
+        <h2 id="ciclo-custom-titulo" style="margin-top:0;">🔄 Configurar Mi Ciclo</h2>
+        <div id="ciclo-custom-hoy" style="padding:.6rem .8rem;border-radius:12px;background:var(--lost-lila);font-weight:800;margin-bottom:.75rem;"></div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:.6rem;">
+          <div>
+            <label id="lbl-custom-desc" for="custom-ciclo-desc">Nombre / Escuela</label>
+            <input type="text" id="custom-ciclo-desc" placeholder="Ej. Mi Colegio" />
+          </div>
+          <div>
+            <label id="lbl-custom-letras" for="custom-ciclo-letras">Letras del ciclo</label>
+            <input type="text" id="custom-ciclo-letras" value="A, B, C, D, E, F" />
+          </div>
+          <div>
+            <label id="lbl-custom-ancla-fecha" for="custom-ciclo-ancla-fecha">Fecha referencia</label>
+            <input type="date" id="custom-ciclo-ancla-fecha" />
+          </div>
+          <div>
+            <label id="lbl-custom-ancla-letra" for="custom-ciclo-ancla-letra">Letra ese día</label>
+            <select id="custom-ciclo-ancla-letra"></select>
+          </div>
+        </div>
+        <button type="button" id="btn-guardar-ciclo-custom" class="btn-prim" style="margin-top:.65rem;">Guardar ciclo</button>
+
+        <hr style="margin:1rem 0;border:none;border-top:1px dashed var(--lost-lila-borde);" />
+        <div style="display:flex;flex-wrap:wrap;gap:.5rem;align-items:flex-end;">
+          <div>
+            <label id="lbl-custom-fer" for="custom-feriado-fecha">Día libre / Feriado</label>
+            <input type="date" id="custom-feriado-fecha" />
+          </div>
+          <div style="flex:1;min-width:160px;">
+            <input type="text" id="custom-feriado-nombre" placeholder="Motivo del feriado" />
+          </div>
+          <button type="button" id="btn-agregar-feriado-custom" class="btn-sec">⛱️ Marcar</button>
+          <label id="lbl-custom-archivo" class="btn-sec" style="cursor:pointer;">📂 Importar CSV/JSON<input type="file" id="custom-feriado-archivo" accept=".csv,.json,.txt" style="display:none;" /></label>
+        </div>
+        <ul id="custom-lista-feriados" style="margin-top:.6rem;"></ul>
+
+        <hr style="margin:1rem 0;border:none;border-top:1px dashed var(--lost-lila-borde);" />
+        <label id="lbl-custom-consulta" for="custom-consulta-fecha" style="font-weight:800;">Consultar fecha:</label>
+        <input type="date" id="custom-consulta-fecha" />
+        <div id="custom-consulta-resultado" style="font-weight:900;margin-top:.45rem;color:var(--lost-morado-osc);"></div>
+        <div id="custom-consulta-especiales" style="font-size:.86rem;margin-top:.25rem;"></div>
+
+        <h4 id="lbl-lista-especiales" style="margin:.9rem 0 .35rem;">✨ Fechas especiales del año</h4>
+        <ul id="lista-especiales-ciclo" style="max-height:200px;overflow-y:auto;"></ul>
+      </div>
+
+      <!-- Subpanel Calendario Mater -->
+      <div id="subpanel-mater" class="card" style="display:none;">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;">
+          <div>
+            <h2 id="mater-titulo-panel" style="margin:0;">Calendario Escolar A–F</h2>
+            <small id="mater-nota-ref">Incluye rotación de letras, días sin clase y eventos.</small>
+          </div>
+          <div style="display:flex;gap:.35rem;align-items:center;">
+            <button type="button" id="btn-mater-prev" class="btn-sec">◀</button>
+            <strong id="mater-mes-titulo">Noviembre 2026</strong>
+            <button type="button" id="btn-mater-next" class="btn-sec">▶</button>
+            <button type="button" id="btn-mater-hoy" class="btn-prim">Hoy</button>
+          </div>
+        </div>
+        <div id="mater-resumen-hoy" style="margin:.65rem 0;padding:.55rem .75rem;border-radius:12px;background:var(--lost-lila);font-weight:800;"></div>
+        <div id="mater-grid-hdr" class="mater-grid-hdr" style="margin-bottom:.35rem;">
+          <div>Lun</div><div>Mar</div><div>Mié</div><div>Jue</div><div>Vie</div><div>Sáb</div><div>Dom</div>
+        </div>
+        <div id="mater-cal-grid" class="mater-cal-grid"></div>
+        <div id="mater-dia-detalle" style="margin-top:.75rem;padding:.7rem;border-radius:14px;background:var(--lost-lila);"></div>
+      </div>
+    </section>
+
+    <!-- VISTA: CREAR CLASES / BLOQUES -->
+    <section class="vista-seccion" data-vista="crear" style="display:none;">
+      <div class="card">
+        <h2 id="titulo-clases-letra" style="margin-top:0;">📚 Materias por Letra de Ciclo (A–F)</h2>
+        <p id="desc-clases-letra" style="margin-top:0;opacity:.85;">Asigna tus clases a cada letra para verlas automáticamente en el calendario.</p>
+
+        <form id="form-clase-letra" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.55rem;">
+          <div>
+            <label id="lbl-letra-clase" for="select-letra-clase">Letra</label>
+            <select id="select-letra-clase"></select>
+          </div>
+          <div>
+            <label id="lbl-emoji-materia" for="input-emoji-materia">Emoji</label>
+            <input type="text" id="input-emoji-materia" placeholder="Auto (📚)" maxlength="6" />
+          </div>
+          <div>
+            <label id="lbl-nombre-materia-letra" for="input-nombre-materia-letra">Materia</label>
+            <input type="text" id="input-nombre-materia-letra" placeholder="Ej. Precalculus" required />
+          </div>
+          <div>
+            <label id="lbl-detalle-materia-letra" for="input-detalle-materia-letra">Hora / Salón</label>
+            <input type="text" id="input-detalle-materia-letra" placeholder="Ej. 8:00 AM · Salón 204" />
+          </div>
+          <div style="grid-column:1/-1;display:flex;gap:.5rem;">
+            <button type="submit" id="btn-submit-clase-letra" class="btn-prim">Guardar materia</button>
+            <button type="button" id="btn-cancelar-edicion-clase" class="btn-sec" style="display:none;">Cancelar</button>
+          </div>
+        </form>
+
+        <div id="tabs-filtro-letras" class="lost-subtabs" style="margin-top:.85rem;"></div>
+        <ul id="lista-clases-por-letra"></ul>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-top:0;">⏱️ Bloque de Horario</h3>
+        <form id="form-bloque-horario" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.55rem;">
+          <div><label id="lbl-materia" for="input-materia">Materia</label><input type="text" id="input-materia" placeholder="Nombre de materia" /></div>
+          <div><label id="lbl-salon" for="input-salon">Salón</label><input type="text" id="input-salon" placeholder="Salón" /></div>
+          <div><label id="lbl-hora-inicio" for="input-hora-inicio">Inicio</label><input type="time" id="input-hora-inicio" /></div>
+          <div><label id="lbl-hora-fin" for="input-hora-fin">Fin</label><input type="time" id="input-hora-fin" /></div>
+          <div style="grid-column:1/-1;"><button type="submit" id="btn-guardar-bloque" class="btn-prim">Guardar bloque</button></div>
+        </form>
+      </div>
+    </section>
+
+    <!-- VISTA: ALARMAS -->
+    <section class="vista-seccion" data-vista="alarmas" style="display:none;">
+      <div class="card">
+        <h2 id="titulo-alarmas" style="margin-top:0;">⏰ Alarmas y Recordatorios</h2>
+        <form id="form-alarma" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.55rem;">
+          <div><label id="lbl-hora-alarma" for="input-hora-alarma">Hora</label><input type="time" id="input-hora-alarma" required /></div>
+          <div>
+            <label id="lbl-tipo-alarma" for="select-tipo-alarma">Tipo</label>
+            <select id="select-tipo-alarma">
+              <option value="despertar">Despertar</option>
+              <option value="pendiente">Pendiente</option>
+              <option value="recordatorio">Recordatorio</option>
+            </select>
+          </div>
+          <div>
+            <label id="lbl-rep-alarma" for="select-repeticion-alarma">Repetición</label>
+            <select id="select-repeticion-alarma">
+              <option value="una_vez">Una vez</option>
+              <option value="diaria">Diaria</option>
+              <option value="lv">Lunes a Viernes</option>
+            </select>
+          </div>
+          <div>
+            <label id="lbl-tono-alarma" for="select-tono-alarma">Tono</label>
+            <select id="select-tono-alarma">
+              <option value="campanita">Campanita</option>
+              <option value="arpegio">Arpegio</option>
+              <option value="pulso">Pulso</option>
+            </select>
+          </div>
+          <div style="grid-column:1/-1;">
+            <label id="lbl-etiqueta-alarma" for="input-etiqueta-alarma">Etiqueta</label>
+            <input type="text" id="input-etiqueta-alarma" placeholder="Ej. Entregar laboratorio" />
+          </div>
+          <div style="grid-column:1/-1;display:flex;gap:.5rem;flex-wrap:wrap;">
+            <button type="submit" id="btn-guardar-alarma" class="btn-prim">Guardar alarma</button>
+            <button type="button" id="btn-probar-alarma" class="btn-sec">🔊 Probar sonido</button>
+            <button type="button" id="btn-permiso-notif" class="btn-sec">🔔 Activar notificaciones</button>
+          </div>
+        </form>
+        <ul id="lista-alarmas" style="margin-top:.85rem;"></ul>
+      </div>
+    </section>
+
+    <!-- VISTA: PERFIL Y COMUNIDAD -->
+    <section class="vista-seccion" data-vista="perfil" style="display:none;">
+      <div class="card">
+        <h2 id="titulo-perfil" style="margin-top:0;">💜 Mi Perfil</h2>
+        <form id="form-perfil">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.6rem;">
+            <div>
+              <label id="lbl-nombre-perfil" for="input-nombre-perfil">Tu nombre</label>
+              <input type="text" id="input-nombre-perfil" placeholder="Tu nombre" />
+            </div>
+            <div>
+              <label id="lbl-tipo-avatar" for="select-tipo-avatar">Tipo de avatar</label>
+              <select id="select-tipo-avatar">
+                <option value="emoji">Emoji</option>
+                <option value="bitmoji">Bitmoji / Sticker</option>
+                <option value="foto">Foto</option>
+              </select>
+            </div>
+            <div>
+              <label id="lbl-emoji-perfil" for="input-emoji-perfil">Emoji / Sticker elegido</label>
+              <input type="text" id="input-emoji-perfil" value="📅" />
+            </div>
+            <div>
+              <label id="lbl-cumple-perfil" for="input-cumple-perfil">Tu cumpleaños</label>
+              <input type="date" id="input-cumple-perfil" />
+            </div>
+            <div>
+              <label id="lbl-idioma-perfil" for="select-idioma-perfil">Idioma</label>
+              <select id="select-idioma-perfil">
+                <option value="es">Español</option>
+                <option value="en">English</option>
+                <option value="fr">Français</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="lost-foto-box">
+            <img id="lost-foto-perfil-preview" src="./icon-512.png" alt="Avatar" />
+            <div style="flex:1;">
+              <label id="lbl-foto-perfil" for="input-foto-perfil" style="font-weight:800;display:block;">Foto de perfil</label>
+              <input type="file" id="input-foto-perfil" accept="image/*" />
+              <div id="lost-foto-estado-texto" style="font-size:.8rem;opacity:.8;margin-top:.2rem;">Sin foto subida</div>
+              <small id="lost-foto-ayuda-texto" style="font-size:.76rem;opacity:.75;">Puedes subir una foto o elegir cualquier emoji o sticker abajo.</small>
+            </div>
+            <button type="button" id="btn-quitar-foto-perfil" class="btn-sec" style="display:none;">Quitar foto</button>
+          </div>
+
+          <!-- TODAS LAS 120 OPCIONES DE EMOJIS DESPLEGADAS -->
+          <div style="margin-top:.85rem;">
+            <label id="lbl-emojis-rapidos" style="display:block;font-weight:900;margin-bottom:.35rem;">Emojis rápidos (120 opciones)</label>
+            <div id="selector-emojis-rapidos" role="group" aria-label="Emojis rápidos"></div>
+          </div>
+
+          <!-- TODAS LAS 50 OPCIONES DE BITMOJI / STICKERS DESPLEGADAS -->
+          <div style="margin-top:.85rem;">
+            <label id="lbl-bitmoji-rapidos" style="display:block;font-weight:900;margin-bottom:.35rem;">Bitmoji / Stickers (50 opciones)</label>
+            <div id="selector-bitmoji-fotos" role="group" aria-label="Bitmoji y Stickers"></div>
+          </div>
+
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.9rem;">
+            <button type="submit" id="btn-guardar-perfil" class="btn-prim">Guardar perfil</button>
+            <button type="button" id="btn-link-mi-perfil" class="btn-sec">🔗 Copiar enlace</button>
+            <button type="button" id="btn-qr-mi-perfil" class="btn-sec">📱 Ver QR</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Comunidad y Cumpleaños -->
+      <div class="card">
+        <h2 id="titulo-comunidad" style="margin-top:0;">🎂 Comunidad y Cumpleaños</h2>
+        <form id="form-comunidad" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.55rem;">
+          <div><label id="lbl-nombre-amigo" for="input-nombre-amigo">Nombre</label><input type="text" id="input-nombre-amigo" placeholder="Nombre del amigo/a" /></div>
+          <div><label id="lbl-emoji-amigo" for="input-emoji-amigo">Emoji</label><input type="text" id="input-emoji-amigo" value="💜" /></div>
+          <div><label id="lbl-cumple-amigo" for="input-cumple-amigo">Cumpleaños</label><input type="date" id="input-cumple-amigo" /></div>
+          <div>
+            <label id="lbl-idioma-amigo" for="select-idioma-amigo">Idioma de su carta</label>
+            <select id="select-idioma-amigo">
+              <option value="es">Español</option>
+              <option value="en">English</option>
+              <option value="fr">Français</option>
+            </select>
+          </div>
+          <div style="grid-column:1/-1;"><button type="submit" id="btn-agregar-amigo" class="btn-prim">+ Agregar cumpleaños</button></div>
+        </form>
+
+        <ul id="lista-comunidad" style="margin-top:.75rem;"></ul>
+
+        <div style="margin-top:.85rem;display:flex;flex-wrap:wrap;gap:.5rem;align-items:flex-end;">
+          <div style="flex:1;min-width:190px;">
+            <label id="lbl-enlace-comunidad" for="input-enlace-comunidad">Importar enlace compartido</label>
+            <input type="text" id="input-enlace-comunidad" placeholder="Pega el enlace aquí..." />
+          </div>
+          <button type="button" id="btn-fusionar-comunidad" class="btn-sec">Importar</button>
+          <button type="button" id="btn-link-comunidad" class="btn-sec">🔗 Compartir lista</button>
+          <button type="button" id="btn-qr-comunidad" class="btn-sec">📱 QR lista</button>
+        </div>
+
+        <div id="panel-qr-comunidad" style="display:none;margin-top:.85rem;text-align:center;">
+          <h4 id="titulo-qr-panel">Código QR</h4>
+          <div id="qr-container"></div>
+          <button type="button" id="btn-cerrar-qr" class="btn-sec" style="margin-top:.5rem;">Cerrar QR</button>
+        </div>
+      </div>
+
+      <!-- Configuración y Respaldo -->
+      <div class="card">
+        <h3 id="titulo-config" style="margin-top:0;">⚙️ Configuración y Respaldo</h3>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:.65rem;">
+          <span><small id="lbl-stat-inicio">Inicio:</small> <strong id="stat-inicio">—</strong></span>
+          <span><small id="lbl-stat-letras">Letras:</small> <strong id="stat-letras">A–F</strong></span>
+          <span><small id="lbl-stat-feriados">Feriados:</small> <strong id="stat-feriados">0</strong></span>
+        </div>
+        <form id="form-config-ciclo" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.55rem;">
+          <div><label id="lbl-fecha-inicio" for="input-fecha-inicio">Fecha inicio</label><input type="date" id="input-fecha-inicio" /></div>
+          <div><label id="lbl-letras-ciclo" for="input-letras-ciclo">Letras</label><input type="text" id="input-letras-ciclo" value="A,B,C,D,E,F" /></div>
+          <div><label id="lbl-correo-destino" for="input-correo-destino">Correo destino</label><input type="email" id="input-correo-destino" /></div>
+          <div><label id="lbl-minutos-antelacion" for="input-minutos-antelacion">Antelación (min)</label><input type="number" id="input-minutos-antelacion" value="15" /></div>
+          <div style="grid-column:1/-1;"><label id="lbl-apps-script" for="input-apps-script">URL Apps Script</label><input type="url" id="input-apps-script" /></div>
+          <div style="grid-column:1/-1;"><button type="submit" id="btn-guardar-config" class="btn-prim">Guardar configuración</button></div>
+        </form>
+
+        <div style="margin-top:.75rem;display:flex;gap:.5rem;flex-wrap:wrap;align-items:flex-end;">
+          <div><label id="lbl-fecha-feriado" for="input-fecha-feriado">Feriado</label><input type="date" id="input-fecha-feriado" /></div>
+          <button type="button" id="btn-toggle-feriado" class="btn-sec">Alternar feriado</button>
+          <button type="button" id="btn-sync-calendar" class="btn-sec">📅 Sync Calendar</button>
+          <button type="button" id="btn-sync-correo" class="btn-sec">✉️ Enviar correo</button>
+        </div>
+
+        <div style="margin-top:.75rem;">
+          <textarea id="area-json-respaldo" rows="3" placeholder="JSON de respaldo..." style="width:100%;"></textarea>
+          <div style="display:flex;gap:.5rem;margin-top:.4rem;">
+            <button type="button" id="btn-copiar-json" class="btn-sec">📋 Copiar respaldo</button>
+            <button type="button" id="btn-importar-json" class="btn-sec">📥 Importar respaldo</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Burbuja Fin de Año -->
+  <div id="lost-nye-bubble-wrap" style="display:none;position:fixed;bottom:4.8rem;right:1rem;z-index:950;">
+    <button type="button" id="lost-nye-mini-btn" class="btn-prim" style="display:none;">🎆 <span id="lost-nye-mini-timer">00:00:00</span></button>
+    <div id="lost-nye-bubble" class="card" style="position:relative;overflow:hidden;width:250px;text-align:center;">
+      <canvas id="lost-nye-canvas" style="position:absolute;inset:0;pointer-events:none;"></canvas>
+      <div id="nye-tag-label" style="font-size:.76rem;font-weight:800;">🎆 Cuenta regresiva Año Nuevo</div>
+      <div id="lost-nye-countdown" style="font-size:1.35rem;font-weight:900;">00:00:00</div>
+      <p id="lost-nye-mensaje" style="font-size:.78rem;margin:.25rem 0 .45rem;"></p>
+      <div style="display:flex;gap:.35rem;justify-content:center;">
+        <button type="button" id="btn-rafaga-nye-lost" class="btn-sec">✨</button>
+        <button type="button" id="btn-simular-nye-lost" class="btn-sec">🧪</button>
+        <button type="button" id="btn-min-nye-lost" class="btn-sec">—</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Barra de Navegación Inferior -->
+  <nav id="lost-bottom-nav" class="kawaii-bottom-nav" aria-label="Navegación principal">
+    <button type="button" class="kawaii-tab-item activa" data-target-vista="inicio"><span>🏠</span><small id="nav-lbl-inicio">Inicio</small></button>
+    <button type="button" class="kawaii-tab-item" data-target-vista="calendario"><span>📅</span><small id="nav-lbl-calendario">Calendario</small></button>
+    <button type="button" class="kawaii-tab-item" data-target-vista="crear"><span>➕</span><small id="nav-lbl-crear">Materias</small></button>
+    <button type="button" class="kawaii-tab-item" data-target-vista="alarmas"><span>⏰</span><small id="nav-lbl-alarmas">Alarmas</small></button>
+    <button type="button" class="kawaii-tab-item" data-target-vista="perfil"><span>💜</span><small id="nav-lbl-perfil">Perfil</small></button>
+  </nav>
+
+  <script src="./app.js"></script>
+  <script>
+  (() => {
+    const KEY_IDIOMA_APP = "lost_idioma_app_v1";
+    const KEY_IDIOMAS_PERSONAS = "lost_idiomas_personas_v1";
+    const KEY_EPOCA_LOST = "lost_epoca_modo_v1";
+    const KEY_FOTO_PERFIL = "lost_foto_perfil_dataurl_v1";
+
+    const normalizarIdioma = (v) => {
+      const s = String(v || "").trim().toLowerCase();
+      if (s.startsWith("en")) return "en";
+      if (s.startsWith("fr")) return "fr";
+      return "es";
+    };
+
+    const obtenerIdiomaApp = () => normalizarIdioma(localStorage.getItem(KEY_IDIOMA_APP) || "es");
+
+    function leerIdiomasPersonas() {
+      try { return JSON.parse(localStorage.getItem(KEY_IDIOMAS_PERSONAS) || "{}"); } catch (e) { return {}; }
+    }
+    function guardarIdiomaPersona(nombre, lang) {
+      if (!nombre) return;
+      const map = leerIdiomasPersonas();
+      map[String(nombre).trim().toLowerCase()] = normalizarIdioma(lang);
+      localStorage.setItem(KEY_IDIOMAS_PERSONAS, JSON.stringify(map));
+    }
+    function resolverIdiomaPersona(nombre, fallback) {
+      const map = leerIdiomasPersonas();
+      const k = String(nombre || "").trim().toLowerCase();
+      return map[k] || normalizarIdioma(fallback || obtenerIdiomaApp());
+    }
+
+    const TEXTOS_UI = {
+      es: {
+        htmlLang: "es",
+        tagline: "Tu agenda escolar con ciclo inteligente",
+        creator: "Hecho con 💜 para organizar tus días",
+        welcomeDesc: "Organiza tus clases por letras de ciclo, tus actividades de lunes a viernes, alarmas y cumpleaños de tus amigos.",
+        pillRol: "🎓 Estudiante / Docente",
+        pillCiclo: "🔄 Ciclo A–F",
+        pillAlarmas: "⏰ Alarmas",
+        pillComunidad: "🎂 Comunidad",
+        btnTutorial: "✨ Ver guía rápida",
+        btnSaltar: "Entrar directo →",
+        btnAtras: "← Anterior",
+        btnSiguiente: "Siguiente →",
+        btnEntrarTut: "¡Empezar! ✨",
+        btnOmitir: "Saltar",
+        portada: "Portada",
+        pasoLabel: (a, b) => `Paso ${a} de ${b}`,
+        pasos: [
+          { icon: "🔄", tag: "Ciclo A–F", title: "Consulta tu letra del día", body: "Mira al instante qué letra de ciclo toca hoy y qué materias tienes." },
+          { icon: "📆", tag: "Lunes a Viernes", title: "Organiza tu semana", body: "Añade tus actividades extracurriculares, prácticas o estudio de lunes a viernes." },
+          { icon: "🎨", tag: "Épocas del año", title: "Decoración automática", body: "La app cambia de tema en Navidad, Halloween, San Valentín, Pascua y más." },
+          { icon: "🎂", tag: "Comunidad", title: "Cumpleaños y perfil", body: "Personaliza tu avatar con 120 emojis y 50 stickers y celebra cumpleaños." }
+        ],
+        epocaOpciones: {
+          auto: "✨ Época: Automática",
+          navidad: "🎄 Navidad",
+          halloween: "🎃 Halloween",
+          "san-valentin": "💘 San Valentín",
+          pascua: "🐣 Pascua",
+          verano: "☀️ Verano",
+          "regreso-clases": "🎒 Regreso a clases",
+          normal: "💜 Estilo LOST"
+        },
+        epocaBadges: {
+          navidad: "🎄 Modo Navidad",
+          halloween: "🎃 Modo Halloween",
+          "san-valentin": "💘 Modo San Valentín",
+          pascua: "🐣 Modo Pascua",
+          verano: "☀️ Modo Verano",
+          "regreso-clases": "🎒 Regreso a clases",
+          normal: "✨ Estilo LOST"
+        },
+        portadaTag: "AGENDA ESCOLAR · CICLO",
+        portadaDesc: "Organiza tus materias, horarios, ciclo y fechas especiales.",
+        miPerfil: "Mi Perfil",
+        comunidadEtq: "Comunidad",
+        loginGoogle: "☁️ Conectar Google",
+        salir: "Salir",
+        rolEst: "🎒 Estudiante",
+        rolMae: "🍎 Docente",
+        modoCiclo: "🔄 Modo Ciclo",
+        modoSem: "📆 Modo Semanal",
+        verTutApp: "❓ Guía",
+        badgeMateria: "📚 Hoy en clase",
+        toggleGym: "🏃‍♀️ Gym",
+        irHoy: "📍 Hoy",
+        enVivo: "⏱️ En vivo",
+        bloqueActual: "Bloque actual",
+        siguienteBloque: "Siguiente bloque",
+        subLv: "📆 Lunes a Viernes",
+        subCiclo: "🔄 Mi Ciclo",
+        subMater: "🏫 Calendario Mater (A–F)",
+        lvTitulo: "Calendario Mensual y Lunes a Viernes",
+        lvDesc: "Consulta el mes y organiza tu rutina semanal.",
+        lvAgendaTit: "🗓️ Rutina Lunes a Viernes",
+        lblLvDia: "Día",
+        lblLvHora: "Hora",
+        phLvHora: "3:30 PM",
+        lblLvAct: "Actividad",
+        phLvAct: "Ej. Práctica, estudio, club...",
+        btnAgregarLv: "+ Agregar",
+        titPerfil: "💜 Mi Perfil",
+        lblNombrePerfil: "Tu nombre",
+        phNombrePerfil: "Tu nombre",
+        lblTipoAvatar: "Tipo de avatar",
+        lblEmojiPerfil: "Emoji / Sticker elegido",
+        lblCumplePerfil: "Tu cumpleaños",
+        lblIdiomaPerfil: "Idioma",
+        lblFotoPerfil: "Foto de perfil",
+        ayudaFoto: "Puedes subir una foto o elegir cualquier emoji o sticker abajo.",
+        quitarFoto: "Quitar foto",
+        fotoActiva: "✅ Foto activa como avatar",
+        fotoGuardada: "🖼️ Foto guardada (selecciona 'Foto' arriba para usarla)",
+        sinFoto: "Sin foto subida",
+        lblEmojisRap: "Emojis rápidos (120 opciones)",
+        lblBitmojiRap: "Bitmoji / Stickers (50 opciones)",
+        btnGuardarPerfil: "Guardar perfil",
+        btnLinkPerfil: "🔗 Copiar enlace",
+        btnQrPerfil: "📱 Ver QR",
+        titComunidad: "🎂 Comunidad y Cumpleaños",
+        lblNombreAmigo: "Nombre",
+        phNombreAmigo: "Nombre del amigo/a",
+        lblEmojiAmigo: "Emoji",
+        lblCumpleAmigo: "Cumpleaños",
+        lblIdiomaAmigo: "Idioma de su carta",
+        btnAgregarAmigo: "+ Agregar cumpleaños",
+        nav: ["Inicio", "Calendario", "Materias", "Alarmas", "Perfil"]
+      },
+      en: {
+        htmlLang: "en",
+        tagline: "Your smart school cycle planner",
+        creator: "Made with 💜 to organize your days",
+        welcomeDesc: "Organize your cycle letter classes, Monday–Friday activities, alarms, and friends' birthdays.",
+        pillRol: "🎓 Student / Teacher",
+        pillCiclo: "🔄 A–F Cycle",
+        pillAlarmas: "⏰ Alarms",
+        pillComunidad: "🎂 Community",
+        btnTutorial: "✨ Quick guide",
+        btnSaltar: "Enter directly →",
+        btnAtras: "← Back",
+        btnSiguiente: "Next →",
+        btnEntrarTut: "Let's go! ✨",
+        btnOmitir: "Skip",
+        portada: "Welcome",
+        pasoLabel: (a, b) => `Step ${a} of ${b}`,
+        pasos: [
+          { icon: "🔄", tag: "A–F Cycle", title: "Check today's cycle letter", body: "Instantly see which cycle letter applies today and your scheduled classes." },
+          { icon: "📆", tag: "Mon–Fri", title: "Plan your week", body: "Add your extracurriculars, practices, or study blocks from Monday to Friday." },
+          { icon: "🎨", tag: "Seasonal Themes", title: "Automatic holiday decor", body: "The app adapts its theme for Christmas, Halloween, Valentine's Day, Easter, and more." },
+          { icon: "🎂", tag: "Community", title: "Birthdays & profile", body: "Customize your avatar with 120 emojis and 50 stickers and celebrate birthdays." }
+        ],
+        epocaOpciones: {
+          auto: "✨ Season: Automatic",
+          navidad: "🎄 Christmas",
+          halloween: "🎃 Halloween",
+          "san-valentin": "💘 Valentine's Day",
+          pascua: "🐣 Easter",
+          verano: "☀️ Summer",
+          "regreso-clases": "🎒 Back to School",
+          normal: "💜 LOST Style"
+        },
+        epocaBadges: {
+          navidad: "🎄 Christmas Mode",
+          halloween: "🎃 Halloween Mode",
+          "san-valentin": "💘 Valentine's Mode",
+          pascua: "🐣 Easter Mode",
+          verano: "☀️ Summer Mode",
+          "regreso-clases": "🎒 Back to School",
+          normal: "✨ LOST Style"
+        },
+        portadaTag: "SCHOOL PLANNER · CYCLE",
+        portadaDesc: "Organize your classes, schedules, cycle letters, and special dates.",
+        miPerfil: "My Profile",
+        comunidadEtq: "Community",
+        loginGoogle: "☁️ Connect Google",
+        salir: "Sign out",
+        rolEst: "🎒 Student",
+        rolMae: "🍎 Teacher",
+        modoCiclo: "🔄 Cycle Mode",
+        modoSem: "📆 Weekly Mode",
+        verTutApp: "❓ Guide",
+        badgeMateria: "📚 Today in class",
+        toggleGym: "🏃‍♀️ Gym",
+        irHoy: "📍 Today",
+        enVivo: "⏱️ Live",
+        bloqueActual: "Current block",
+        siguienteBloque: "Next block",
+        subLv: "📆 Monday to Friday",
+        subCiclo: "🔄 My Cycle",
+        subMater: "🏫 Mater Calendar (A–F)",
+        lvTitulo: "Monthly & Monday–Friday Calendar",
+        lvDesc: "Check the month and organize your weekly routine.",
+        lvAgendaTit: "🗓️ Monday–Friday Routine",
+        lblLvDia: "Day",
+        lblLvHora: "Time",
+        phLvHora: "3:30 PM",
+        lblLvAct: "Activity",
+        phLvAct: "E.g., Practice, study, club...",
+        btnAgregarLv: "+ Add",
+        titPerfil: "💜 My Profile",
+        lblNombrePerfil: "Your name",
+        phNombrePerfil: "Your name",
+        lblTipoAvatar: "Avatar type",
+        lblEmojiPerfil: "Selected Emoji / Sticker",
+        lblCumplePerfil: "Your birthday",
+        lblIdiomaPerfil: "Language",
+        lblFotoPerfil: "Profile photo",
+        ayudaFoto: "Upload a photo or pick any emoji or sticker below.",
+        quitarFoto: "Remove photo",
+        fotoActiva: "✅ Photo active as avatar",
+        fotoGuardada: "🖼️ Photo saved (select 'Photo' above to use it)",
+        sinFoto: "No photo uploaded",
+        lblEmojisRap: "Quick emojis (120 options)",
+        lblBitmojiRap: "Bitmoji / Stickers (50 options)",
+        btnGuardarPerfil: "Save profile",
+        btnLinkPerfil: "🔗 Copy link",
+        btnQrPerfil: "📱 Show QR",
+        titComunidad: "🎂 Community & Birthdays",
+        lblNombreAmigo: "Name",
+        phNombreAmigo: "Friend's name",
+        lblEmojiAmigo: "Emoji",
+        lblCumpleAmigo: "Birthday",
+        lblIdiomaAmigo: "Card language",
+        btnAgregarAmigo: "+ Add birthday",
+        nav: ["Home", "Calendar", "Classes", "Alarms", "Profile"]
+      },
+      fr: {
+        htmlLang: "fr",
+        tagline: "Ton agenda scolaire avec cycle intelligent",
+        creator: "Créé avec 💜 pour organiser tes journées",
+        welcomeDesc: "Organise tes cours par lettres de cycle, tes activités du lundi au vendredi, tes alarmes et les anniversaires.",
+        pillRol: "🎓 Élève / Enseignant",
+        pillCiclo: "🔄 Cycle A–F",
+        pillAlarmas: "⏰ Alarmes",
+        pillComunidad: "🎂 Communauté",
+        btnTutorial: "✨ Guide rapide",
+        btnSaltar: "Entrer directement →",
+        btnAtras: "← Précédent",
+        btnSiguiente: "Suivant →",
+        btnEntrarTut: "Commencer ! ✨",
+        btnOmitir: "Passer",
+        portada: "Accueil",
+        pasoLabel: (a, b) => `Étape ${a} sur ${b}`,
+        pasos: [
+          { icon: "🔄", tag: "Cycle A–F", title: "Vois la lettre du jour", body: "Découvre immédiatement quelle lettre de cycle correspond à aujourd'hui." },
+          { icon: "📆", tag: "Lun–Ven", title: "Organise ta semaine", body: "Ajoute tes activités, entraînements ou révisions du lundi au vendredi." },
+          { icon: "🎨", tag: "Saisons", title: "Décoration automatique", body: "L'application change de thème à Noël, Halloween, Saint-Valentin, Pâques et plus." },
+          { icon: "🎂", tag: "Communauté", title: "Anniversaires et profil", body: "Personnalise ton avatar avec 120 émojis et 50 autocollants." }
+        ],
+        epocaOpciones: {
+          auto: "✨ Saison : Automatique",
+          navidad: "🎄 Noël",
+          halloween: "🎃 Halloween",
+          "san-valentin": "💘 Saint-Valentin",
+          pascua: "🐣 Pâques",
+          verano: "☀️ Été",
+          "regreso-clases": "🎒 Rentrée scolaire",
+          normal: "💜 Style LOST"
+        },
+        epocaBadges: {
+          navidad: "🎄 Mode Noël",
+          halloween: "🎃 Mode Halloween",
+          "san-valentin": "💘 Mode Saint-Valentin",
+          pascua: "🐣 Mode Pâques",
+          verano: "☀️ Mode Été",
+          "regreso-clases": "🎒 Rentrée scolaire",
+          normal: "✨ Style LOST"
+        },
+        portadaTag: "AGENDA SCOLAIRE · CYCLE",
+        portadaDesc: "Organise tes matières, horaires, cycles et dates spéciales.",
+        miPerfil: "Mon Profil",
+        comunidadEtq: "Communauté",
+        loginGoogle: "☁️ Connecter Google",
+        salir: "Déconnexion",
+        rolEst: "🎒 Élève",
+        rolMae: "🍎 Enseignant",
+        modoCiclo: "🔄 Mode Cycle",
+        modoSem: "📆 Mode Hebdo",
+        verTutApp: "❓ Guide",
+        badgeMateria: "📚 Aujourd'hui en classe",
+        toggleGym: "🏃‍♀️ Gym",
+        irHoy: "📍 Aujourd'hui",
+        enVivo: "⏱️ En direct",
+        bloqueActual: "Bloc actuel",
+        siguienteBloque: "Bloc suivant",
+        subLv: "📆 Lundi au Vendredi",
+        subCiclo: "🔄 Mon Cycle",
+        subMater: "🏫 Calendrier Mater (A–F)",
+        lvTitulo: "Calendrier Mensuel et Lundi–Vendredi",
+        lvDesc: "Consulte le mois et organise ta routine hebdomadaire.",
+        lvAgendaTit: "🗓️ Routine Lundi au Vendredi",
+        lblLvDia: "Jour",
+        lblLvHora: "Heure",
+        phLvHora: "15h30",
+        lblLvAct: "Activité",
+        phLvAct: "Ex. Sport, étude, club...",
+        btnAgregarLv: "+ Ajouter",
+        titPerfil: "💜 Mon Profil",
+        lblNombrePerfil: "Ton prénom",
+        phNombrePerfil: "Ton prénom",
+        lblTipoAvatar: "Type d'avatar",
+        lblEmojiPerfil: "Émoji / Autocollant choisi",
+        lblCumplePerfil: "Ton anniversaire",
+        lblIdiomaPerfil: "Langue",
+        lblFotoPerfil: "Photo de profil",
+        ayudaFoto: "Télécharge une photo ou choisis un émoji ou autocollant ci-dessous.",
+        quitarFoto: "Supprimer",
+        fotoActiva: "✅ Photo active comme avatar",
+        fotoGuardada: "🖼️ Photo enregistrée (choisis 'Photo' ci-dessus)",
+        sinFoto: "Aucune photo",
+        lblEmojisRap: "Émojis rapides (120 options)",
+        lblBitmojiRap: "Bitmoji / Autocollants (50 options)",
+        btnGuardarPerfil: "Enregistrer",
+        btnLinkPerfil: "🔗 Copier le lien",
+        btnQrPerfil: "📱 Voir QR",
+        titComunidad: "🎂 Communauté et Anniversaires",
+        lblNombreAmigo: "Prénom",
+        phNombreAmigo: "Prénom de l'ami(e)",
+        lblEmojiAmigo: "Émoji",
+        lblCumpleAmigo: "Anniversaire",
+        lblIdiomaAmigo: "Langue de la carte",
+        btnAgregarAmigo: "+ Ajouter",
+        nav: ["Accueil", "Calendrier", "Matières", "Alarmes", "Profil"]
+      }
+    };
+
+    const ui = () => TEXTOS_UI[obtenerIdiomaApp()] || TEXTOS_UI.es;
+
+    const MENSAJES_CUMPLE = {
+      es: { titulo: "¡Feliz Cumpleaños!", cuerpo: "Que hoy esté lleno de alegría, abrazos, pastel y momentos inolvidables.", cerrar: "Cerrar cartita ✨" },
+      en: { titulo: "Happy Birthday!", cuerpo: "Wishing you a day full of joy, cake, laughter, and unforgettable memories.", cerrar: "Close card ✨" },
+      fr: { titulo: "Joyeux Anniversaire !", cuerpo: "Que cette journée soit remplie de joie, de gâteau et de merveilleux souvenirs.", cerrar: "Fermer la carte ✨" }
+    };
+
+    function calcularPascuaGregoriana(year) {
+      const a = year % 19;
+      const b = Math.floor(year / 100);
+      const c = year % 100;
+      const d = Math.floor(b / 4);
+      const e = b % 4;
+      const f = Math.floor((b + 8) / 25);
+      const g = Math.floor((b - f + 1) / 3);
+      const h = (19 * a + b - d - g + 15) % 30;
+      const i = Math.floor(c / 4);
+      const k = c % 4;
+      const l = (32 + 2 * e + 2 * i - h - k) % 7;
+      const m = Math.floor((a + 11 * h + 22 * l) / 451);
+      const month = Math.floor((h + l - 7 * m + 114) / 31);
+      const day = ((h + l - 7 * m + 114) % 31) + 1;
+      return new Date(year, month - 1, day);
+    }
+
+    function detectarEpocaAutomatica(fecha = new Date()) {
+      const y = fecha.getFullYear();
+      const mmdd = `${String(fecha.getMonth() + 1).padStart(2, "0")}-${String(fecha.getDate()).padStart(2, "0")}`;
+      const pascua = calcularPascuaGregoriana(y);
+      const inicioPascua = new Date(y, pascua.getMonth(), pascua.getDate() - 7);
+      const finPascua = new Date(y, pascua.getMonth(), pascua.getDate() + 1);
+      const hoySolo = new Date(y, fecha.getMonth(), fecha.getDate());
+
+      if (mmdd >= "12-01" || mmdd <= "01-06") return "navidad";
+      if (mmdd >= "10-15" && mmdd <= "11-02") return "halloween";
+      if (mmdd >= "02-07" && mmdd <= "02-16") return "san-valentin";
+      if (hoySolo >= inicioPascua && hoySolo <= finPascua) return "pascua";
+      if (mmdd >= "08-01" && mmdd <= "08-25") return "regreso-clases";
+      if (mmdd >= "06-01" && mmdd <= "07-31") return "verano";
+      return "normal";
+    }
+
+    const obtenerModoEpocaGuardado = () => localStorage.getItem(KEY_EPOCA_LOST) || "auto";
+
+    function aplicarDecoracionEpocaLOST(modoForzado) {
+      const modo = modoForzado || obtenerModoEpocaGuardado();
+      const epocaActiva = modo === "auto" ? detectarEpocaAutomatica(new Date()) : modo;
+      if (epocaActiva === "normal") document.body.removeAttribute("data-epoca");
+      else document.body.setAttribute("data-epoca", epocaActiva);
+
+      const badge = document.getElementById("lost-epoca-badge");
+      if (badge) {
+        badge.textContent = ui().epocaBadges[epocaActiva] || ui().epocaBadges.normal;
+      }
+    }
+
+    const obtenerMMDDLocal = (dt) => `${String(dt.getMonth() + 1).padStart(2, "0")}-${String(dt.getDate()).padStart(2, "0")}`;
+
+    function extraerMMDD(valor) {
+      if (!valor) return "";
+      const m = String(valor).trim().match(/(\d{2})-(\d{2})$/);
+      return m ? `${m[1]}-${m[2]}` : "";
+    }
+
+    function normalizarClavePersona(nombre, esYo) {
+      const lim = String(nombre || "").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, " ");
+      return `${lim}|${esYo ? "yo" : "com"}`;
+    }
+
+    function buscarCumpleanerosHoy() {
+      const hoyMMDD = obtenerMMDDLocal(new Date());
+      const personasMap = new Map();
+      const langApp = obtenerIdiomaApp();
+
+      const agregarPersona = (nombre, emoji, idioma, esYo) => {
+        const limNombre = String(nombre || "").trim() || (esYo ? ui().miPerfil : ui().comunidadEtq);
+        const clave = normalizarClavePersona(limNombre, esYo);
+        if (!clave || clave === "|yo" || clave === "|com" || personasMap.has(clave)) return;
+        personasMap.set(clave, {
+          nombre: limNombre,
+          emoji: String(emoji || "🎂").trim() || "🎂",
+          idioma: idioma ? normalizarIdioma(idioma) : langApp,
+          esYo: Boolean(esYo)
+        });
+      };
+
+      const inpCumplePerfil = document.getElementById("input-cumple-perfil");
+      const inpNombrePerfil = document.getElementById("input-nombre-perfil");
+      const chipNombre = document.getElementById("chip-perfil-nombre");
+      const inpEmojiPerfil = document.getElementById("input-emoji-perfil");
+      const selIdiomaPerfil = document.getElementById("select-idioma-perfil");
+
+      if (extraerMMDD(inpCumplePerfil?.value) === hoyMMDD) {
+        agregarPersona(inpNombrePerfil?.value || chipNombre?.textContent || ui().miPerfil, inpEmojiPerfil?.value || "🎂", selIdiomaPerfil?.value || langApp, true);
+      }
+
+      const inpCumpleAmigo = document.getElementById("input-cumple-amigo");
+      const inpNombreAmigo = document.getElementById("input-nombre-amigo");
+      const inpEmojiAmigo = document.getElementById("input-emoji-amigo");
+      const selIdiomaAmigo = document.getElementById("select-idioma-amigo");
+      if (extraerMMDD(inpCumpleAmigo?.value) === hoyMMDD && inpNombreAmigo?.value?.trim()) {
+        agregarPersona(inpNombreAmigo.value, inpEmojiAmigo?.value || "💜", selIdiomaAmigo?.value || langApp, false);
+      }
+
+      const esCumple = (v) => typeof v === "string" && extraerMMDD(v) === hoyMMDD;
+      const explorarObjeto = (obj, profundidad = 0) => {
+        if (!obj || typeof obj !== "object" || profundidad > 5) return;
+        if (Array.isArray(obj)) {
+          obj.forEach(item => explorarObjeto(item, profundidad + 1));
+          return;
+        }
+        const posiblesFechas = [obj.cumple, obj.cumpleanos, obj.cumpleaños, obj.birthday, obj.birthDate, obj.fechaCumple, obj.fechaNacimiento];
+        if (posiblesFechas.some(esCumple)) {
+          const nom = obj.nombre || obj.name || obj.titulo || obj.usuario || ui().comunidadEtq;
+          const emj = obj.emoji || obj.avatar || "🎂";
+          const idi = obj.idioma || obj.lang || obj.language || langApp;
+          agregarPersona(nom, emj, idi, false);
+        }
+        Object.values(obj).forEach(val => {
+          if (val && typeof val === "object") explorarObjeto(val, profundidad + 1);
+        });
+      };
+
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (!k || k.startsWith("lost_lv_") || k.startsWith("lost_clases_")) continue;
+        const raw = localStorage.getItem(k);
+        if (!raw) continue;
+        if (esCumple(raw) && (k.toLowerCase().includes("cumple") || k.toLowerCase().includes("perfil"))) {
+          agregarPersona(inpNombrePerfil?.value || chipNombre?.textContent || ui().miPerfil, inpEmojiPerfil?.value || "🎂", selIdiomaPerfil?.value || langApp, true);
+        }
+        if (raw.startsWith("{") || raw.startsWith("[")) {
+          try { explorarObjeto(JSON.parse(raw), 0); } catch (e) {}
+        }
+      }
+
+      return Array.from(personasMap.values());
+    }
+
+    window.actualizarSaludoCumpleanosLOST = () => {
+      const wrap = document.getElementById("lost-banner-cumple");
+      if (!wrap) return;
+      const cumpleaneros = buscarCumpleanerosHoy();
+      if (!cumpleaneros.length) {
+        wrap.style.display = "none";
+        wrap.innerHTML = "";
+        return;
+      }
+
+      const langApp = obtenerIdiomaApp();
+      wrap.innerHTML = cumpleaneros.map((p, idx) => {
+        const idiomaEfectivo = p.esYo ? langApp : (p.idioma || langApp);
+        const copy = MENSAJES_CUMPLE[idiomaEfectivo] || MENSAJES_CUMPLE[langApp] || MENSAJES_CUMPLE.es;
+        const etiquetaExtra = p.esYo ? "" : `<div style="font-size:.82rem;font-weight:800;color:#6b21a8;margin-bottom:.35rem;">${p.emoji} ${ui().comunidadEtq}</div>`;
+        return `
+          <div class="lost-cumple-tarjeta" data-cartita-idx="${idx}">
+            <span class="lost-cumple-bizcocho-top" aria-hidden="true">🎂</span>
+            <span class="lost-cumple-bizcocho-bottom" aria-hidden="true">🧁</span>
+            ${etiquetaExtra}
+            <p class="lost-cumple-titulo-cursiva">${copy.titulo}</p>
+            <div class="lost-cumple-nombre-burbuja">${p.emoji} ${p.nombre}</div>
+            <p class="lost-cumple-cuerpo-cursiva">${copy.cuerpo}</p>
+            <button type="button" class="lost-cumple-cerrar-btn" data-cerrar-cartita="${idx}">${copy.cerrar}</button>
+          </div>
+        `;
+      }).join("");
+      wrap.style.display = "block";
+    };
+
+    // 120 emojis rápidos
+    const EMOJIS_120 = [
+      "🦊","🐶","💜","🎀","🌸","🍓","✨","🎂","📚","🎧",
+      "🐱","🐰","🐻","🐼","🐨","🐯","🦁","🐮","🐷","🐸",
+      "🦄","🐧","🦉","🐬","🦋","🐝","🐞","🐢","🌼","🌷",
+      "🌹","🪻","🌻","🍀","🌿","🌱","🌵","🌴","🍂","🍁",
+      "🍒","🍑","🍉","🍍","🥭","🍎","🍏","🍋","🥑","🥐",
+      "🧁","🍰","🍩","🍪","🍫","☕","🍵","🧋","🥤","🎵",
+      "🎶","🎸","🎹","🎷","🎨","🖌️","🎭","🎬","📷","💍",
+      "🏃‍♀️","🏋️‍♀️","🧘‍♀️","🚴‍♀️","🏐","🏀","⚽","🎾","⛳","🏆",
+      "🥇","👑","🧸","🎈","🎉","📅","🗓️","⏰","⏳","📌",
+      "📍","📝","📒","📓","📔","📕","📗","📘","📙","📖",
+      "✏️","✒️","🖊️","🖍️","📐","📏","🔬","🧪","🧫","🔭",
+      "💻","🎒","🎓","🏫","🏛️","🗺️","🩷","🩵","🤍","💛"
+    ];
+
+    // 50 Bitmoji / Stickers
+    const BITMOJI_50 = [
+      "🦄 Lavanda Cool","📅 Pastel Vibe","🧸 Study Star","🌙 Night Owl",
+      "😎 Chill Mode","🤓 Nerd Power","🥳 Party Time","🤩 Star Pupil",
+      "😇 Angelic","🥰 Sweetheart","😍 Heart Eyes","🤗 Warm Hug",
+      "🤭 Giggles","🤔 Deep Thinker","😴 Sleepyhead","🥱 Morning Mood",
+      "🤯 Mind Blown","🤠 Yeehaw","🥸 Disguise","👩🏻‍🎓 Grad Ready",
+      "🧑🏻‍🎓 Honor Roll","👩🏻‍🏫 Teacher Vibe","🧑🏻‍🏫 Mentor","👩🏻‍🔬 Lab Pro",
+      "👩🏻‍🎨 Art Soul","👩🏻‍💻 Code Queen","👩🏻‍🚀 Space Cadet","🧚🏻‍♀️ Fairy Dust",
+      "🧜🏻‍♀️ Ocean Wave","🦸🏻‍♀️ Super Hero","💃🏻 Dance Break","🧋 Boba Lover",
+      "📚 Bookworm","☕ Coffee First","🎧 Lo-Fi Beats","🌈 Dreamer",
+      "🎀 Coquette","🍀 Lucky Charm","🧁 Cupcake","📸 Snap Queen",
+      "🏃🏻‍♀️ Track Star","✍️ Note Taker","🎓 Class of '27","🦊 Clever Fox",
+      "🐱 Kitty Purr","🐼 Zen Panda","🐰 Bunny Hop","🐨 Cozy Koala",
+      "🦋 Butterfly","🌻 Sunshine"
+    ];
+
+    function sincronizarAvatarYFotoPerfil() {
+      const t = ui();
+      const fotoData = localStorage.getItem(KEY_FOTO_PERFIL) || "";
+      const tipoSelect = document.getElementById("select-tipo-avatar");
+      const inputEmoji = document.getElementById("input-emoji-perfil");
+      const chip = document.getElementById("chip-perfil-activo");
+      const chipEmoji = document.getElementById("chip-perfil-emoji");
+      const preview = document.getElementById("lost-foto-perfil-preview");
+      const estadoFoto = document.getElementById("lost-foto-estado-texto");
+      const btnQuitarFoto = document.getElementById("btn-quitar-foto-perfil");
+      const tipoActual = (tipoSelect && tipoSelect.value) || (fotoData ? "foto" : "emoji");
+      const usarFoto = Boolean(fotoData) && tipoActual === "foto";
+
+      if (preview) preview.src = fotoData || "./icon-512.png";
+      if (estadoFoto) estadoFoto.textContent = fotoData ? (usarFoto ? t.fotoActiva : t.fotoGuardada) : t.sinFoto;
+      if (btnQuitarFoto) btnQuitarFoto.style.display = fotoData ? "inline-block" : "none";
+
+      if (chip) {
+        let chipImg = document.getElementById("lost-chip-foto-avatar");
+        if (!chipImg) {
+          chipImg = document.createElement("img");
+          chipImg.id = "lost-chip-foto-avatar";
+          chipImg.alt = t.miPerfil;
+          chipImg.className = "lost-chip-avatar-img";
+          chip.prepend(chipImg);
+        }
+        if (usarFoto) {
+          chipImg.src = fotoData;
+          chipImg.style.display = "inline-block";
+          if (chipEmoji) chipEmoji.style.display = "none";
+        } else {
+          chipImg.style.display = "none";
+          if (chipEmoji) {
+            chipEmoji.style.display = "inline";
+            const valInput = inputEmoji ? inputEmoji.value.trim() : "";
+            if (valInput) chipEmoji.textContent = valInput;
+          }
+        }
+      }
+      const elegidoActual = inputEmoji ? inputEmoji.value.trim() : "";
+      document.querySelectorAll(".lost-emoji-btn-item").forEach(btn => {
+        btn.classList.toggle("seleccionado", Boolean(elegidoActual && btn.dataset.emoji === elegidoActual));
+      });
+    }
+
+    let pausarObserverEmojis = false;
+    function poblarSelectoresEmojisCompletos() {
+      const inputEmoji = document.getElementById("input-emoji-perfil");
+      const tipoSelect = document.getElementById("select-tipo-avatar");
+
+      const armar = (id, lista, tipoDestino, esSticker) => {
+        const box = document.getElementById(id);
+        if (!box) return;
+        pausarObserverEmojis = true;
+        box.innerHTML = lista.map(item => {
+          const val = esSticker ? item.split(" ")[0] : item;
+          const cls = esSticker ? "lost-emoji-btn-item lost-sticker-btn-item" : "lost-emoji-btn-item";
+          return `<button type="button" class="${cls}" data-emoji="${val}" data-full="${item}" title="${item}">${item}</button>`;
+        }).join("");
+        pausarObserverEmojis = false;
+
+        if (!box.dataset.lostBound) {
+          box.dataset.lostBound = "1";
+          box.addEventListener("click", (ev) => {
+            const btn = ev.target.closest(".lost-emoji-btn-item");
+            if (!btn) return;
+            const elegido = btn.dataset.emoji || "📅";
+            if (inputEmoji) {
+              inputEmoji.value = elegido;
+              inputEmoji.dispatchEvent(new Event("input", { bubbles: true }));
+              inputEmoji.dispatchEvent(new Event("change", { bubbles: true }));
+            }
+            if (tipoSelect && tipoSelect.value === "foto") {
+              tipoSelect.value = tipoDestino;
+              tipoSelect.dispatchEvent(new Event("change", { bubbles: true }));
+            }
+            sincronizarAvatarYFotoPerfil();
+          });
+
+          const obs = new MutationObserver(() => {
+            if (pausarObserverEmojis) return;
+            if (box.children.length < lista.length) {
+              armar(id, lista, tipoDestino, esSticker);
+              sincronizarAvatarYFotoPerfil();
+            }
+          });
+          obs.observe(box, { childList: true });
+        }
+      };
+
+      armar("selector-emojis-rapidos", EMOJIS_120, "emoji", false);
+      armar("selector-bitmoji-fotos", BITMOJI_50, "bitmoji", true);
+    }
+
+    function configurarFotoPerfil() {
+      const inputFoto = document.getElementById("input-foto-perfil");
+      const btnQuitar = document.getElementById("btn-quitar-foto-perfil");
+      const tipoSelect = document.getElementById("select-tipo-avatar");
+      const inputEmoji = document.getElementById("input-emoji-perfil");
+      const formPerfil = document.getElementById("form-perfil");
+
+      inputFoto?.addEventListener("change", () => {
+        const file = inputFoto.files?.[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+          const dataUrl = String(reader.result || "");
+          try { localStorage.setItem(KEY_FOTO_PERFIL, dataUrl); } catch (e) {}
+          if (tipoSelect) {
+            tipoSelect.value = "foto";
+            tipoSelect.dispatchEvent(new Event("change", { bubbles: true }));
+          }
+          sincronizarAvatarYFotoPerfil();
+        };
+        reader.readAsDataURL(file);
+      });
+
+      btnQuitar?.addEventListener("click", () => {
+        localStorage.removeItem(KEY_FOTO_PERFIL);
+        if (inputFoto) inputFoto.value = "";
+        if (tipoSelect && tipoSelect.value === "foto") {
+          tipoSelect.value = "emoji";
+          tipoSelect.dispatchEvent(new Event("change", { bubbles: true }));
+        }
+        sincronizarAvatarYFotoPerfil();
+      });
+
+      tipoSelect?.addEventListener("change", sincronizarAvatarYFotoPerfil);
+      inputEmoji?.addEventListener("input", sincronizarAvatarYFotoPerfil);
+      formPerfil?.addEventListener("submit", () => {
+        setTimeout(() => {
+          sincronizarAvatarYFotoPerfil();
+          window.actualizarSaludoCumpleanosLOST?.();
+        }, 60);
+      });
+    }
+
+    let pasoActualIdx = 0;
+    function renderPasoTutorial(idx) {
+      const t = ui();
+      const pasos = t.pasos;
+      pasoActualIdx = Math.max(0, Math.min(pasos.length - 1, idx));
+      const p = pasos[pasoActualIdx];
+      const setTxt = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+      setTxt("lost-step-icon", p.icon);
+      setTxt("lost-step-tag", p.tag);
+      setTxt("lost-step-title", p.title);
+      setTxt("lost-step-body", p.body);
+      setTxt("lost-step-counter", t.pasoLabel(pasoActualIdx + 1, pasos.length));
+      const fill = document.getElementById("lost-progress-fill");
+      if (fill) fill.style.width = `${((pasoActualIdx + 1) / pasos.length) * 100}%`;
+      const prev = document.getElementById("btn-paso-anterior");
+      const next = document.getElementById("btn-paso-siguiente");
+      if (prev) prev.disabled = pasoActualIdx === 0;
+      if (next) next.textContent = pasoActualIdx === pasos.length - 1 ? t.btnEntrarTut : t.btnSiguiente;
+    }
+
+    function mostrarAppPrincipal(vistaInicial = "inicio") {
+      const welcome = document.getElementById("lost-welcome");
+      const app = document.getElementById("lost-app");
+      const nav = document.getElementById("lost-bottom-nav");
+      if (welcome) welcome.classList.add("lost-oculto");
+      if (app) app.style.display = "block";
+      if (nav) nav.style.display = "flex";
+      cambiarVistaPrincipal(vistaInicial);
+    }
+
+    function mostrarBienvenidaLOST(irATutorial = false) {
+      const welcome = document.getElementById("lost-welcome");
+      const landing = document.getElementById("lost-landing-view");
+      const tut = document.getElementById("lost-tutorial-view");
+      if (welcome) welcome.classList.remove("lost-oculto");
+      if (landing) landing.style.display = irATutorial ? "none" : "block";
+      if (tut) tut.style.display = irATutorial ? "block" : "none";
+    }
+
+    function cambiarVistaPrincipal(vista) {
+      if (!vista) return;
+      document.querySelectorAll(".vista-seccion").forEach(sec => {
+        sec.style.display = sec.dataset.vista === vista ? "" : "none";
+      });
+      document.querySelectorAll("#lost-bottom-nav .kawaii-tab-item").forEach(btn => {
+        btn.classList.toggle("activa", btn.dataset.targetVista === vista);
+      });
+      if (vista === "perfil") {
+        poblarSelectoresEmojisCompletos();
+        sincronizarAvatarYFotoPerfil();
+      }
+      window.actualizarSaludoCumpleanosLOST?.();
+    }
+
+    function aplicarTraduccionCompletaApp() {
+      const t = ui();
+      document.documentElement.lang = t.htmlLang;
+      const setTxt = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+      const setPh = (id, v) => { const el = document.getElementById(id); if (el) el.placeholder = v; };
+
+      setTxt("lost-welcome-tagline", t.tagline);
+      setTxt("lost-creator-credit", t.creator);
+      setTxt("lost-welcome-desc", t.welcomeDesc);
+      setTxt("pill-rol", t.pillRol);
+      setTxt("pill-ciclo", t.pillCiclo);
+      setTxt("pill-alarmas", t.pillAlarmas);
+      setTxt("pill-comunidad", t.pillComunidad);
+      setTxt("btn-iniciar-tutorial", t.btnTutorial);
+      setTxt("btn-saltar-todo", t.btnSaltar);
+      setTxt("btn-paso-anterior", t.btnAtras);
+      setTxt("btn-omitir-tutorial", t.btnOmitir);
+
+      const selEpoca = document.getElementById("select-epoca-lost");
+      if (selEpoca) {
+        const prevModo = obtenerModoEpocaGuardado();
+        const ordenModos = ["auto", "navidad", "halloween", "san-valentin", "pascua", "verano", "regreso-clases", "normal"];
+        selEpoca.innerHTML = ordenModos.map(k => `<option value="${k}">${t.epocaOpciones[k]}</option>`).join("");
+        selEpoca.value = prevModo;
+      }
+
+      setTxt("portada-sub-tag", t.portadaTag);
+      setTxt("portada-desc", t.portadaDesc);
+      setTxt("btn-login-lost", t.loginGoogle);
+      setTxt("btn-logout-lost", t.salir);
+      setTxt("btn-rol-estudiante", t.rolEst);
+      setTxt("btn-rol-maestro", t.rolMae);
+      setTxt("btn-modo-ciclo", t.modoCiclo);
+      setTxt("btn-modo-semanal", t.modoSem);
+      setTxt("btn-ver-tutorial-app", t.verTutApp);
+
+      setTxt("badge-categoria-materia", t.badgeMateria);
+      setTxt("btn-toggle-gym", t.toggleGym);
+      setTxt("btn-ir-hoy", t.irHoy);
+      setTxt("titulo-en-vivo", t.enVivo);
+      setTxt("etiqueta-bloque-actual", t.bloqueActual);
+      setTxt("etiqueta-siguiente-bloque", t.siguienteBloque);
+
+      setTxt("subtab-btn-lv", t.subLv);
+      setTxt("subtab-btn-ciclo", t.subCiclo);
+      setTxt("subtab-btn-mater", t.subMater);
+      setTxt("lv-titulo-panel", t.lvTitulo);
+      setTxt("lv-desc-panel", t.lvDesc);
+      setTxt("lv-agenda-titulo", t.lvAgendaTit);
+      setTxt("lbl-lv-dia", t.lblLvDia);
+      setTxt("lbl-lv-hora", t.lblLvHora);
+      setPh("input-lv-hora", t.phLvHora);
+      setTxt("lbl-lv-actividad", t.lblLvAct);
+      setPh("input-lv-actividad", t.phLvAct);
+      setTxt("btn-agregar-lv", t.btnAgregarLv);
+
+      setTxt("titulo-perfil", t.titPerfil);
+      setTxt("lbl-nombre-perfil", t.lblNombrePerfil);
+      setPh("input-nombre-perfil", t.phNombrePerfil);
+      setTxt("lbl-tipo-avatar", t.lblTipoAvatar);
+      setTxt("lbl-emoji-perfil", t.lblEmojiPerfil);
+      setTxt("lbl-cumple-perfil", t.lblCumplePerfil);
+      setTxt("lbl-idioma-perfil", t.lblIdiomaPerfil);
+      setTxt("lbl-foto-perfil", t.lblFotoPerfil);
+      setTxt("lost-foto-ayuda-texto", t.ayudaFoto);
+      setTxt("btn-quitar-foto-perfil", t.quitarFoto);
+      setTxt("lbl-emojis-rap", t.lblEmojisRap);
+      setTxt("lbl-bitmoji-rap", t.lblBitmojiRap);
+      setTxt("btn-guardar-perfil", t.btnGuardarPerfil);
+      setTxt("btn-link-mi-perfil", t.btnLinkPerfil);
+      setTxt("btn-qr-mi-perfil", t.btnQrPerfil);
+
+      setTxt("titulo-comunidad", t.titComunidad);
+      setTxt("lbl-nombre-amigo", t.lblNombreAmigo);
+      setPh("input-nombre-amigo", t.phNombreAmigo);
+      setTxt("lbl-emoji-amigo", t.lblEmojiAmigo);
+      setTxt("lbl-cumple-amigo", t.lblCumpleAmigo);
+      setTxt("lbl-idioma-amigo", t.lblIdiomaAmigo);
+      setTxt("btn-agregar-amigo", t.btnAgregarAmigo);
+
+      const navIds = ["nav-lbl-inicio", "nav-lbl-calendario", "nav-lbl-crear", "nav-lbl-alarmas", "nav-lbl-perfil"];
+      navIds.forEach((id, i) => setTxt(id, t.nav[i]));
+
+      aplicarDecoracionEpocaLOST();
+      sincronizarAvatarYFotoPerfil();
+      window.actualizarSaludoCumpleanosLOST?.();
+    }
+
+    document.addEventListener("click", (ev) => {
+      const target = ev.target;
+      if (!(target instanceof Element)) return;
+
+      const cerrarCartitaBtn = target.closest("[data-cerrar-cartita]");
+      if (cerrarCartitaBtn) {
+        cerrarCartitaBtn.closest(".lost-cumple-tarjeta")?.remove();
+        const wrap = document.getElementById("lost-banner-cumple");
+        if (wrap && !wrap.querySelector(".lost-cumple-tarjeta")) wrap.style.display = "none";
+        return;
+      }
+
+      if (target.closest("#btn-iniciar-tutorial")) { renderPasoTutorial(0); mostrarBienvenidaLOST(true); return; }
+      if (target.closest("#btn-saltar-todo") || target.closest("#btn-omitir-tutorial")) { mostrarAppPrincipal("inicio"); return; }
+      if (target.closest("#btn-paso-anterior")) { renderPasoTutorial(pasoActualIdx - 1); return; }
+      if (target.closest("#btn-paso-siguiente")) {
+        if (pasoActualIdx >= ui().pasos.length - 1) mostrarAppPrincipal("inicio");
+        else renderPasoTutorial(pasoActualIdx + 1);
+        return;
+      }
+      if (target.closest("#btn-ver-tutorial-app")) { renderPasoTutorial(0); mostrarBienvenidaLOST(true); return; }
+
+      const idiomaBtn = target.closest("[data-idioma-app]");
+      if (idiomaBtn) {
+        const lang = normalizarIdioma(idiomaBtn.getAttribute("data-idioma-app"));
+        localStorage.setItem(KEY_IDIOMA_APP, lang);
+        document.querySelectorAll("[data-idioma-app]").forEach(b => b.classList.toggle("activo", b === idiomaBtn));
+        aplicarTraduccionCompletaApp();
+        return;
+      }
+
+      const navBtn = target.closest("#lost-bottom-nav .kawaii-tab-item");
+      if (navBtn) {
+        const vista = navBtn.getAttribute("data-target-vista");
+        if (vista) cambiarVistaPrincipal(vista);
+        return;
+      }
+
+      const subtabBtn = target.closest("[data-subtab]");
+      if (subtabBtn) {
+        const tab = subtabBtn.getAttribute("data-subtab");
+        ["lv", "ciclo", "mater"].forEach(k => {
+          const p = document.getElementById(`subpanel-${k}`);
+          const b = document.getElementById(`subtab-btn-${k}`);
+          if (p) p.style.display = k === tab ? "block" : "none";
+          if (b) b.classList.toggle("activa", k === tab);
+        });
+      }
+    }, true);
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const savedLang = obtenerIdiomaApp();
+      document.querySelectorAll("[data-idioma-app]").forEach(b => {
+        b.classList.toggle("activo", normalizarIdioma(b.getAttribute("data-idioma-app")) === savedLang);
+      });
+
+      const selEpoca = document.getElementById("select-epoca-lost");
+      if (selEpoca) {
+        selEpoca.addEventListener("change", () => {
+          localStorage.setItem(KEY_EPOCA_LOST, selEpoca.value);
+          aplicarDecoracionEpocaLOST(selEpoca.value);
+        });
+      }
+
+      poblarSelectoresEmojisCompletos();
+      configurarFotoPerfil();
+      aplicarTraduccionCompletaApp();
+
+      setTimeout(() => {
+        poblarSelectoresEmojisCompletos();
+        sincronizarAvatarYFotoPerfil();
+        window.actualizarSaludoCumpleanosLOST?.();
+      }, 250);
+
+      ["input-cumple-perfil", "input-nombre-perfil", "select-idioma-perfil", "input-cumple-amigo", "input-nombre-amigo", "select-idioma-amigo"].forEach(id => {
+        document.getElementById(id)?.addEventListener("input", () => window.actualizarSaludoCumpleanosLOST?.());
+        document.getElementById(id)?.addEventListener("change", () => window.actualizarSaludoCumpleanosLOST?.());
+      });
+    });
+
+    window.__lostIdiomaCartas = {
+      normalizarIdioma,
+      obtenerIdiomaApp,
+      leerIdiomasPersonas,
+      guardarIdiomaPersona,
+      resolverIdiomaPersona,
+      aplicarTraduccionCompletaApp,
+      aplicarDecoracionEpocaLOST
+    };
+  })();
+  </script>
+</body>
+</html>
