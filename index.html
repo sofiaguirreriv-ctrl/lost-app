@@ -25,7 +25,7 @@
   .lost-especial-banner{margin-top:.5rem;padding:.5rem .8rem;border-radius:16px;background:#fdf4ff;border:2px dashed #e879f9;color:#701a75;font-weight:800;font-size:.88rem}
   .lost-fecha-especial-badge{display:inline-block;margin-top:.2rem;padding:.12rem .42rem;border-radius:999px;background:#fdf4ff;border:1px solid #e879f9;color:#701a75;font-size:.68rem;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;box-sizing:border-box}
   .lost-cumple-tarjeta-wrap{margin:.75rem 0;display:none}
-  .lost-cumple-tarjeta{position:relative;max-width:420px;margin:0 auto;padding:2.15rem 1.5rem;border-radius:24px;background-color:#fff6df;background-image:radial-gradient(circle at 12% 18%,#e11d48 4px,transparent 5px),radial-gradient(circle at 28% 10%,#2563eb 3.5px,transparent 4.5px),radial-gradient(circle at 46% 16%,#eab308 4px,transparent 5px),radial-gradient(circle at 64% 9%,#16a34a 3.5px,transparent 4.5px),radial-gradient(circle at 82% 22%,#ec4899 4px,transparent 5px),radial-gradient(circle at 18% 42%,#9333ea 3.5px,transparent 4.5px),radial-gradient(circle at 37% 55%,#f97316 4px,transparent 5px),radial-gradient(circle at 74% 48%,#06b6d4 3.5px,transparent 4.5px),radial-gradient(circle at 88% 66%,#eab308 4px,transparent 5px),radial-gradient(circle at 22% 76%,#2563eb 4px,transparent 5px),radial-gradient(circle at 52% 84%,#e11d48 3.5px,transparent 4.5px),radial-gradient(circle at 70% 79%,#16a34a 4px,transparent 4.5px),radial-gradient(circle at 42% 93%,#ec4899 3.5px,transparent 4.5px);border:2px solid #f3e8ff;box-shadow:0 10px 24px rgba(88,28,135,.14);text-align:center;color:#111827;overflow:hidden}
+  .lost-cumple-tarjeta{position:relative;max-width:420px;margin:0 auto .85rem;padding:2.15rem 1.5rem;border-radius:24px;background-color:#fff6df;background-image:radial-gradient(circle at 12% 18%,#e11d48 4px,transparent 5px),radial-gradient(circle at 28% 10%,#2563eb 3.5px,transparent 4.5px),radial-gradient(circle at 46% 16%,#eab308 4px,transparent 5px),radial-gradient(circle at 64% 9%,#16a34a 3.5px,transparent 4.5px),radial-gradient(circle at 82% 22%,#ec4899 4px,transparent 5px),radial-gradient(circle at 18% 42%,#9333ea 3.5px,transparent 4.5px),radial-gradient(circle at 37% 55%,#f97316 4px,transparent 5px),radial-gradient(circle at 74% 48%,#06b6d4 3.5px,transparent 4.5px),radial-gradient(circle at 88% 66%,#eab308 4px,transparent 5px),radial-gradient(circle at 22% 76%,#2563eb 4px,transparent 5px),radial-gradient(circle at 52% 84%,#e11d48 3.5px,transparent 4.5px),radial-gradient(circle at 70% 79%,#16a34a 4px,transparent 4.5px),radial-gradient(circle at 42% 93%,#ec4899 3.5px,transparent 4.5px);border:2px solid #f3e8ff;box-shadow:0 10px 24px rgba(88,28,135,.14);text-align:center;color:#111827;overflow:hidden}
   .lost-cumple-bizcocho-top,.lost-cumple-bizcocho-bottom{position:absolute;font-size:2.35rem;line-height:1;filter:grayscale(100%) contrast(1.25);pointer-events:none;user-select:none}
   .lost-cumple-bizcocho-top{top:10px;right:12px;transform:rotate(10deg)}
   .lost-cumple-bizcocho-bottom{bottom:10px;left:12px;transform:rotate(-8deg)}
@@ -98,7 +98,7 @@
       </div>
       <div class="lost-welcome-actions">
         <button type="button" class="btn-agregar" id="btn-iniciar-tutorial" onclick="window.lostAbrirTutorial?.(event)">Empezar tutorial (4 pasos)</button>
-        <button type="button" class="btn-hoy" id="btn-saltar-todo" onclick="window.lostEntrarApp?.(event)">Entrar a LOST</button>
+        <button type="button" class="btn-hoy" id="btn-saltar-todo" onclick="window.lostEntrarApp?.(event)">Ir directo a LOST</button>
       </div>
     </div>
     <div id="lost-tutorial-view" class="lost-welcome-body" style="display:none;">
@@ -111,7 +111,7 @@
         <button type="button" class="btn-hoy" id="btn-paso-anterior" onclick="window.lostPasoAnterior?.(event)">◀ Atrás</button>
         <button type="button" class="btn-agregar" id="btn-paso-siguiente" onclick="window.lostPasoSiguiente?.(event)">Siguiente ▶</button>
       </div>
-      <button type="button" class="btn-sec lost-welcome-omitir" id="btn-omitir-tutorial" onclick="window.lostEntrarApp?.(event)">Entrar a LOST</button>
+      <button type="button" class="btn-sec lost-welcome-omitir" id="btn-omitir-tutorial" onclick="window.lostEntrarApp?.(event)">Omitir y entrar a LOST</button>
     </div>
   </div>
 </div>
@@ -318,7 +318,7 @@
         <div id="custom-consulta-especiales" style="margin-top:.45rem;font-weight:700;color:#701a75;"></div>
       </div>
       <div class="mater-detalle-box">
-        <strong style="display:block;margin-bottom:.35rem;">🎉 Todas las fechas especiales (fijas y móviles según el año)</strong>
+        <strong style="display:block;margin-bottom:.35rem;">🎉 Todas las fechas especiales en Ciclo (fijas y móviles según el año)</strong>
         <ul class="lista-clases" id="lista-especiales-ciclo"></ul>
       </div>
     </div>
@@ -457,8 +457,8 @@
           <button type="button" class="btn-sec" id="btn-quitar-foto-perfil" style="display:none;">Quitar foto</button>
         </div>
       </div>
-      <div class="full"><span class="campo-lbl">Emojis rápidos (más de 90 opciones)</span><div class="emoji-picker-rapido lost-emoji-grid-amplio" id="selector-emojis-rapidos"></div></div>
-      <div class="full"><span class="campo-lbl">Bitmoji / Stickers (más de 45 opciones)</span><div class="emoji-picker-rapido lost-emoji-grid-amplio" id="selector-bitmoji-fotos"></div></div>
+      <div class="full"><span class="campo-lbl">Emojis rápidos</span><div class="emoji-picker-rapido lost-emoji-grid-amplio" id="selector-emojis-rapidos"></div></div>
+      <div class="full"><span class="campo-lbl">Bitmoji / Stickers</span><div class="emoji-picker-rapido lost-emoji-grid-amplio" id="selector-bitmoji-fotos"></div></div>
       <div class="full" style="display:flex;gap:.5rem;flex-wrap:wrap;">
         <button type="submit" class="btn-agregar" id="btn-guardar-perfil">Guardar mi perfil</button>
         <button type="button" class="btn-sec" id="btn-link-mi-perfil">🔗 Copiar mi enlace</button>
@@ -565,7 +565,7 @@
   <button type="button" class="kawaii-tab-item" data-target-vista="perfil" id="nav-btn-perfil"><span class="kawaii-tab-ico">🌸</span><span class="kawaii-tab-lbl" id="nav-lbl-perfil">Perfil</span></button>
 </nav>
 
-<script src="app.js"></script>
+<script src="app.js" defer></script>
 <script>
 (() => {
   const KEY_IDIOMA_APP = "lost_idioma_app_v1";
@@ -606,7 +606,6 @@
     return obtenerIdiomaApp();
   }
 
-  // Cálculo de Pascua (Gregoriana - Anónimo/Meeus/Jones/Butcher)
   function calcularPascuaGregoriana(year) {
     const a = year % 19;
     const b = Math.floor(year / 100);
@@ -629,14 +628,12 @@
   const toISO = (dt) => `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, "0")}-${String(dt.getDate()).padStart(2, "0")}`;
   const addDias = (dt, n) => new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() + n);
 
-  // N-ésimo día de la semana de un mes (weekday: 0=Dom, 1=Lun, ..., 4=Jue, 5=Vie)
   function enesimoDiaSemana(year, month0, weekday, nth) {
     const first = new Date(year, month0, 1);
     const offset = (weekday - first.getDay() + 7) % 7;
     return new Date(year, month0, 1 + offset + (nth - 1) * 7);
   }
 
-  // Último día de la semana de un mes
   function ultimoDiaSemana(year, month0, weekday) {
     const last = new Date(year, month0 + 1, 0);
     const offset = (last.getDay() - weekday + 7) % 7;
@@ -728,9 +725,7 @@
       { fecha: toISO(addDias(enesimoDiaSemana(year, 10, 4, 4), 1)), emoji: "🛍️", nombre: "Viernes Negro" }
     ];
     const mapa = {};
-    items.forEach(it => {
-      (mapa[it.fecha] ||= []).push({ emoji: it.emoji, nombre: it.nombre, movil: true });
-    });
+    items.forEach(it => { (mapa[it.fecha] ||= []).push({ emoji: it.emoji, nombre: it.nombre, movil: true }); });
     cacheMovilesPorAnio[year] = mapa;
     return mapa;
   }
@@ -739,9 +734,7 @@
     if (!iso || !/^\d{4}-\d{2}-\d{2}$/.test(iso)) return [];
     const year = Number(iso.slice(0, 4));
     const mmdd = iso.slice(5);
-    const fijos = FECHAS_FIJAS_LOST[mmdd] || [];
-    const moviles = obtenerEspecialesMovilesDelAnio(year)[iso] || [];
-    return [...moviles, ...fijos];
+    return [...(obtenerEspecialesMovilesDelAnio(year)[iso] || []), ...(FECHAS_FIJAS_LOST[mmdd] || [])];
   }
 
   function mostrarAppPrincipal(vistaInicial = "inicio", ev) {
@@ -749,11 +742,7 @@
     const welcome = document.getElementById("lost-welcome");
     const app = document.getElementById("lost-app");
     const nav = document.getElementById("lost-bottom-nav");
-    if (welcome) {
-      welcome.classList.add("lost-oculto");
-      welcome.style.setProperty("display", "none", "important");
-      welcome.setAttribute("aria-hidden", "true");
-    }
+    if (welcome) { welcome.classList.add("lost-oculto"); welcome.style.setProperty("display", "none", "important"); welcome.setAttribute("aria-hidden", "true"); }
     if (app) app.style.setProperty("display", "block", "important");
     if (nav) nav.style.setProperty("display", "flex", "important");
     cambiarVistaPrincipal(vistaInicial);
@@ -764,11 +753,7 @@
     const welcome = document.getElementById("lost-welcome");
     const landing = document.getElementById("lost-landing-view");
     const tut = document.getElementById("lost-tutorial-view");
-    if (welcome) {
-      welcome.classList.remove("lost-oculto");
-      welcome.style.setProperty("display", "flex", "important");
-      welcome.setAttribute("aria-hidden", "false");
-    }
+    if (welcome) { welcome.classList.remove("lost-oculto"); welcome.style.setProperty("display", "flex", "important"); welcome.setAttribute("aria-hidden", "false"); }
     if (landing) landing.style.setProperty("display", irATutorial ? "none" : "flex", "important");
     if (tut) tut.style.setProperty("display", irATutorial ? "flex" : "none", "important");
   }
@@ -812,8 +797,7 @@
     document.querySelectorAll(".vista-seccion").forEach(sec => { sec.style.display = sec.dataset.vista === vista ? "" : "none"; });
     document.querySelectorAll("#lost-bottom-nav .kawaii-tab-item").forEach(btn => { btn.classList.toggle("activa", btn.dataset.targetVista === vista); });
     if (vista === "calendario") {
-      limpiarLetrasSoloEnSubpanelLV();
-      decorarCalendarioLVConEspeciales();
+      ejecutarDecoracionLVSegura();
       window.renderMesMaterLOST?.();
     }
     if (vista === "perfil") sincronizarAvatarYFotoPerfil();
@@ -946,21 +930,33 @@
     const mIdx = meses.findIndex(m => limpio.includes(m));
     const anioMatch = limpio.match(/\b(20\d{2})\b/);
     const now = new Date();
-    return {
-      year: anioMatch ? Number(anioMatch[1]) : now.getFullYear(),
-      month: mIdx >= 0 ? mIdx : now.getMonth()
-    };
+    return { year: anioMatch ? Number(anioMatch[1]) : now.getFullYear(), month: mIdx >= 0 ? mIdx : now.getMonth() };
   }
 
   function renderDetalleFechaLV(iso) {
     const box = document.getElementById("lv-detalle-fecha");
     if (!box) return;
     const esp = obtenerEspeciales(iso);
-    box.innerHTML = `<div><strong>${iso}</strong> · <strong>Lunes–Viernes</strong></div>${
+    const nuevoHtml = `<div><strong>${iso}</strong> · <strong>Lunes–Viernes</strong></div>${
       esp.length
         ? `<ul style="margin:.4rem 0 0 1.1rem;">${esp.map(e => `<li>${e.emoji} <strong>${e.nombre}</strong> <em>(${e.movil ? "Fecha móvil del año" : "Fecha especial"})</em></li>`).join("")}</ul>`
         : "<p style='margin:.35rem 0 0;'>Sin fecha especial registrada este día.</p>"
     }`;
+    if (box.innerHTML !== nuevoHtml) box.innerHTML = nuevoHtml;
+  }
+
+  let lvObserver = null;
+  let pausarObserverLV = false;
+
+  function limpiarLetrasSoloEnSubpanelLV() {
+    const lvGrid = document.querySelector("#subpanel-lv .cal-grid-dias");
+    if (!lvGrid) return;
+    lvGrid.querySelectorAll("*").forEach(el => {
+      if (el.children.length === 0 && /^(Ciclo\s*)?[A-F]$/i.test(el.textContent.trim())) {
+        el.textContent = "";
+        el.style.display = "none";
+      }
+    });
   }
 
   function decorarCalendarioLVConEspeciales() {
@@ -1018,6 +1014,20 @@
     renderDetalleFechaLV(isoSeleccionado);
   }
 
+  function ejecutarDecoracionLVSegura() {
+    if (pausarObserverLV) return;
+    pausarObserverLV = true;
+    if (lvObserver) lvObserver.disconnect();
+    try {
+      limpiarLetrasSoloEnSubpanelLV();
+      decorarCalendarioLVConEspeciales();
+    } finally {
+      pausarObserverLV = false;
+      const grid = document.getElementById("cuadricula-calendario");
+      if (lvObserver && grid) lvObserver.observe(grid, { childList: true });
+    }
+  }
+
   function poblarListaEspecialesCiclo() {
     const ul = document.getElementById("lista-especiales-ciclo");
     if (!ul) return;
@@ -1033,9 +1043,7 @@
     });
 
     combinadas.sort((a, b) => a.fecha.localeCompare(b.fecha));
-    ul.innerHTML = combinadas.map(it =>
-      `<li><span><strong>${it.fecha}</strong> (${it.tipo}) · ${it.emoji} ${it.nombre}</span></li>`
-    ).join("");
+    ul.innerHTML = combinadas.map(it => `<li><span><strong>${it.fecha}</strong> (${it.tipo}) · ${it.emoji} ${it.nombre}</span></li>`).join("");
   }
 
   function refrescarEspecialesEnPantalla() {
@@ -1061,7 +1069,7 @@
       if (espCal.length) bannerCal.textContent = `${fechaRef}: ${espCal.map(e => `${e.emoji} ${e.nombre}`).join(" · ")}`;
     }
 
-    decorarCalendarioLVConEspeciales();
+    ejecutarDecoracionLVSegura();
     window.renderConsultaCicloPersonalLOST?.();
   }
 
@@ -1083,17 +1091,6 @@
       const base = typeof window.obtenerEstadoLOST === "function" ? window.obtenerEstadoLOST() : {};
       window.guardarEnNubeLOST({ ...base, agendaLV });
     }
-  }
-
-  function limpiarLetrasSoloEnSubpanelLV() {
-    const lvGrid = document.querySelector("#subpanel-lv .cal-grid-dias");
-    if (!lvGrid) return;
-    lvGrid.querySelectorAll("*").forEach(el => {
-      if (el.children.length === 0 && /^(Ciclo\s*)?[A-F]$/i.test(el.textContent.trim())) {
-        el.textContent = "";
-        el.style.display = "none";
-      }
-    });
   }
 
   window.seleccionarDiaLVPersonal = (dia) => {
@@ -1122,8 +1119,7 @@
         ? lista.map((it, idx) => `<li><div><strong>${it.actividad}</strong>${it.hora ? `<div class="subtitulo-dia" style="margin:0;">🕒 ${it.hora}</div>` : ""}</div><button type="button" class="btn-sec" data-borrar-lv-dia="${diaLVSel}" data-borrar-lv-idx="${idx}">Eliminar</button></li>`).join("")
         : `<li>No hay actividades anotadas para el <strong>${diaLVSel}</strong>.</li>`;
     }
-    limpiarLetrasSoloEnSubpanelLV();
-    decorarCalendarioLVConEspeciales();
+    ejecutarDecoracionLVSegura();
   }
 
   window.cambiarSubpestanaCalendario = (tab) => {
@@ -1133,7 +1129,7 @@
       if (p) p.style.display = k === tab ? "block" : "none";
       if (b) b.classList.toggle("activa", k === tab);
     });
-    if (tab === "lv") { renderAgendaLVPersonal(); setTimeout(decorarCalendarioLVConEspeciales, 30); }
+    if (tab === "lv") { renderAgendaLVPersonal(); setTimeout(ejecutarDecoracionLVSegura, 30); }
     if (tab === "ciclo") { poblarListaEspecialesCiclo(); renderConsultaCicloPersonalLOST(); }
     if (tab === "mater") renderMesMaterLOST();
   };
@@ -1297,761 +1293,4 @@
     { inicio: "2026-10-15", fin: "2026-10-17", nombre: "Torneo de Voley", emoji: "🏐" },
     { inicio: "2026-11-16", fin: "2026-11-20", nombre: "Semana de Puerto Rico", emoji: "🇵🇷" },
     { inicio: "2026-12-14", fin: "2026-12-16", nombre: "Midterms Int. HS", emoji: "📝" },
-    { inicio: "2026-12-15", fin: "2026-12-15", nombre: "Festival de Navidad de 1, 2 y 3 grado", emoji: "🎅" },
-    { inicio: "2026-12-16", fin: "2026-12-16", nombre: "Festival de Navidad de 4, 5 y 6 grado", emoji: "🎄" },
-    { inicio: "2026-12-16", fin: "2026-12-16", nombre: "Último día de clases preescolar, elemental, Inte. y HS", emoji: "🔔" },
-    { inicio: "2026-12-17", fin: "2026-12-17", nombre: "Festival de Navidad de Preescolar", emoji: "⭐" },
-    { inicio: "2027-01-11", fin: "2027-01-11", nombre: "Comienzo de las clases", emoji: "📚" },
-    { inicio: "2027-02-05", fin: "2027-02-05", nombre: "Field day Intermedia y HS", emoji: "🏃" },
-    { inicio: "2027-02-10", fin: "2027-02-10", nombre: "Miércoles de Ceniza", emoji: "✝️" },
-    { inicio: "2027-02-12", fin: "2027-02-12", nombre: "Field day elemental", emoji: "🏅" },
-    { inicio: "2027-02-19", fin: "2027-02-19", nombre: "Field day Preescolar", emoji: "🎈" },
-    { inicio: "2027-02-26", fin: "2027-02-26", nombre: "Torneo de Golf", emoji: "⛳" },
-    { inicio: "2027-03-02", fin: "2027-03-04", nombre: "Midterms Int. HS", emoji: "📝" },
-    { inicio: "2027-03-12", fin: "2027-03-13", nombre: "Torneo de Baloncesto", emoji: "🏀" },
-    { inicio: "2027-04-05", fin: "2027-04-05", nombre: "Solemnidad de la Anunciación. Misa Mater", emoji: "⛪" },
-    { inicio: "2027-04-16", fin: "2027-04-17", nombre: "Torneo de futsal", emoji: "⚽" },
-    { inicio: "2027-05-06", fin: "2027-05-06", nombre: "Día del estudiante", emoji: "🎉" },
-    { inicio: "2027-05-07", fin: "2027-05-07", nombre: "Día del maestro", emoji: "🍎" },
-    { inicio: "2027-05-12", fin: "2027-05-14", nombre: "Midterms Int. HS", emoji: "📝" },
-    { inicio: "2027-05-18", fin: "2027-05-18", nombre: "Misa de grado 12", emoji: "🎓" },
-    { inicio: "2027-05-19", fin: "2027-05-19", nombre: "Graduación de grado 12", emoji: "🥳" },
-    { inicio: "2027-05-20", fin: "2027-05-20", nombre: "Fin de preescolar y elemental / Grad. 8vo", emoji: "🎓" },
-    { inicio: "2027-05-21", fin: "2027-05-21", nombre: "Graduación de Kinder", emoji: "🌟" },
-    { inicio: "2027-05-25", fin: "2027-07-02", nombre: "Campamento verano", emoji: "☀️" }
-  ];
-
-  let mesMater = new Date(2026, 10, 1);
-  let diaMaterSel = "2026-11-20";
-  const rangoMatch = (arr, iso) => arr.filter(x => iso >= x.inicio && iso <= x.fin);
-  const esDiaConCicloMater = (dt) => dt.getDay() !== 0 && dt.getDay() !== 6 && rangoMatch(FERIADOS_MATER, toISO(dt)).length === 0;
-
-  function calcularInfoMater(iso) {
-    const dt = parseISO(iso);
-    const feriados = rangoMatch(FERIADOS_MATER, iso);
-    const eventos = rangoMatch(EVENTOS_MATER, iso);
-    const especiales = obtenerEspeciales(iso);
-    const esSombrilla = feriados.length > 0;
-    let ciclo = null;
-    if (!esSombrilla && dt.getDay() !== 0 && dt.getDay() !== 6) {
-      if (iso === ANCLA_MATER_FECHA) ciclo = CICLOS_MATER[ANCLA_MATER_IDX];
-      else {
-        const ancla = parseISO(ANCLA_MATER_FECHA);
-        let pasos = 0;
-        const cur = new Date(ancla.getTime());
-        if (dt > ancla) { while (toISO(cur) < iso) { cur.setDate(cur.getDate() + 1); if (esDiaConCicloMater(cur)) pasos++; } }
-        else { while (toISO(cur) > iso) { cur.setDate(cur.getDate() - 1); if (esDiaConCicloMater(cur)) pasos--; } }
-        const n = CICLOS_MATER.length;
-        ciclo = CICLOS_MATER[(((ANCLA_MATER_IDX + pasos) % n) + n) % n];
-      }
-    }
-    return { iso, dt, ciclo, esSombrilla, feriados, eventos, especiales };
-  }
-
-  window.renderMesMaterLOST = () => {
-    const grid = document.getElementById("mater-cal-grid");
-    const tit = document.getElementById("mater-mes-titulo");
-    if (!grid || !tit) return;
-    const y = mesMater.getFullYear(), m = mesMater.getMonth();
-    const nom = mesMater.toLocaleDateString("es-PR", { month: "long", year: "numeric" });
-    tit.textContent = nom.charAt(0).toUpperCase() + nom.slice(1);
-    const offset = (new Date(y, m, 1).getDay() + 6) % 7;
-    const total = new Date(y, m + 1, 0).getDate();
-    let html = "";
-    for (let i = 0; i < offset; i++) html += `<div class="mater-celda vacia"></div>`;
-    for (let d = 1; d <= total; d++) {
-      const iso = toISO(new Date(y, m, d));
-      const info = calcularInfoMater(iso);
-      const cls = ["mater-celda"];
-      if (info.esSombrilla) cls.push("sombrilla");
-      if (iso === diaMaterSel) cls.push("sel");
-      const emojis = [...info.especiales.map(e => e.emoji), ...info.eventos.map(e => e.emoji || ""), ...info.feriados.map(f => f.emoji || "⛱️")].filter(Boolean).join("");
-      const tags = [...info.especiales.map(e => `${e.emoji} ${e.nombre}`), ...info.eventos.map(e => `${e.emoji || "📌"} ${e.nombre}`), ...info.feriados.map(f => `${f.emoji || "⛱️"} ${f.nombre}`)];
-      html += `<div class="${cls.join(" ")}" data-mater-dia="${iso}"><div class="mater-celda-top"><span class="mater-dia-num-wrap"><span>${d}</span><span>${emojis}</span></span>${info.ciclo ? `<span class="mater-letra-pill">${info.ciclo}</span>` : ""}</div><div>${tags.slice(0, 2).map(t => `<div class="mater-evento-pill">${t}</div>`).join("")}</div></div>`;
-    }
-    grid.innerHTML = html;
-    renderDetalleDiaMaterLOST(diaMaterSel);
-  };
-
-  function renderDetalleDiaMaterLOST(iso) {
-    const box = document.getElementById("mater-dia-detalle");
-    if (!box) return;
-    const info = calcularInfoMater(iso);
-    const estado = info.ciclo ? `Ciclo ${info.ciclo}` : info.esSombrilla ? "Sombrilla (feriado / sin ciclo)" : "Fin de semana";
-    const lines = [
-      ...info.feriados.map(f => `<li>${f.emoji || "⛱️"} <strong>${f.nombre}</strong> <em>(Sombrilla)</em></li>`),
-      ...info.eventos.map(e => `<li>${e.emoji || "📌"} <strong>${e.nombre}</strong></li>`),
-      ...info.especiales.map(s => `<li>${s.emoji} <strong>${s.nombre}</strong> <em>(${s.movil ? "Fecha móvil del año" : "Fecha especial"})</em></li>`)
-    ];
-    const clasesDia = info.ciclo ? (clasesPorLetra[info.ciclo] || []) : [];
-    const clasesHtml = info.ciclo
-      ? `<div class="lost-clases-dia-box" style="margin-top:.55rem;padding-top:.45rem;border-top:1px dashed #d8b4fe;">${
-          clasesDia.length ? `<strong>Clases del Ciclo ${info.ciclo}:</strong><ul style="margin:.25rem 0 0 1.1rem;">${clasesDia.map(c => `<li>${c.emoji || "📚"} <strong>${c.materia}</strong>${c.detalle ? ` — ${c.detalle}` : ""}</li>`).join("")}</ul>`
-          : `<span class="subtitulo-dia" style="margin:0;">Sin clases guardadas para el Ciclo ${info.ciclo}.</span>`
-        }</div>` : "";
-    box.innerHTML = `<div><strong>${info.iso}</strong> · <strong>${estado}</strong></div>${lines.length ? `<ul style="margin:.4rem 0 0 1.1rem;">${lines.join("")}</ul>` : "<p style='margin:.35rem 0 0;'>Sin eventos ni feriados en esta fecha.</p>"}${clasesHtml}`;
-  }
-
-  const KEY_CLASES_LETRA = "lost_clases_por_letra_v1";
-  const KEY_LETRA_ACTIVA = "lost_letra_activa_v1";
-  const EMOJIS_MATERIA_MAP = [
-    { keys: ["diseno de joyas","diseño de joyas","diseno y joyas","diseño y joyas","joyas","joyeria","joyería"], emoji: "💍" },
-    { keys: ["formacion","formación"], emoji: "👥" },
-    { keys: ["counseling","consejeria","consejería","orientacion","orientación"], emoji: "🎓" },
-    { keys: ["nutricion y cocina","nutrición y cocina","nutricion","nutrición","cocina","culinaria","gastronomia","gastronomía"], emoji: "🍳" },
-    { keys: ["mate","math","algebra","geometr","calcul","precalc","trigo"], emoji: "📐" },
-    { keys: ["fisic","physics","quimic","chem","biolog","bio","cienc","lab"], emoji: "🧪" },
-    { keys: ["espanol","español","literat","lengua","redacc","ap lang"], emoji: "📖" },
-    { keys: ["histor","history","geograf","social","mun","civica","cívica"], emoji: "🗺️" },
-    { keys: ["ingles","inglés","english"], emoji: "🔤" },
-    { keys: ["frances","francés","french"], emoji: "🥐" },
-    { keys: ["arte","art","dibujo","pintura","diseno","diseño"], emoji: "🎨" },
-    { keys: ["musica","música","coro","banda","jazz"], emoji: "🎵" },
-    { keys: ["gym","deporte","educacion fisica","educación física","voley","baloncesto","futsal","golf"], emoji: "🏃‍♀️" },
-    { keys: ["comput","program","codigo","código","tech","robot"], emoji: "💻" },
-    { keys: ["religion","religión","etica","ética","filosof","misa"], emoji: "✨" },
-    { keys: ["almuerzo","lunch","receso","break"], emoji: "🥪" }
-  ];
-
-  let clasesPorLetra = {};
-  let letraActivaFiltro = localStorage.getItem(KEY_LETRA_ACTIVA) || "A";
-  let editandoClase = null;
-
-  function detectarEmojiMateria(nombreMateria) {
-    const limpio = String(nombreMateria || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    for (const item of EMOJIS_MATERIA_MAP) if (item.keys.some(k => limpio.includes(k))) return item.emoji;
-    return "📚";
-  }
-
-  function cargarClasesPorLetra() {
-    try { const parsed = JSON.parse(localStorage.getItem(KEY_CLASES_LETRA) || "null"); if (parsed && typeof parsed === "object") clasesPorLetra = parsed; } catch (e) {}
-  }
-
-  function guardarClasesPorLetra() {
-    localStorage.setItem(KEY_CLASES_LETRA, JSON.stringify(clasesPorLetra));
-    localStorage.setItem(KEY_LETRA_ACTIVA, letraActivaFiltro);
-    if (typeof window.guardarEnNubeLOST === "function") {
-      const base = typeof window.obtenerEstadoLOST === "function" ? window.obtenerEstadoLOST() : {};
-      window.guardarEnNubeLOST({ ...base, clasesPorLetra });
-    }
-  }
-
-  function obtenerLetrasDisponibles() {
-    let customLetras = [];
-    try { const parsed = JSON.parse(localStorage.getItem(KEY_CICLO_LOST) || "null"); if (Array.isArray(parsed?.letras) && parsed.letras.length) customLetras = parsed.letras; } catch (e) {}
-    const combinadas = [...new Set([...CICLOS_MATER, ...customLetras, ...Object.keys(clasesPorLetra)])].filter(Boolean);
-    return combinadas.length ? combinadas : CICLOS_MATER;
-  }
-
-  function sincronizarSelectYTabsLetras(forzarLetra) {
-    if (forzarLetra) { letraActivaFiltro = forzarLetra; localStorage.setItem(KEY_LETRA_ACTIVA, letraActivaFiltro); }
-    const letras = obtenerLetrasDisponibles();
-    if (!letras.includes(letraActivaFiltro)) letraActivaFiltro = letras[0];
-    const sel = document.getElementById("select-letra-clase");
-    if (sel) { sel.innerHTML = letras.map(l => `<option value="${l}">Día ${l}</option>`).join(""); sel.value = letraActivaFiltro; }
-    const tabsBox = document.getElementById("tabs-filtro-letras");
-    if (tabsBox) tabsBox.innerHTML = letras.map(l => `<button type="button" class="lost-subtab-btn ${l === letraActivaFiltro ? "activa" : ""}" data-filtro-letra="${l}">${l}</button>`).join("");
-  }
-
-  function resetearFormularioClaseLetra() {
-    editandoClase = null;
-    const inpM = document.getElementById("input-nombre-materia-letra");
-    const inpE = document.getElementById("input-emoji-materia");
-    const inpD = document.getElementById("input-detalle-materia-letra");
-    const btnS = document.getElementById("btn-submit-clase-letra");
-    const btnC = document.getElementById("btn-cancelar-edicion-clase");
-    if (inpM) inpM.value = "";
-    if (inpD) inpD.value = "";
-    if (inpE) { inpE.value = ""; delete inpE.dataset.manual; inpE.placeholder = "Auto (ej. 💍)"; }
-    if (btnS) btnS.textContent = "+ Guardar clase en esta letra";
-    if (btnC) btnC.style.display = "none";
-  }
-
-  function renderListaClasesLetra() {
-    const ul = document.getElementById("lista-clases-por-letra");
-    if (!ul) return;
-    const lista = clasesPorLetra[letraActivaFiltro] || [];
-    ul.innerHTML = lista.length
-      ? lista.map((item, idx) => `<li><div><strong>${item.emoji || "📚"} ${item.materia}</strong>${item.detalle ? `<div class="subtitulo-dia" style="margin:0;">${item.detalle}</div>` : ""}</div><div class="lost-clase-acciones"><button type="button" class="btn-sec" data-editar-letra="${letraActivaFiltro}" data-editar-idx="${idx}">✏️ Editar</button><button type="button" class="btn-sec" data-borrar-letra="${letraActivaFiltro}" data-borrar-idx="${idx}">Eliminar</button></div></li>`).join("")
-      : `<li>No hay clases guardadas para el <strong>Día ${letraActivaFiltro}</strong> todavía.</li>`;
-  }
-
-  window.refrescarDatosExtraLOST = () => {
-    cargarAgendaLV(); cargarCicloCustom(); cargarClasesPorLetra();
-    renderAgendaLVPersonal(); sincronizarSelectYTabsLetras(letraActivaFiltro);
-    renderListaClasesLetra(); window.renderMesMaterLOST?.();
-    refrescarEspecialesEnPantalla(); window.actualizarSaludoCumpleanosLOST?.();
-  };
-
-  function engancharBotonesDelegados() {
-    document.addEventListener("click", (ev) => {
-      const target = ev.target;
-      if (!(target instanceof Element)) return;
-      if (target.closest("#btn-iniciar-tutorial")) { renderPasoTutorial(0); mostrarBienvenidaLOST(true, ev); return; }
-      if (target.closest("#btn-saltar-todo") || target.closest("#btn-omitir-tutorial")) { mostrarAppPrincipal("inicio", ev); return; }
-      if (target.closest("#btn-paso-anterior")) { renderPasoTutorial(pasoActualIdx - 1); return; }
-      if (target.closest("#btn-paso-siguiente")) { if (pasoActualIdx >= PASOS_TUTORIAL.length - 1) mostrarAppPrincipal("inicio", ev); else renderPasoTutorial(pasoActualIdx + 1); return; }
-      if (target.closest("#btn-ver-tutorial-app")) { renderPasoTutorial(0); mostrarBienvenidaLOST(true, ev); return; }
-
-      const idiomaBtn = target.closest("[data-idioma-app]");
-      if (idiomaBtn) {
-        const lang = normalizarIdioma(idiomaBtn.getAttribute("data-idioma-app"));
-        localStorage.setItem(KEY_IDIOMA_APP, lang);
-        document.querySelectorAll("[data-idioma-app]").forEach(b => b.classList.toggle("activo", b === idiomaBtn));
-        setTimeout(() => window.actualizarSaludoCumpleanosLOST?.(), 40);
-        return;
-      }
-
-      if (target.closest("#mes-anterior") || target.closest("#mes-siguiente") || target.closest("#btn-ir-hoy")) {
-        setTimeout(decorarCalendarioLVConEspeciales, 30);
-      }
-
-      const navBtn = target.closest("#lost-bottom-nav .kawaii-tab-item");
-      if (navBtn) { const vista = navBtn.getAttribute("data-target-vista"); if (vista) cambiarVistaPrincipal(vista); return; }
-      const subtabBtn = target.closest("[data-subtab]");
-      if (subtabBtn) { window.cambiarSubpestanaCalendario(subtabBtn.getAttribute("data-subtab")); return; }
-      const lvCard = target.closest("[data-lv-dia]");
-      if (lvCard) { window.seleccionarDiaLVPersonal(lvCard.getAttribute("data-lv-dia")); return; }
-      const borrarLvBtn = target.closest("[data-borrar-lv-dia]");
-      if (borrarLvBtn) {
-        const d = borrarLvBtn.getAttribute("data-borrar-lv-dia");
-        const i = Number(borrarLvBtn.getAttribute("data-borrar-lv-idx"));
-        if (d && !Number.isNaN(i)) { agendaLV[d].splice(i, 1); guardarAgendaLV(); renderAgendaLVPersonal(); }
-        return;
-      }
-      if (target.closest("#btn-guardar-ciclo-custom")) { window.guardarCicloPersonalLOST(); return; }
-      if (target.closest("#btn-agregar-feriado-custom")) { window.agregarFeriadoPersonalLOST(); return; }
-      const quitarFerBtn = target.closest("[data-quitar-feriado]");
-      if (quitarFerBtn) { window.quitarFeriadoPersonalLOST(quitarFerBtn.getAttribute("data-quitar-feriado")); return; }
-      if (target.closest("#btn-mater-prev")) { mesMater = new Date(mesMater.getFullYear(), mesMater.getMonth() - 1, 1); window.renderMesMaterLOST(); return; }
-      if (target.closest("#btn-mater-next")) { mesMater = new Date(mesMater.getFullYear(), mesMater.getMonth() + 1, 1); window.renderMesMaterLOST(); return; }
-      if (target.closest("#btn-mater-hoy")) { const h = new Date(); diaMaterSel = toISO(h); mesMater = new Date(h.getFullYear(), h.getMonth(), 1); window.renderMesMaterLOST(); return; }
-      const materDia = target.closest("[data-mater-dia]");
-      if (materDia) { diaMaterSel = materDia.getAttribute("data-mater-dia"); window.renderMesMaterLOST(); return; }
-      const filtroLetraBtn = target.closest("[data-filtro-letra]");
-      if (filtroLetraBtn) { letraActivaFiltro = filtroLetraBtn.getAttribute("data-filtro-letra"); localStorage.setItem(KEY_LETRA_ACTIVA, letraActivaFiltro); sincronizarSelectYTabsLetras(letraActivaFiltro); renderListaClasesLetra(); return; }
-      const editarClaseBtn = target.closest("[data-editar-letra]");
-      if (editarClaseBtn) {
-        const l = editarClaseBtn.getAttribute("data-editar-letra");
-        const i = Number(editarClaseBtn.getAttribute("data-editar-idx"));
-        const item = clasesPorLetra[l]?.[i];
-        if (item) {
-          editandoClase = { letra: l, idx: i }; letraActivaFiltro = l; localStorage.setItem(KEY_LETRA_ACTIVA, l);
-          sincronizarSelectYTabsLetras(l); renderListaClasesLetra();
-          const selL = document.getElementById("select-letra-clase");
-          const inpM = document.getElementById("input-nombre-materia-letra");
-          const inpE = document.getElementById("input-emoji-materia");
-          const inpD = document.getElementById("input-detalle-materia-letra");
-          const btnS = document.getElementById("btn-submit-clase-letra");
-          const btnC = document.getElementById("btn-cancelar-edicion-clase");
-          if (selL) selL.value = l;
-          if (inpM) inpM.value = item.materia || "";
-          if (inpE) { inpE.value = item.emoji || ""; inpE.dataset.manual = item.emoji ? "1" : ""; }
-          if (inpD) inpD.value = item.detalle || "";
-          if (btnS) btnS.textContent = "Guardar cambios de clase";
-          if (btnC) btnC.style.display = "inline-block";
-          inpM?.focus();
-        }
-        return;
-      }
-      const borrarClaseBtn = target.closest("[data-borrar-letra]");
-      if (borrarClaseBtn) {
-        const l = borrarClaseBtn.getAttribute("data-borrar-letra");
-        const i = Number(borrarClaseBtn.getAttribute("data-borrar-idx"));
-        if (Array.isArray(clasesPorLetra[l])) {
-          clasesPorLetra[l].splice(i, 1);
-          if (editandoClase && editandoClase.letra === l && editandoClase.idx === i) resetearFormularioClaseLetra();
-          letraActivaFiltro = l; guardarClasesPorLetra(); sincronizarSelectYTabsLetras(l); renderListaClasesLetra(); window.renderMesMaterLOST();
-        }
-      }
-    });
-  }
-
-  document.addEventListener("DOMContentLoaded", () => {
-    engancharBotonesDelegados();
-    const hoyISO = toISO(new Date());
-    const hInfo = calcularInfoMater(hoyISO);
-    const resHoy = document.getElementById("mater-resumen-hoy");
-    if (resHoy) resHoy.textContent = `Hoy (${hoyISO}): ${hInfo.ciclo ? `Ciclo ${hInfo.ciclo}` : hInfo.esSombrilla ? "Sombrilla" : "Fin de semana"}${hInfo.especiales.length ? " · " + hInfo.especiales.map(e => `${e.emoji} ${e.nombre}`).join(" · ") : ""}`;
-
-    poblarSelectoresEmojisAmplios();
-    configurarFotoPerfil();
-    window.refrescarDatosExtraLOST();
-
-    const lvGrid = document.getElementById("cuadricula-calendario");
-    if (lvGrid) {
-      new MutationObserver(() => {
-        limpiarLetrasSoloEnSubpanelLV();
-        decorarCalendarioLVConEspeciales();
-      }).observe(lvGrid, { childList: true, subtree: true });
-    }
-
-    document.getElementById("custom-feriado-archivo")?.addEventListener("change", window.importarFeriadosArchivoLOST);
-    document.getElementById("custom-consulta-fecha")?.addEventListener("change", window.renderConsultaCicloPersonalLOST);
-    document.getElementById("input-fecha-nota")?.addEventListener("change", refrescarEspecialesEnPantalla);
-
-    document.getElementById("form-lv-personal")?.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const dia = document.getElementById("select-lv-dia")?.value || diaLVSel || "Lunes";
-      const hora = (document.getElementById("input-lv-hora")?.value || "").trim();
-      const actInp = document.getElementById("input-lv-actividad");
-      const actividad = (actInp?.value || "").trim();
-      if (!actividad) return;
-      if (!Array.isArray(agendaLV[dia])) agendaLV[dia] = [];
-      agendaLV[dia].push({ hora, actividad });
-      diaLVSel = dia; guardarAgendaLV(); renderAgendaLVPersonal();
-      if (actInp) actInp.value = "";
-      const horaInp = document.getElementById("input-lv-hora");
-      if (horaInp) horaInp.value = "";
-      actInp?.focus();
-    });
-
-    const form = document.getElementById("form-clase-letra");
-    const selLetra = document.getElementById("select-letra-clase");
-    const inputMateria = document.getElementById("input-nombre-materia-letra");
-    const inputEmoji = document.getElementById("input-emoji-materia");
-    const inputDetalle = document.getElementById("input-detalle-materia-letra");
-    const btnCancelar = document.getElementById("btn-cancelar-edicion-clase");
-
-    btnCancelar?.addEventListener("click", () => { resetearFormularioClaseLetra(); inputMateria?.focus(); });
-    selLetra?.addEventListener("change", () => { letraActivaFiltro = selLetra.value; localStorage.setItem(KEY_LETRA_ACTIVA, letraActivaFiltro); sincronizarSelectYTabsLetras(letraActivaFiltro); renderListaClasesLetra(); });
-    inputMateria?.addEventListener("input", () => { if (inputEmoji && !inputEmoji.dataset.manual) inputEmoji.placeholder = `Auto (${detectarEmojiMateria(inputMateria.value)})`; });
-    inputEmoji?.addEventListener("input", () => { inputEmoji.dataset.manual = inputEmoji.value.trim() ? "1" : ""; });
-
-    form?.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const letraElegida = selLetra?.value || letraActivaFiltro || "A";
-      const materia = (inputMateria?.value || "").trim();
-      if (!materia) return;
-      const emojiFinal = (inputEmoji?.value || "").trim() || detectarEmojiMateria(materia);
-      const detalle = (inputDetalle?.value || "").trim();
-      const nuevaClase = { materia, emoji: emojiFinal, detalle };
-      if (editandoClase) {
-        const origenLista = clasesPorLetra[editandoClase.letra];
-        if (Array.isArray(origenLista) && origenLista[editandoClase.idx]) {
-          if (editandoClase.letra === letraElegida) origenLista[editandoClase.idx] = nuevaClase;
-          else { origenLista.splice(editandoClase.idx, 1); (clasesPorLetra[letraElegida] ||= []).push(nuevaClase); }
-        }
-      } else (clasesPorLetra[letraElegida] ||= []).push(nuevaClase);
-      letraActivaFiltro = letraElegida;
-      guardarClasesPorLetra(); resetearFormularioClaseLetra();
-      sincronizarSelectYTabsLetras(letraElegida); renderListaClasesLetra(); window.renderMesMaterLOST();
-      inputMateria?.focus();
-    });
-  });
-
-  window.__lostIdiomaCartas = {
-    normalizarIdioma,
-    obtenerIdiomaApp,
-    leerIdiomasPersonas,
-    guardarIdiomaPersona,
-    resolverIdiomaPersona
-  };
-})();
-</script>
-<script>
-(() => {
-  const wrap = document.getElementById("lost-nye-bubble-wrap");
-  const bubble = document.getElementById("lost-nye-bubble");
-  const miniBtn = document.getElementById("lost-nye-mini-btn");
-  const relojEl = document.getElementById("lost-nye-countdown");
-  const miniRelojEl = document.getElementById("lost-nye-mini-timer");
-  const msgEl = document.getElementById("lost-nye-mensaje");
-  const btnSimular = document.getElementById("btn-simular-nye-lost");
-  const btnRafaga = document.getElementById("btn-rafaga-nye-lost");
-  const btnMin = document.getElementById("btn-min-nye-lost");
-  const canvas = document.getElementById("lost-nye-canvas");
-  const ctx = canvas ? canvas.getContext("2d") : null;
-  let particulas = [], animId = null, modoSimulacionNYE = false;
-
-  const es31Dic = (ahora) => ahora.getMonth() === 11 && ahora.getDate() === 31;
-
-  function ajustarCanvasNYE() {
-    if (!canvas || !bubble) return;
-    const rect = bubble.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
-    canvas.width = Math.max(1, Math.floor(rect.width * dpr));
-    canvas.height = Math.max(1, Math.floor(rect.height * dpr));
-    if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  }
-
-  function crearExplosionNYE(x, y) {
-    if (!bubble) return;
-    const rect = bubble.getBoundingClientRect();
-    const cx = typeof x === "number" ? x : rect.width * (.25 + Math.random() * .5);
-    const cy = typeof y === "number" ? y : rect.height * (.25 + Math.random() * .45);
-    const colores = ["#f472b6","#facc15","#38bdf8","#c084fc","#4ade80","#fb7185"];
-    for (let i = 0; i < 24; i++) {
-      const ang = (Math.PI * 2 * i) / 24 + (Math.random() - .5) * .25;
-      const vel = 1.2 + Math.random() * 2.6;
-      particulas.push({ x: cx, y: cy, vx: Math.cos(ang) * vel, vy: Math.sin(ang) * vel, alpha: 1, radio: 2 + Math.random() * 2.5, color: colores[Math.floor(Math.random() * colores.length)] });
-    }
-  }
-
-  window.lanzarRafagaNYE = () => {
-    if (!bubble) return;
-    const rect = bubble.getBoundingClientRect();
-    crearExplosionNYE(rect.width * .28, rect.height * .35);
-    setTimeout(() => crearExplosionNYE(rect.width * .72, rect.height * .3), 140);
-    setTimeout(() => crearExplosionNYE(rect.width * .5, rect.height * .55), 280);
-  };
-
-  window.simularCuentaRegresivaNYE = (activo = true) => {
-    modoSimulacionNYE = Boolean(activo);
-    if (btnSimular) btnSimular.dataset.sim = modoSimulacionNYE ? "1" : "0";
-    actualizarVisibilidadNYE(); actualizarRelojNYE();
-    if (modoSimulacionNYE) window.lanzarRafagaNYE();
-  };
-
-  window.alternarMiniBurbujaNYE = (minimizar) => {
-    if (!bubble || !miniBtn) return;
-    bubble.style.display = minimizar ? "none" : "block";
-    miniBtn.style.display = minimizar ? "inline-flex" : "none";
-    if (!minimizar) { ajustarCanvasNYE(); window.lanzarRafagaNYE(); }
-  };
-
-  function iniciarLoopFuegosNYE() {
-    if (animId || !ctx || !canvas || !bubble) return;
-    const paso = () => {
-      const rect = bubble.getBoundingClientRect();
-      ctx.clearRect(0, 0, rect.width, rect.height);
-      for (let i = particulas.length - 1; i >= 0; i--) {
-        const p = particulas[i];
-        p.x += p.vx; p.y += p.vy; p.vy += .035; p.alpha -= .022;
-        if (p.alpha <= 0) { particulas.splice(i, 1); continue; }
-        ctx.save(); ctx.globalAlpha = Math.max(0, p.alpha); ctx.fillStyle = p.color;
-        ctx.beginPath(); ctx.arc(p.x, p.y, p.radio, 0, Math.PI * 2); ctx.fill(); ctx.restore();
-      }
-      animId = requestAnimationFrame(paso);
-    };
-    animId = requestAnimationFrame(paso);
-  }
-
-  function actualizarVisibilidadNYE() {
-    if (!wrap) return;
-    const visible = modoSimulacionNYE || es31Dic(new Date());
-    wrap.style.display = visible ? "block" : "none";
-    if (visible) { ajustarCanvasNYE(); iniciarLoopFuegosNYE(); }
-    else if (animId) { cancelAnimationFrame(animId); animId = null; }
-  }
-
-  function actualizarRelojNYE() {
-    const ahora = new Date();
-    if (!modoSimulacionNYE && !es31Dic(ahora)) return;
-    const diffMs = new Date(ahora.getFullYear() + 1, 0, 1, 0, 0, 0).getTime() - ahora.getTime();
-    if (diffMs <= 0) {
-      if (relojEl) relojEl.textContent = "¡00:00:00! 🎉";
-      if (miniRelojEl) miniRelojEl.textContent = "¡Feliz Año!";
-      if (msgEl) msgEl.textContent = "¡Feliz Año Nuevo en LOST! 🎆✨";
-      if (Math.random() < .25) crearExplosionNYE();
-      return;
-    }
-    const tot = Math.floor(diffMs / 1000);
-    const texto = `${String(Math.floor(tot / 3600)).padStart(2, "0")}:${String(Math.floor((tot % 3600) / 60)).padStart(2, "0")}:${String(tot % 60).padStart(2, "0")}`;
-    if (relojEl) relojEl.textContent = texto;
-    if (miniRelojEl) miniRelojEl.textContent = texto;
-    if (msgEl) msgEl.textContent = "Toca la burbuja para lanzar fuegos artificiales ✨";
-  }
-
-  document.addEventListener("DOMContentLoaded", () => {
-    miniBtn?.addEventListener("click", () => window.alternarMiniBurbujaNYE(false));
-    bubble?.addEventListener("click", (ev) => {
-      const rect = bubble.getBoundingClientRect();
-      crearExplosionNYE(typeof ev.clientX === "number" ? ev.clientX - rect.left : undefined, typeof ev.clientY === "number" ? ev.clientY - rect.top : undefined);
-    });
-    btnRafaga?.addEventListener("click", (ev) => { ev.stopPropagation(); window.lanzarRafagaNYE(); });
-    btnMin?.addEventListener("click", (ev) => { ev.stopPropagation(); window.alternarMiniBurbujaNYE(true); });
-    btnSimular?.addEventListener("click", (ev) => { ev.stopPropagation(); window.simularCuentaRegresivaNYE(!(btnSimular.dataset.sim === "1")); });
-    actualizarVisibilidadNYE(); actualizarRelojNYE();
-    setInterval(() => { actualizarVisibilidadNYE(); actualizarRelojNYE(); }, 1000);
-    window.addEventListener("resize", ajustarCanvasNYE);
-  });
-})();
-</script>
-<script>
-(() => {
-  let ocultaManualmente = false;
-  const mesDiaHoy = () => { const a = new Date(); return `${String(a.getMonth() + 1).padStart(2, "0")}-${String(a.getDate()).padStart(2, "0")}`; };
-
-  const TEXTOS_CARTITA = {
-    es: {
-      titulo: "¡Feliz cumpleaños!",
-      cuerpo: (nombre) => `LOST le desea a ${nombre} el mejor de los cumpleaños, que sea un día lleno de alegrías y regalos junto a su familia y amigos.`,
-      extra: (nombres) => `Hoy también celebran: ${nombres}`,
-      aviso: (nombres) => `🎂 ¡Feliz cumpleaños, ${nombres}!`,
-      cerrar: "Ocultar tarjeta"
-    },
-    en: {
-      titulo: "Happy Birthday!",
-      cuerpo: (nombre) => `LOST wishes ${nombre} the very best birthday, full of joy and gifts with family and friends.`,
-      extra: (nombres) => `Also celebrating today: ${nombres}`,
-      aviso: (nombres) => `🎂 Happy Birthday, ${nombres}!`,
-      cerrar: "Hide card"
-    },
-    fr: {
-      titulo: "Joyeux anniversaire !",
-      cuerpo: (nombre) => `LOST souhaite à ${nombre} le plus bel anniversaire, rempli de joie et de cadeaux avec sa famille et ses amis.`,
-      extra: (nombres) => `Fêtent aussi aujourd'hui : ${nombres}`,
-      aviso: (nombres) => `🎂 Joyeux anniversaire, ${nombres} !`,
-      cerrar: "Masquer la carte"
-    }
-  };
-
-  function extraerCumplesDeStorage() {
-    const encontrados = [], hoy = mesDiaHoy();
-    const helper = window.__lostIdiomaCartas;
-    const ic = document.getElementById("input-cumple-perfil");
-    const inb = document.getElementById("input-nombre-perfil");
-    const isel = document.getElementById("select-idioma-perfil");
-
-    if (ic?.value?.length >= 10 && ic.value.slice(5) === hoy) {
-      const nombrePropio = inb?.value.trim() || "tú";
-      encontrados.push({
-        nombre: nombrePropio,
-        idioma: helper ? helper.resolverIdiomaPersona(nombrePropio, isel?.value) : "es",
-        esPropio: true
-      });
-    }
-
-    for (let i = 0; i < localStorage.length; i++) {
-      const k = localStorage.key(i);
-      if (!k || !k.toLowerCase().includes("lost")) continue;
-      try {
-        const val = JSON.parse(localStorage.getItem(k) || "null");
-        if (!val || typeof val !== "object") continue;
-        if (val.cumple?.slice(5) === hoy) {
-          const n = val.nombre || "tú";
-          encontrados.push({ nombre: n, idioma: helper ? helper.resolverIdiomaPersona(n, val.idioma) : "es", esPropio: true });
-        }
-        if (val.perfil?.cumple?.slice(5) === hoy) {
-          const n = val.perfil.nombre || "tú";
-          encontrados.push({ nombre: n, idioma: helper ? helper.resolverIdiomaPersona(n, val.perfil.idioma) : "es", esPropio: true });
-        }
-        if (Array.isArray(val.comunidad)) {
-          val.comunidad.forEach(p => {
-            if (p?.cumple?.slice(5) === hoy) {
-              const n = p.nombre || "alguien de la comunidad";
-              encontrados.push({
-                nombre: n,
-                idioma: helper ? helper.resolverIdiomaPersona(n, p.idioma || p.lang || p.language) : "es",
-                esPropio: false
-              });
-            }
-          });
-        }
-      } catch (e) {}
-    }
-
-    const vistos = new Set();
-    return encontrados.filter(it => {
-      const c = `${it.esPropio ? "1" : "0"}:${it.nombre.toLowerCase()}`;
-      if (vistos.has(c)) return false;
-      vistos.add(c);
-      return true;
-    });
-  }
-
-  function crearCartitaIndividualHTML(persona, extraNota = "") {
-    const helper = window.__lostIdiomaCartas;
-    const lang = helper ? helper.normalizarIdioma(persona.idioma) : "es";
-    const t = TEXTOS_CARTITA[lang] || TEXTOS_CARTITA.es;
-    const nombreLimpio = persona.nombre || "AMIGO/A";
-    return `
-      <div class="lost-cumple-tarjeta" lang="${lang}">
-        <div class="lost-cumple-bizcocho-top" aria-hidden="true">🎂</div>
-        <div class="lost-cumple-bizcocho-bottom" aria-hidden="true">🎂</div>
-        <p class="lost-cumple-titulo-cursiva">${t.titulo}</p>
-        <div class="lost-cumple-nombre-burbuja">${nombreLimpio.toUpperCase()}</div>
-        <p class="lost-cumple-cuerpo-cursiva">${t.cuerpo(nombreLimpio)}</p>
-        ${extraNota ? `<p class="subtitulo-dia" style="margin:.55rem 0 0;font-size:.78rem;">${extraNota}</p>` : ""}
-        <button type="button" class="lost-cumple-cerrar-btn" id="btn-ocultar-cumple-lost">${t.cerrar}</button>
-      </div>
-    `;
-  }
-
-  window.ocultarTarjetaCumpleanosLOST = () => {
-    ocultaManualmente = true;
-    const w = document.getElementById("lost-banner-cumple");
-    if (w) { w.style.display = "none"; w.innerHTML = ""; }
-  };
-
-  window.mostrarTarjetaCumpleanosLOST = (nombreForzado, idiomaForzado) => {
-    ocultaManualmente = false;
-    const helper = window.__lostIdiomaCartas;
-    const nombre = nombreForzado || "NOMBRE DE LA PERSONA";
-    const idioma = helper ? helper.resolverIdiomaPersona(nombre, idiomaForzado) : "es";
-    const w = document.getElementById("lost-banner-cumple");
-    if (w) {
-      w.style.display = "block";
-      w.innerHTML = crearCartitaIndividualHTML({ nombre, idioma });
-    }
-  };
-
-  function actualizarSaludoCumpleanos() {
-    if (ocultaManualmente) return;
-    const wrap = document.getElementById("lost-banner-cumple");
-    const avisoDia = document.getElementById("cumple-aviso-dia");
-    const cumpleHoy = extraerCumplesDeStorage();
-    if (!cumpleHoy.length) {
-      if (wrap) { wrap.style.display = "none"; wrap.innerHTML = ""; }
-      return;
-    }
-    const todosNombres = cumpleHoy.map(c => c.nombre).join(" & ");
-    const langApp = window.__lostIdiomaCartas ? window.__lostIdiomaCartas.obtenerIdiomaApp() : "es";
-    const tApp = TEXTOS_CARTITA[langApp] || TEXTOS_CARTITA.es;
-
-    if (wrap) {
-      wrap.style.display = "block";
-      if (cumpleHoy.length === 1) {
-        wrap.innerHTML = crearCartitaIndividualHTML(cumpleHoy[0]);
-      } else {
-        wrap.innerHTML = cumpleHoy.map((persona) => {
-          const tPersona = TEXTOS_CARTITA[persona.idioma] || TEXTOS_CARTITA.es;
-          const otros = cumpleHoy.filter(x => x !== persona).map(x => x.nombre).join(", ");
-          return crearCartitaIndividualHTML(persona, tPersona.extra(otros));
-        }).join("");
-      }
-    }
-    if (avisoDia) {
-      avisoDia.style.display = "block";
-      avisoDia.textContent = tApp.aviso(todosNombres);
-    }
-  }
-
-  document.addEventListener("DOMContentLoaded", () => {
-    const helper = window.__lostIdiomaCartas;
-    const selPerfil = document.getElementById("select-idioma-perfil");
-    const selAmigo = document.getElementById("select-idioma-amigo");
-    const inpNombrePerfil = document.getElementById("input-nombre-perfil");
-    const inpNombreAmigo = document.getElementById("input-nombre-amigo");
-
-    if (selPerfil && helper) {
-      selPerfil.value = helper.obtenerIdiomaApp();
-      selPerfil.addEventListener("change", () => {
-        if (inpNombrePerfil?.value.trim()) helper.guardarIdiomaPersona(inpNombrePerfil.value.trim(), selPerfil.value);
-        ocultaManualmente = false;
-        actualizarSaludoCumpleanos();
-      });
-    }
-
-    selAmigo?.addEventListener("change", () => {
-      if (inpNombreAmigo?.value.trim() && helper) helper.guardarIdiomaPersona(inpNombreAmigo.value.trim(), selAmigo.value);
-    });
-
-    document.getElementById("form-perfil")?.addEventListener("submit", () => {
-      if (inpNombrePerfil?.value.trim() && selPerfil && helper) {
-        helper.guardarIdiomaPersona(inpNombrePerfil.value.trim(), selPerfil.value);
-      }
-      ocultaManualmente = false;
-      setTimeout(actualizarSaludoCumpleanos, 80);
-    });
-
-    document.getElementById("form-comunidad")?.addEventListener("submit", () => {
-      if (inpNombreAmigo?.value.trim() && selAmigo && helper) {
-        helper.guardarIdiomaPersona(inpNombreAmigo.value.trim(), selAmigo.value);
-      }
-      ocultaManualmente = false;
-      setTimeout(actualizarSaludoCumpleanos, 80);
-    });
-
-    document.addEventListener("click", (ev) => {
-      if (ev.target instanceof Element && ev.target.closest("#btn-ocultar-cumple-lost")) {
-        window.ocultarTarjetaCumpleanosLOST();
-      }
-    });
-
-    actualizarSaludoCumpleanos();
-    ["input-cumple-perfil", "input-nombre-perfil"].forEach(id =>
-      document.getElementById(id)?.addEventListener("input", () => { ocultaManualmente = false; actualizarSaludoCumpleanos(); })
-    );
-  });
-
-  window.actualizarSaludoCumpleanosLOST = actualizarSaludoCumpleanos;
-})();
-</script>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyBxXS5wsrgHX0IfhgCCaZu51JVr4bawxRo",
-  authDomain: "lost-app-62727.firebaseapp.com",
-  projectId: "lost-app-62727",
-  storageBucket: "lost-app-62727.firebasestorage.app",
-  messagingSenderId: "112448744813",
-  appId: "1:112448744813:web:b8ee09a12606a48090be64",
-  measurementId: "G-Z0FL409H2H"
-};
-
-let usuarioActual = null, db = null;
-try {
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  db = getFirestore(app);
-  const provider = new GoogleAuthProvider();
-
-  window.iniciarSesionGoogle = async () => { try { await signInWithPopup(auth, provider); } catch (err) { const el = document.getElementById("estado-nube-lost"); if (el) el.textContent = "No se pudo iniciar sesión: " + err.message; } };
-  window.cerrarSesionLOST = async () => { try { await signOut(auth); } catch (err) { console.error(err); } };
-  document.getElementById("btn-login-lost")?.addEventListener("click", () => window.iniciarSesionGoogle());
-  document.getElementById("btn-logout-lost")?.addEventListener("click", () => window.cerrarSesionLOST());
-
-  window.guardarEnNubeLOST = async (datosCompletos) => {
-    if (!usuarioActual || !db) return;
-    try {
-      const leer = (k, fb) => { try { return JSON.parse(localStorage.getItem(k) || "null") ?? fb; } catch (e) { return fb; } };
-      const base = datosCompletos && typeof datosCompletos === "object" ? datosCompletos : {};
-      await setDoc(doc(db, "usuarios", usuarioActual.uid), {
-        perfil: {
-          ...base,
-          clasesPorLetra: base.clasesPorLetra || leer("lost_clases_por_letra_v1", {}),
-          cicloCustom: base.cicloCustom || leer("lost_ciclo_custom_v1", null),
-          agendaLV: base.agendaLV || leer("lost_lv_personal_v1", null),
-          idiomasPersonas: base.idiomasPersonas || leer("lost_idiomas_personas_v1", {}),
-          fotoPerfil: base.fotoPerfil !== undefined ? base.fotoPerfil : (localStorage.getItem("lost_foto_perfil_dataurl_v1") || "")
-        },
-        actualizadoEn: new Date().toISOString()
-      }, { merge: true });
-      const el = document.getElementById("estado-nube-lost");
-      if (el) el.textContent = "☁️ Sincronizado con tu cuenta";
-    } catch (err) { console.error("Error al sincronizar:", err); }
-  };
-
-  onAuthStateChanged(auth, async (user) => {
-    usuarioActual = user;
-    const btnLogin = document.getElementById("btn-login-lost"), infoUsuario = document.getElementById("info-usuario-lost"), nombreUsuario = document.getElementById("nombre-usuario-lost"), estadoNube = document.getElementById("estado-nube-lost");
-    if (user) {
-      if (btnLogin) btnLogin.style.display = "none";
-      if (infoUsuario) infoUsuario.style.display = "inline-flex";
-      if (nombreUsuario) nombreUsuario.textContent = user.displayName || user.email;
-      if (estadoNube) estadoNube.textContent = "☁️ Cargando datos de tu cuenta...";
-      const snap = await getDoc(doc(db, "usuarios", user.uid));
-      if (snap.exists() && snap.data()?.perfil) {
-        const n = snap.data().perfil;
-        if (n.clasesPorLetra && typeof n.clasesPorLetra === "object") localStorage.setItem("lost_clases_por_letra_v1", JSON.stringify(n.clasesPorLetra));
-        if (n.cicloCustom && typeof n.cicloCustom === "object") localStorage.setItem("lost_ciclo_custom_v1", JSON.stringify(n.cicloCustom));
-        if (n.agendaLV && typeof n.agendaLV === "object") localStorage.setItem("lost_lv_personal_v1", JSON.stringify(n.agendaLV));
-        if (n.idiomasPersonas && typeof n.idiomasPersonas === "object") localStorage.setItem("lost_idiomas_personas_v1", JSON.stringify(n.idiomasPersonas));
-        if (typeof n.fotoPerfil === "string" && n.fotoPerfil) localStorage.setItem("lost_foto_perfil_dataurl_v1", n.fotoPerfil);
-        window.aplicarDatosNubeLOST?.(n);
-        window.refrescarDatosExtraLOST?.();
-      } else if (typeof window.obtenerEstadoLOST === "function") await window.guardarEnNubeLOST(window.obtenerEstadoLOST());
-      if (estadoNube) estadoNube.textContent = "☁️ Sesión activa y sincronizada";
-    } else {
-      if (btnLogin) btnLogin.style.display = "inline-block";
-      if (infoUsuario) infoUsuario.style.display = "none";
-      if (estadoNube) estadoNube.textContent = "";
-    }
-  });
-} catch (err) { console.warn("Firebase pendiente de configurar:", err.message); }
-</script>
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./sw.js", { updateViaCache: "none" })
-      .then((reg) => reg?.update?.().catch(() => {}))
-      .catch(() => {});
-  });
-}
-</script>
-</body>
-</html>
+    { inicio: "2026-12-15", fin: "2026-12-15", nombre: "Festival de Navidad de 1,
