@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#7c3aed" />
+  <title>LOST — Horario, Calendario y Ciclo</title>
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" type="image/png" href="./icon-512.png" />
+  <link rel="apple-touch-icon" href="./icon-512.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Great+Vibes&family=Nunito:wght@500;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+  <style>
+    body[data-epoca="navidad"] .portada-lost {
+      background: linear-gradient(135deg, #dcfce7 0%, #fee2e2 55%, #fef3c7 100%);
+    }
+    body[data-epoca="halloween"] .portada-lost {
+      background: linear-gradient(135deg, #ede9fe 0%, #ffedd5 55%, #fed7aa 100%);
+    }
+    body[data-epoca="san-valentin"] .portada-lost {
+      background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 55%, #f5d0fe 100%);
+    }
+    body[data-epoca="pascua"] .portada-lost {
+      background: linear-gradient(135deg, #ccfbf1 0%, #ede9fe 55%, #fef3c7 100%);
+    }
+    body[data-epoca="verano"] .portada-lost {
+      background: linear-gradient(135deg, #e0f2fe 0%, #cffafe 55%, #fef3c7 100%);
+    }
+    body[data-epoca="regreso-clases"] .portada-lost {
+      background: linear-gradient(135deg, #e0e7ff 0%, #ede9fe 55%, #e0f2fe 100%);
+    }
+    .lost-epoca-select {
+      border: 2px solid var(--borde);
+      background: #ffffff;
+      color: var(--principal-oscuro);
+      font-weight: 800;
+      font-size: 0.78rem;
+      padding: 0.3rem 0.7rem;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+    .lost-cumple-tarjeta {
+      background: linear-gradient(135deg, #fdf4ff, #fce7f3);
+      border: 2px solid #f0abfc;
+      border-radius: 26px;
+      padding: 1rem 1.2rem;
+      margin-bottom: 1.1rem;
+      text-align: center;
+    }
+    .lost-cumple-titulo-cursiva {
+      font-family: "Great Vibes", cursive;
+      font-size: 1.9rem;
+      color: #86198f;
+      margin: 0.1rem 0;
+    }
+    .lost-cumple-nombre-burbuja {
+      display: inline-block;
+      background: #ffffff;
+      border: 2px solid #e879f9;
+      color: #6b21a8;
+      font-weight: 900;
+      padding: 0.2rem 0.85rem;
+      border-radius: 999px;
+      margin: 0.2rem 0 0.4rem;
+    }
+    .lost-cumple-cuerpo-cursiva {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #581c87;
+      margin: 0 0 0.6rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Pantalla de Bienvenida / Tutorial -->
+  <section id="lost-welcome" class="lost-welcome-overlay" aria-label="Bienvenida LOST">
+    <div id="lost-landing-view" class="card lost-welcome-card">
+      <div class="lost-welcome-top">
+        <span id="lost-step-counter" class="badge-fecha">Portada</span>
+        <div class="modo-switch" role="group" aria-label="Idioma">
+          <button type="button" id="btn-idioma-es" class="modo-btn activo">ES</button>
+          <button type="button" id="btn-idioma-en" class="modo-btn">EN</button>
+          <button type="button" id="btn-idioma-fr" class="modo-btn">FR</button>
+        </div>
+      </div>
+
+      <div id="welcome-muneco-box" class="muneco-wrap lost-welcome-muneco muneco-anim-flotar">🗓️</div>
+      <h1 class="lost-welcome-h1">LOST</h1>
+      <p id="lost-welcome-tagline" class="lost-welcome-tagline">“Por si estás perdido y no sabes ni que día es después de unas buenas vacaciones.”</p>
+      <p id="lost-creator-credit" class="lost-creator-credit">Creado por Sofía Aguirre Rivera</p>
+      <p id="lost-welcome-desc" class="lost-welcome-desc">Organiza tu rutina académica o docente, consulta qué bloque está en curso y administra alarmas, fechas clave y comunidad desde un solo lugar.</p>
+
+      <div class="lost-welcome-pills">
+        <span id="pill-rol" class="materia-badge">🎓 Estudiante / Maestro</span>
+        <span id="pill-ciclo" class="materia-badge">🔄 Ciclo A–F o Lun–Vie</span>
+        <span id="pill-alarmas" class="materia-badge">⏰ Alarmas y feriados</span>
+        <span id="pill-comunidad" class="materia-badge">🤝 Comunidad y QR</span>
+      </div>
+
+      <div class="lost-welcome-actions">
+        <button type="button" id="btn-iniciar-tutorial" class="btn-agregar">Empezar tutorial (4 pasos)</button>
+        <button type="button" id="btn-saltar-todo" class="btn-sec">Ir directo a LOST</button>
+      </div>
+    </div>
+
+    <div id="lost-tutorial-view" class="card lost-welcome-card" style="display:none;">
+      <div class="lost-welcome-top">
+        <span id="lost-step-counter-tut" class="badge-fecha">1 / 4</span>
+        <div class="modo-switch" role="group" aria-label="Idioma tutorial">
+          <button type="button" id="btn-idioma-es-tut" class="modo-btn activo" onclick="document.getElementById('btn-idioma-es').click()">ES</button>
+          <button type="button" id="btn-idioma-en-tut" class="modo-btn" onclick="document.getElementById('btn-idioma-en').click()">EN</button>
+          <button type="button" id="btn-idioma-fr-tut" class="modo-btn" onclick="document.getElementById('btn-idioma-fr').click()">FR</button>
+        </div>
+      </div>
+
+      <div class="lost-progress-track">
+        <div id="lost-progress-fill" class="lost-progress-fill" style="width:25%;"></div>
+      </div>
+
+      <div id="lost-step-icon" class="muneco-wrap lost-welcome-muneco">🎓</div>
+      <div id="lost-step-tag" class="lost-tutorial-tip">✦ Paso 1 · Rol y ciclo</div>
+      <h2 id="lost-step-title">1. Tu rol y ciclo</h2>
+      <p id="lost-step-body" class="lost-welcome-desc">Elige si usas LOST como Estudiante o Maestro y cambia entre Ciclo A–F o semana Lun–Vie desde la portada.</p>
+
+      <div class="lost-welcome-actions">
+        <button type="button" id="btn-paso-anterior" class="btn-sec">◀ Atrás</button>
+        <button type="button" id="btn-paso-siguiente" class="btn-agregar">Siguiente ▶</button>
+      </div>
+      <button type="button" id="btn-omitir-tutorial" class="btn-sec lost-welcome-omitir">Omitir y entrar a LOST</button>
+    </div>
+  </section>
+
+  <!-- Aplicación Principal -->
+  <main id="lost-app" class="app" style="display:none;">
+
+    <!-- Banner Alarma Activa -->
+    <div id="alarma-banner" class="alarma-alerta-banner" role="alert" aria-live="assertive">
+      <div>
+        <h3 id="alarma-banner-titulo" class="alarma-alerta-titulo">⏰ Alarma activa</h3>
+        <p id="alarma-banner-sub" class="alarma-alerta-sub">Recordatorio LOST</p>
+      </div>
+      <div class="hero-acciones">
+        <button type="button" id="btn-posponer-alarma" class="btn-alarma-accion btn-posponer-alarma">Posponer 5 min</button>
+        <button type="button" id="btn-detener-alarma" class="btn-alarma-accion btn-detener-alarma">Detener</button>
+      </div>
+    </div>
+
+    <!-- Portada -->
+    <header class="portada-lost">
+      <div class="portada-contenido">
+        <div>
+          <span id="portada-sub-tag" class="portada-tag">Estudiante · Ciclo Escolar A–F</span>
+          <h1 class="portada-titulo">LOST</h1>
+          <p id="portada-desc" class="portada-sub">Horario, calendario académico, alarmas, cumpleaños y comunidad</p>
+          <div class="perfil-chip-portada">
+            <span id="chip-perfil-emoji">🦊</span>
+            <strong id="chip-perfil-nombre">Mi Perfil</strong>
+            <span id="chip-perfil-cake"></span>
+          </div>
+          <div id="lost-auth-bar" class="lost-auth-bar">
+            <button type="button" id="btn-login-lost" class="lost-btn-login">☁️ Conectar Google</button>
+            <div id="info-usuario-lost" class="lost-user-pill" style="display:none;">
+              <span id="nombre-usuario-lost"></span>
+              <button type="button" id="btn-logout-lost" class="lost-btn-logout">Salir</button>
+            </div>
+            <small id="estado-nube-lost" class="clase-meta"></small>
+          </div>
+        </div>
+
+        <div class="controles-portada">
+          <div class="modo-switch" role="group" aria-label="Idioma">
+            <button type="button" id="btn-idioma-es" class="modo-btn activo">ES</button>
+            <button type="button" id="btn-idioma-en" class="modo-btn">EN</button>
+            <button type="button" id="btn-idioma-fr" class="modo-btn">FR</button>
+          </div>
+
+          <select id="select-epoca-lost" class="lost-epoca-select" aria-label="Época / Tema"></select>
+
+          <div class="modo-switch" role="group" aria-label="Rol">
+            <button type="button" id="btn-rol-estudiante" class="modo-btn activo">Estudiante</button>
+            <button type="button" id="btn-rol-maestro" class="modo-btn">Maestro</button>
+          </div>
+
+          <div class="modo-switch" role="group" aria-label="Modo de horario">
+            <button type="button" id="btn-modo-ciclo" class="modo-btn activo">Ciclo A–F</button>
+            <button type="button" id="btn-modo-semanal" class="modo-btn">Lun–Vie</button>
+          </div>
+
+          <button type="button" id="btn-ver-tutorial-app" class="btn-sec">✨ Tutorial</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Cartita de cumpleaños -->
+    <section id="lost-banner-cumple" style="display:none;" aria-live="polite"></section>
+
+    <!-- VISTA: INICIO -->
+    <section class="vista-seccion" data-vista="inicio">
+      <div class="card hero">
+        <div>
+          <p id="texto-fecha-seleccionada" class="badge-fecha"></p>
+          <div id="letra-seleccionada" class="letra-gigante">A</div>
+          <p id="subtitulo-dia" class="subtitulo-dia"></p>
+          <div id="cumple-aviso-dia" class="cumple-aviso-dia" style="display:none;"></div>
+        </div>
+        <div class="hero-acciones">
+          <button type="button" id="btn-toggle-gym" class="btn-hoy">🏋️ Gym este día</button>
+          <button type="button" id="btn-ir-hoy" class="btn-hoy">Ir a hoy</button>
+        </div>
+      </div>
+
+      <div class="materia-card">
+        <div>
+          <span id="badge-categoria-materia" class="materia-badge">Materia activa / del día</span>
+          <h2 id="titulo-materia-muneco" class="materia-titulo">Día A</h2>
+          <p id="desc-materia-muneco" class="materia-desc">Selecciona un día en el calendario para ver o editar sus detalles.</p>
+        </div>
+        <div id="muneco-materia-box" class="muneco-wrap muneco-anim-flotar">🦊</div>
+      </div>
+
+      <div class="card">
+        <div class="live-header">
+          <h2 id="titulo-en-vivo">En vivo hoy</h2>
+          <span id="reloj-en-vivo" class="live-reloj">00:00:00</span>
+        </div>
+        <div class="live-grid">
+          <div class="live-box actual">
+            <span id="etiqueta-bloque-actual" class="live-etiqueta">Bloque actual</span>
+            <div id="live-bloque-actual" class="live-titulo">Sin bloque en curso</div>
+            <div id="live-detalle-actual" class="live-detalle"></div>
+          </div>
+          <div class="live-box siguiente">
+            <span id="etiqueta-siguiente-bloque" class="live-etiqueta">Siguiente bloque</span>
+            <div id="live-siguiente-bloque" class="live-titulo">No hay más bloques hoy</div>
+            <div id="live-detalle-siguiente" class="live-detalle"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 id="titulo-notas-dia">📝 Notas y tareas</h2>
+        <form id="form-nota" class="nota-form">
+          <div class="nota-fila-top">
+            <input type="date" id="input-fecha-nota" />
+            <select id="select-tipo-nota">
+              <option value="Tarea">Tarea</option>
+              <option value="Examen">Examen</option>
+              <option value="Recordatorio">Recordatorio</option>
+            </select>
+          </div>
+          <input type="text" id="input-texto-nota" placeholder="Escribe una nota, tarea o recordatorio..." />
+          <button type="submit" class="btn-agregar">Guardar nota</button>
+        </form>
+        <ul id="lista-notas" class="lista-clases"></ul>
+      </div>
+    </section>
+
+    <!-- VISTA: CALENDARIO -->
+    <section class="vista-seccion oculta" data-vista="calendario">
+      <div class="card cal-card">
+        <div class="cal-header">
+          <button type="button" id="mes-anterior" class="btn-sec">◀</button>
+          <span id="titulo-mes" class="cal-titulo"></span>
+          <button type="button" id="mes-siguiente" class="btn-sec">▶</button>
+        </div>
+
+        <div class="herramientas-feriados-lost">
+          <button type="button" id="btn-modo-feriados-rapido" class="btn-sec">🗓️ Marcar feriados: OFF</button>
+          <label class="btn-sec lost-label-foto">
+            📸 Foto calendario escolar
+            <input type="file" id="input-foto-calendario" accept="image/*" style="display:none;" />
+          </label>
+          <small id="estado-feriados-foto" class="clase-meta"></small>
+        </div>
+
+        <div class="leyenda">
+          <span><i style="background:#ede9fe;"></i> Ciclo / Día</span>
+          <span><i style="background:#fef3c7;"></i> Feriado / Libre</span>
+          <span><i style="background:#fce7f3;"></i> Cumpleaños</span>
+          <span><i style="background:#dcfce7;"></i> Gym</span>
+        </div>
+
+        <div class="cal-grid-semana">
+          <div>Dom</div><div>Lun</div><div>Mar</div><div>Mié</div><div>Jue</div><div>Vie</div><div>Sáb</div>
+        </div>
+        <div id="cuadricula-calendario" class="cal-grid-dias"></div>
+      </div>
+    </section>
+
+    <!-- VISTA: CREAR BLOQUES -->
+    <section class="vista-seccion oculta" data-vista="crear">
+      <div class="card">
+        <h2 id="titulo-bloques-dia">📚 Bloques del día A</h2>
+        <div id="tabs-dias" class="tabs"></div>
+        <form id="form-clase" class="form-grid">
+          <div>
+            <label class="campo-lbl" for="input-materia">Materia / Bloque</label>
+            <input type="text" id="input-materia" placeholder="Ej. Matemáticas" required />
+          </div>
+          <div>
+            <label class="campo-lbl" for="input-salon">Salón / Nota</label>
+            <input type="text" id="input-salon" placeholder="Ej. Salón 204" />
+          </div>
+          <div>
+            <label class="campo-lbl" for="input-hora-inicio">Hora inicio</label>
+            <input type="time" id="input-hora-inicio" required />
+          </div>
+          <div>
+            <label class="campo-lbl" for="input-hora-fin">Hora fin</label>
+            <input type="time" id="input-hora-fin" required />
+          </div>
+          <div class="full">
+            <button type="submit" class="btn-agregar">+ Agregar bloque</button>
+          </div>
+        </form>
+        <ul id="lista-clases" class="lista-clases"></ul>
+      </div>
+    </section>
+
+    <!-- VISTA: ALARMAS -->
+    <section class="vista-seccion oculta" data-vista="alarmas">
+      <div class="card">
+        <h2 id="titulo-alarmas">Alarmas (despertar, pendientes y recordatorios)</h2>
+        <form id="form-alarma" class="form-grid">
+          <div>
+            <label class="campo-lbl" for="input-hora-alarma">Hora</label>
+            <input type="time" id="input-hora-alarma" required />
+          </div>
+          <div>
+            <label class="campo-lbl" for="select-tipo-alarma">Tipo</label>
+            <select id="select-tipo-alarma">
+              <option value="despertar">Despertar</option>
+              <option value="pendiente">Pendiente</option>
+              <option value="recordatorio">Recordatorio</option>
+            </select>
+          </div>
+          <div>
+            <label class="campo-lbl" for="select-repeticion-alarma">Repetición</label>
+            <select id="select-repeticion-alarma">
+              <option value="una_vez">Una vez</option>
+              <option value="diaria">Diaria</option>
+              <option value="lv">Lunes a Viernes</option>
+            </select>
+          </div>
+          <div>
+            <label class="campo-lbl" for="select-tono-alarma">Tono</label>
+            <select id="select-tono-alarma">
+              <option value="campanita">Campanita</option>
+              <option value="arpegio">Arpegio</option>
+              <option value="pulso">Pulso</option>
+            </select>
+          </div>
+          <div class="full">
+            <label class="campo-lbl" for="input-etiqueta-alarma">Etiqueta</label>
+            <input type="text" id="input-etiqueta-alarma" placeholder="Ej. Repasar fórmula o despertar" required />
+          </div>
+          <div class="full respaldo-botones">
+            <button type="submit" class="btn-agregar">+ Guardar alarma</button>
+            <button type="button" id="btn-probar-alarma" class="btn-sec">🔊 Probar sonido</button>
+            <button type="button" id="btn-permiso-notif" class="btn-sec">🔔 Activar notificaciones</button>
+          </div>
+        </form>
+        <ul id="lista-alarmas" class="lista-clases"></ul>
+      </div>
+    </section>
+
+    <!-- VISTA: PERFIL, COMUNIDAD Y CONFIGURACIÓN -->
+    <section class="vista-seccion oculta" data-vista="perfil">
+      <div class="card">
+        <h2 id="titulo-perfil">Mi perfil, avatar/Bitmoji, foto y cumpleaños</h2>
+        <form id="form-perfil" class="form-grid">
+          <div>
+            <label class="campo-lbl" for="input-nombre-perfil">Tu nombre</label>
+            <input type="text" id="input-nombre-perfil" placeholder="Tu nombre" />
+          </div>
+          <div>
+            <label class="campo-lbl" for="select-tipo-avatar">Tipo de avatar</label>
+            <select id="select-tipo-avatar">
+              <option value="emoji">Emoji</option>
+              <option value="bitmoji">Bitmoji / Sticker</option>
+              <option value="foto">Foto</option>
+            </select>
+          </div>
+          <div>
+            <label class="campo-lbl" for="input-emoji-perfil">Emoji / Sticker</label>
+            <input type="text" id="input-emoji-perfil" value="🦊" />
+          </div>
+          <div>
+            <label class="campo-lbl" for="input-cumple-perfil">Tu cumpleaños</label>
+            <input type="date" id="input-cumple-perfil" />
+          </div>
+          <div class="full">
+            <label class="campo-lbl" for="input-foto-perfil">Subir foto de perfil</label>
+            <input type="file" id="input-foto-perfil" accept="image/*" />
+          </div>
+          <div class="full">
+            <label id="lbl-emojis-rapidos" class="campo-lbl">Emojis rápidos (120 opciones)</label>
+            <div id="selector-emojis-rapidos" class="emoji-picker-rapido"></div>
+          </div>
+          <div class="full">
+            <label id="lbl-bitmoji-rapidos" class="campo-lbl">Bitmoji / Stickers (50 opciones)</label>
+            <div id="selector-bitmoji-fotos" class="emoji-picker-rapido"></div>
+          </div>
+          <div class="full respaldo-botones">
+            <button type="submit" class="btn-agregar">Guardar perfil</button>
+            <button type="button" id="btn-link-mi-perfil" class="btn-sec">🔗 Compartir perfil</button>
+            <button type="button" id="btn-qr-mi-perfil" class="btn-sec">📱 QR perfil</button>
+          </div>
+        </form>
+        <p id="msg-perfil" class="msg-respaldo"></p>
+      </div>
+
+      <div class="card">
+        <h2 id="titulo-comunidad">Comunidad compartida (QR, Enlace o en la App)</h2>
+        <form id="form-comunidad" class="form-grid">
+          <div>
+            <label class="campo-lbl" for="input-nombre-amigo">Nombre</label>
+            <input type="text" id="input-nombre-amigo" placeholder="Nombre de amigo/a" required />
+          </div>
+          <div>
+            <label class="campo-lbl" for="input-emoji-amigo">Emoji</label>
+            <input type="text" id="input-emoji-amigo" value="💜" />
+          </div>
+          <div class="full">
+            <label class="campo-lbl" for="input-cumple-amigo">Cumpleaños</label>
+            <input type="date" id="input-cumple-amigo" />
+          </div>
+          <div class="full">
+            <button type="submit" class="btn-agregar">+ Agregar a comunidad</button>
+          </div>
+        </form>
+
+        <ul id="lista-comunidad" class="lista-clases"></ul>
+
+        <div class="form-grid" style="margin-top:0.85rem;">
+          <div class="full">
+            <label class="campo-lbl" for="input-enlace-comunidad">Pegar enlace o código de comunidad</label>
+            <input type="text" id="input-enlace-comunidad" placeholder="Pega aquí #perfil=..., #comunidad=... o JSON" />
+          </div>
+          <div class="full respaldo-botones">
+            <button type="button" id="btn-fusionar-comunidad" class="btn-sec">🤝 Fusionar</button>
+            <button type="button" id="btn-link-comunidad" class="btn-sec">🔗 Enlace comunidad</button>
+            <button type="button" id="btn-qr-comunidad" class="btn-sec">📱 QR comunidad</button>
+          </div>
+        </div>
+
+        <div id="panel-qr-compartir" class="qr-panel">
+          <h3 id="titulo-qr-panel">Código QR</h3>
+          <p id="subtitulo-qr-panel" class="clase-meta"></p>
+          <div id="contenedor-qr" class="qr-canvas-box"></div>
+          <button type="button" id="btn-cerrar-qr" class="btn-sec">Cerrar QR</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 id="titulo-config">⚙️ Configuración del ciclo, feriados, Apps Script y respaldo</h2>
+        <div class="ciclo-resumen-bar">
+          <div class="ciclo-stat">
+            <span class="ciclo-stat-lbl">Inicio ciclo</span>
+            <strong id="stat-inicio-ciclo" class="ciclo-stat-val">--</strong>
+          </div>
+          <div class="ciclo-stat">
+            <span class="ciclo-stat-lbl">Letras</span>
+            <strong id="stat-letras-ciclo" class="ciclo-stat-val">A · B · C · D · E · F</strong>
+          </div>
+          <div class="ciclo-stat">
+            <span class="ciclo-stat-lbl">Feriados</span>
+            <strong id="stat-total-feriados" class="ciclo-stat-val">0</strong>
+          </div>
+        </div>
+
+        <form id="form-config-ciclo" class="form-grid">
+          <div>
+            <label class="campo-lbl" for="input-fecha-inicio-ciclo">Fecha inicio del ciclo</label>
+            <input type="date" id="input-fecha-inicio-ciclo" />
+          </div>
+          <div>
+            <label class="campo-lbl" for="input-letras-ciclo">Letras (separadas por coma)</label>
+            <input type="text" id="input-letras-ciclo" value="A, B, C, D, E, F" />
+          </div>
+          <div>
+            <label class="campo-lbl" for="input-correo-destino">Correo destino</label>
+            <input type="email" id="input-correo-destino" placeholder="correo@ejemplo.com" />
+          </div>
+          <div>
+            <label class="campo-lbl" for="input-minutos-antelacion">Minutos de antelación</label>
+            <input type="number" id="input-minutos-antelacion" value="15" min="0" />
+          </div>
+          <div class="full">
+            <label class="campo-lbl" for="input-apps-script-url">URL Google Apps Script</label>
+            <input type="url" id="input-apps-script-url" placeholder="https://script.google.com/macros/s/.../exec" />
+          </div>
+          <div class="full">
+            <button type="submit" class="btn-agregar">Guardar configuración</button>
+          </div>
+        </form>
+
+        <div class="feriado-controles">
+          <label class="campo-lbl" for="input-fecha-feriado">Marcar o quitar feriado / día libre</label>
+          <div class="respaldo-botones">
+            <input type="date" id="input-fecha-feriado" style="max-width:220px;" />
+            <button type="button" id="btn-toggle-feriado" class="btn-sec">🏖️ Alternar feriado</button>
+            <button type="button" id="btn-sync-calendar" class="btn-sec">📅 Sync Calendar</button>
+            <button type="button" id="btn-sync-correo" class="btn-sec">✉️ Enviar correo</button>
+          </div>
+          <ul id="lista-feriados" class="lista-clases"></ul>
+        </div>
+
+        <div class="json-avanzado-box">
+          <label class="campo-lbl" for="area-json-respaldo">Respaldo JSON</label>
+          <textarea id="area-json-respaldo" rows="4"></textarea>
+          <div class="respaldo-botones" style="margin-top:0.6rem;">
+            <button type="button" id="btn-copiar-json" class="btn-sec">📋 Copiar JSON</button>
+            <button type="button" id="btn-importar-json" class="btn-sec">📥 Importar JSON</button>
+          </div>
+          <p id="msg-respaldo" class="msg-respaldo"></p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Barra Inferior -->
+  <nav id="lost-bottom-nav" class="kawaii-bottom-bar" aria-label="Navegación principal">
+    <button type="button" class="kawaii-tab-item activa" data-target-vista="inicio">
+      <span class="kawaii-tab-ico">🏠</span>
+      <span id="nav-lbl-inicio" class="kawaii-tab-lbl">Inicio</span>
+    </button>
+    <button type="button" class="kawaii-tab-item" data-target-vista="calendario">
+      <span class="kawaii-tab-ico">📅</span>
+      <span id="nav-lbl-calendario" class="kawaii-tab-lbl">Calendario</span>
+    </button>
+    <button type="button" class="kawaii-tab-item kawaii-tab-center" data-target-vista="crear">
+      <span class="kawaii-tab-ico">+</span>
+      <span id="nav-lbl-crear" class="kawaii-tab-lbl">Crear</span>
+    </button>
+    <button type="button" class="kawaii-tab-item" data-target-vista="alarmas">
+      <span class="kawaii-tab-ico">⏰</span>
+      <span id="nav-lbl-alarmas" class="kawaii-tab-lbl">Alarmas</span>
+    </button>
+    <button type="button" class="kawaii-tab-item" data-target-vista="perfil">
+      <span class="kawaii-tab-ico">💜</span>
+      <span id="nav-lbl-perfil" class="kawaii-tab-lbl">Perfil</span>
+    </button>
+  </nav>
+
+  <script src="./app.js"></script>
+  <script>
+  (() => {
+    const KEY_EPOCA = "lost_epoca_modo_v1";
+    const EMOJIS_120 = [
+      "🦊","🐶","💜","🎀","🌸","🍓","✨","🎂","📚","🎧",
+      "🐱","🐰","🐻","🐼","🐨","🐯","🦁","🐮","🐷","🐸",
+      "🦄","🐧","🦉","🐬","🦋","🐝","🐞","🐢","🌼","🌷",
+      "🌹","🪻","🌻","🍀","🌿","🌱","🌵","🌴","🍂","🍁",
+      "🍒","🍑","🍉","🍍","🥭","🍎","🍏","🍋","🥑","🥐",
+      "🧁","🍰","🍩","🍪","🍫","☕","🍵","🧋","🥤","🎵",
+      "🎶","🎸","🎹","🎷","🎨","🖌️","🎭","🎬","📷","💍",
+      "🏃‍♀️","🏋️‍♀️","🧘‍♀️","🚴‍♀️","🏐","🏀","⚽","🎾","⛳","🏆",
+      "🥇","👑","🧸","🎈","🎉","📅","🗓️","⏰","⏳","📌",
+      "📍","📝","📒","📓","📔","📕","📗","📘","📙","📖",
+      "✏️","✒️","🖊️","🖍️","📐","📏","🔬","🧪","🧫","🔭",
+      "💻","🎒","🎓","🏫","🏛️","🗺️","🩷","🩵","🤍","💛"
+    ];
+    const BITMOJI_50 = [
+      "🦄 Lavanda Cool","🗓️ Pastel Vibe","🧸 Study Star","🌙 Night Owl",
+      "😎 Chill Mode","🤓 Nerd Power","🥳 Party Time","🤩 Star Pupil",
+      "😇 Angelic","🥰 Sweetheart","😍 Heart Eyes","🤗 Warm Hug",
+      "🤭 Giggles","🤔 Deep Thinker","😴 Sleepyhead","🥱 Morning Mood",
+      "🤯 Mind Blown","🤠 Yeehaw","🥸 Disguise","👩🏻‍🎓 Grad Ready",
+      "🧑🏻‍🎓 Honor Roll","👩🏻‍🏫 Teacher Vibe","🧑🏻‍🏫 Mentor","👩🏻‍🔬 Lab Pro",
+      "👩🏻‍🎨 Art Soul","👩🏻‍💻 Code Queen","👩🏻‍🚀 Space Cadet","🧚🏻‍♀️ Fairy Dust",
+      "🧜🏻‍♀️ Ocean Wave","🦸🏻‍♀️ Super Hero","💃🏻 Dance Break","🧋 Boba Lover",
+      "📚 Bookworm","☕ Coffee First","🎧 Lo-Fi Beats","🌈 Dreamer",
+      "🎀 Coquette","🍀 Lucky Charm","🧁 Cupcake","📸 Snap Queen",
+      "🏃🏻‍♀️ Track Star","✍️ Note Taker","🎓 Class of '27","🦊 Clever Fox",
+      "🐱 Kitty Purr","🐼 Zen Panda","🐰 Bunny Hop","🐨 Cozy Koala",
+      "🦋 Butterfly","🌻 Sunshine"
+    ];
+
+    function detectarEpoca(fecha = new Date()) {
+      const mmdd = `${String(fecha.getMonth() + 1).padStart(2, "0")}-${String(fecha.getDate()).padStart(2, "0")}`;
+      if (mmdd >= "12-01" || mmdd <= "01-06") return "navidad";
+      if (mmdd >= "10-15" && mmdd <= "11-02") return "halloween";
+      if (mmdd >= "02-07" && mmdd <= "02-16") return "san-valentin";
+      if (mmdd >= "08-01" && mmdd <= "08-25") return "regreso-clases";
+      if (mmdd >= "06-01" && mmdd <= "07-31") return "verano";
+      return "normal";
+    }
+
+    function aplicarEpoca() {
+      const sel = document.getElementById("select-epoca-lost");
+      const modo = localStorage.getItem(KEY_EPOCA) || "auto";
+      if (sel) {
+        sel.innerHTML = [
+          ["auto", "✨ Época: Auto"],
+          ["normal", "💜 Estilo LOST"],
+          ["navidad", "🎄 Navidad"],
+          ["halloween", "🎃 Halloween"],
+          ["san-valentin", "💘 San Valentín"],
+          ["pascua", "🐣 Pascua"],
+          ["verano", "☀️ Verano"],
+          ["regreso-clases", "🎒 Regreso a clases"]
+        ].map(([v, l]) => `<option value="${v}">${l}</option>`).join("");
+        sel.value = modo;
+      }
+      const activa = modo === "auto" ? detectarEpoca() : modo;
+      if (activa === "normal") document.body.removeAttribute("data-epoca");
+      else document.body.setAttribute("data-epoca", activa);
+    }
+
+    function renderCumpleBanner() {
+      const wrap = document.getElementById("lost-banner-cumple");
+      const est = window.obtenerEstadoLOST?.();
+      if (!wrap || !est) return;
+      const hoyMMDD = new Date().toISOString().slice(5, 10);
+      const personas = [];
+      if (est.perfil?.cumple && est.perfil.cumple.slice(5, 10) === hoyMMDD) {
+        personas.push({ nombre: est.perfil.nombre || "Mi Perfil", emoji: est.perfil.emoji || "🎂" });
+      }
+      (est.comunidad || []).forEach((m) => {
+        if (m.cumple && m.cumple.slice(5, 10) === hoyMMDD) {
+          personas.push({ nombre: m.nombre, emoji: m.emoji || "💜" });
+        }
+      });
+      if (!personas.length) {
+        wrap.style.display = "none";
+        wrap.innerHTML = "";
+        return;
+      }
+      wrap.innerHTML = personas.map((p) => `
+        <div class="lost-cumple-tarjeta">
+          <p class="lost-cumple-titulo-cursiva">¡Feliz Cumpleaños!</p>
+          <div class="lost-cumple-nombre-burbuja">${p.emoji} ${p.nombre}</div>
+          <p class="lost-cumple-cuerpo-cursiva">Que hoy esté lleno de alegría, abrazos y momentos inolvidables.</p>
+          <button type="button" class="btn-sec" onclick="this.closest('.lost-cumple-tarjeta').remove()">Cerrar ✨</button>
+        </div>
+      `).join("");
+      wrap.style.display = "block";
+    }
+
+    function poblarPickersCompletos() {
+      const est = window.obtenerEstadoLOST?.();
+      const boxEmojis = document.getElementById("selector-emojis-rapidos");
+      const boxBitmoji = document.getElementById("selector-bitmoji-fotos");
+      const inpEmoji = document.getElementById("input-emoji-perfil");
+      const selTipo = document.getElementById("select-tipo-avatar");
+      if (!est || !boxEmojis || !boxBitmoji) return;
+
+      boxEmojis.innerHTML = EMOJIS_120.map((em) =>
+        `<button type="button" class="emoji-chip ${est.perfil.emoji === em && est.perfil.tipoAvatar !== "bitmoji" ? "activo" : ""}" data-em="${em}">${em}</button>`
+      ).join("");
+
+      boxBitmoji.innerHTML = BITMOJI_50.map((bm) => {
+        const em = bm.split(" ")[0];
+        const act = est.perfil.tipoAvatar === "bitmoji" && est.perfil.emoji === em;
+        return `<button type="button" class="emoji-chip ${act ? "activo" : ""}" data-bm="${em}">${bm}</button>`;
+      }).join("");
+
+      boxEmojis.onclick = (e) => {
+        const btn = e.target.closest("[data-em]");
+        if (!btn) return;
+        est.perfil.emoji = btn.dataset.em;
+        est.perfil.tipoAvatar = "emoji";
+        if (inpEmoji) inpEmoji.value = est.perfil.emoji;
+        if (selTipo) selTipo.value = "emoji";
+        localStorage.setItem("LOST_LAVENDER_YORKIE_FULL_V1", JSON.stringify(est));
+        window.renderTodo?.();
+        poblarPickersCompletos();
+      };
+
+      boxBitmoji.onclick = (e) => {
+        const btn = e.target.closest("[data-bm]");
+        if (!btn) return;
+        est.perfil.emoji = btn.dataset.bm;
+        est.perfil.tipoAvatar = "bitmoji";
+        if (inpEmoji) inpEmoji.value = est.perfil.emoji;
+        if (selTipo) selTipo.value = "bitmoji";
+        localStorage.setItem("LOST_LAVENDER_YORKIE_FULL_V1", JSON.stringify(est));
+        window.renderTodo?.();
+        poblarPickersCompletos();
+      };
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      aplicarEpoca();
+      renderCumpleBanner();
+      poblarPickersCompletos();
+
+      const sel = document.getElementById("select-epoca-lost");
+      sel?.addEventListener("change", () => {
+        localStorage.setItem(KEY_EPOCA, sel.value);
+        aplicarEpoca();
+      });
+
+      const origRender = window.renderTodo;
+      if (typeof origRender === "function") {
+        window.renderTodo = function () {
+          origRender.apply(this, arguments);
+          poblarPickersCompletos();
+          renderCumpleBanner();
+        };
+      }
+      setTimeout(() => {
+        poblarPickersCompletos();
+        renderCumpleBanner();
+      }, 150);
+    });
+  })();
+  </script>
+</body>
+</html>
